@@ -9,12 +9,15 @@ class Debug(object):
     filename = 'debug.txt'
     did_output = False
     quiet = False
+    screen = False
 
     def __init__(self,
                  quiet=False,   # Way to shut down all output easily
+                 screen=False,  # print out to the screen as well as file?
                  filename=None
                  ):
         Debug.quiet = quiet
+        Debug.screen = screen
         if filename is not None:
             Debug.filename = filename
         self.PP = pprint.PrettyPrinter(indent=3, width=150)
@@ -44,6 +47,13 @@ class Debug(object):
             return
         self.print('\n~~ %s ~~' % string)
 
+    def header4(self,
+                string
+                ):
+        if Debug.quiet:
+            return
+        self.print('\n.. %s ..' % string)
+
     def print(self,
               string # string to be output
               ):
@@ -60,6 +70,8 @@ class Debug(object):
         with open(Debug.filename, 'a') as f:
             f.write(string)
             f.write('\n')
+        if Debug.screen:
+            print(string)
 
     def pprint(self,
                thing # the thing to be pretty printed
@@ -74,3 +86,5 @@ class Debug(object):
         #strings = traceback.format_tb(tb)
         stack = traceback.format_stack()
         self.pprint(stack)
+        if Debug.screen:
+            print(stack)

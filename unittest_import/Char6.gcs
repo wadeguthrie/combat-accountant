@@ -1,41 +1,50 @@
 {
 	"type": "character",
-	"version": 2,
+	"version": 4,
 	"id": "76c19a12-07c2-4254-afdd-02164930f593",
+	"total_points": 216,
+	"points_record": [
+		{
+			"when": "2023-08-08T21:21:04-07:00",
+			"points": 216,
+			"reason": "Reconciliation"
+		}
+	],
+	"profile": {
+		"name": "Mama V",
+		"age": "43",
+		"birthday": "Oct. 31",
+		"eyes": "Vivid Purple",
+		"hair": "Grey, Unruly, Long",
+		"skin": "Pale with freckles",
+		"handedness": "Right",
+		"gender": "Female",
+		"height": "5'1\"",
+		"weight": "151 lb",
+		"player_name": "test",
+		"title": "Bokor",
+		"religion": "Voodou",
+		"tech_level": "3"
+	},
 	"settings": {
-		"default_length_units": "ft_in",
-		"default_weight_units": "lb",
-		"user_description_display": "tooltip",
-		"modifiers_display": "inline",
-		"notes_display": "inline",
-		"skill_level_adj_display": "tooltip",
-		"use_multiplicative_modifiers": false,
-		"use_modifying_dice_plus_adds": false,
-		"damage_progression": "basic_set",
-		"use_simple_metric_conversions": true,
-		"show_college_in_sheet_spells": false,
-		"show_difficulty": false,
-		"show_advantage_modifier_adj": false,
-		"show_equipment_modifier_adj": false,
-		"show_spell_adj": true,
-		"use_title_in_footer": false,
 		"page": {
-			"paper_size": "na-letter",
+			"paper_size": "letter",
+			"orientation": "portrait",
 			"top_margin": "0.25 in",
 			"left_margin": "0.25 in",
 			"bottom_margin": "0.25 in",
-			"right_margin": "0.25 in",
-			"orientation": "portrait"
+			"right_margin": "0.25 in"
 		},
 		"block_layout": [
 			"reactions",
 			"melee",
 			"ranged",
-			"advantages skills",
+			"traits skills",
 			"spells",
 			"equipment",
 			"other_equipment",
-			"notes"
+			"notes",
+			"conditional_modifiers"
 		],
 		"attributes": [
 			{
@@ -53,8 +62,7 @@
 				"name": "DX",
 				"full_name": "Dexterity",
 				"attribute_base": "10",
-				"cost_per_point": 20,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 20
 			},
 			{
 				"id": "iq",
@@ -62,8 +70,7 @@
 				"name": "IQ",
 				"full_name": "Intelligence",
 				"attribute_base": "10",
-				"cost_per_point": 20,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 20
 			},
 			{
 				"id": "ht",
@@ -71,26 +78,21 @@
 				"name": "HT",
 				"full_name": "Health",
 				"attribute_base": "10",
-				"cost_per_point": 10,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 10
 			},
 			{
 				"id": "will",
 				"type": "integer",
 				"name": "Will",
-				"full_name": "",
 				"attribute_base": "$iq",
-				"cost_per_point": 5,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 5
 			},
 			{
 				"id": "fright_check",
 				"type": "integer",
 				"name": "Fright Check",
-				"full_name": "",
 				"attribute_base": "$will",
-				"cost_per_point": 2,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 2
 			},
 			{
 				"id": "per",
@@ -98,62 +100,49 @@
 				"name": "Per",
 				"full_name": "Perception",
 				"attribute_base": "$iq",
-				"cost_per_point": 5,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 5
 			},
 			{
 				"id": "vision",
 				"type": "integer",
 				"name": "Vision",
-				"full_name": "",
 				"attribute_base": "$per",
-				"cost_per_point": 2,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 2
 			},
 			{
 				"id": "hearing",
 				"type": "integer",
 				"name": "Hearing",
-				"full_name": "",
 				"attribute_base": "$per",
-				"cost_per_point": 2,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 2
 			},
 			{
 				"id": "taste_smell",
 				"type": "integer",
-				"name": "Taste & Smell",
-				"full_name": "",
+				"name": "Taste \u0026 Smell",
 				"attribute_base": "$per",
-				"cost_per_point": 2,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 2
 			},
 			{
 				"id": "touch",
 				"type": "integer",
 				"name": "Touch",
-				"full_name": "",
 				"attribute_base": "$per",
-				"cost_per_point": 2,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 2
 			},
 			{
 				"id": "basic_speed",
 				"type": "decimal",
 				"name": "Basic Speed",
-				"full_name": "",
 				"attribute_base": "($dx+$ht)/4",
-				"cost_per_point": 20,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 20
 			},
 			{
 				"id": "basic_move",
 				"type": "integer",
 				"name": "Basic Move",
-				"full_name": "",
 				"attribute_base": "floor($basic_speed)",
-				"cost_per_point": 5,
-				"cost_adj_percent_per_sm": 0
+				"cost_per_point": 5
 			},
 			{
 				"id": "fp",
@@ -162,14 +151,10 @@
 				"full_name": "Fatigue Points",
 				"attribute_base": "$ht",
 				"cost_per_point": 3,
-				"cost_adj_percent_per_sm": 0,
 				"thresholds": [
 					{
 						"state": "Unconscious",
-						"explanation": "",
-						"multiplier": -1,
-						"divisor": 1,
-						"addition": 0,
+						"expression": "-$fp",
 						"ops": [
 							"halve_move",
 							"halve_dodge",
@@ -178,10 +163,8 @@
 					},
 					{
 						"state": "Collapse",
+						"expression": "0",
 						"explanation": "Roll vs. Will to do anything besides talk or rest; failure causes unconsciousness\nEach FP you lose below 0 also causes 1 HP of injury\nMove, Dodge and ST are halved (B426)",
-						"multiplier": 0,
-						"divisor": 1,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge",
@@ -190,10 +173,8 @@
 					},
 					{
 						"state": "Tired",
+						"expression": "round($fp/3)",
 						"explanation": "Move, Dodge and ST are halved (B426)",
-						"multiplier": 1,
-						"divisor": 3,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge",
@@ -202,23 +183,11 @@
 					},
 					{
 						"state": "Tiring",
-						"explanation": "",
-						"multiplier": 1,
-						"divisor": 1,
-						"addition": -1,
-						"ops": [
-
-						]
+						"expression": "$fp-1"
 					},
 					{
 						"state": "Rested",
-						"explanation": "",
-						"multiplier": 1,
-						"divisor": 1,
-						"addition": 0,
-						"ops": [
-
-						]
+						"expression": "$fp"
 					}
 				]
 			},
@@ -233,10 +202,7 @@
 				"thresholds": [
 					{
 						"state": "Dead",
-						"explanation": "",
-						"multiplier": -5,
-						"divisor": 1,
-						"addition": 0,
+						"expression": "round(-$hp*5)",
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -244,10 +210,8 @@
 					},
 					{
 						"state": "Dying #4",
+						"expression": "round(-$hp*4)",
 						"explanation": "Roll vs. HT to avoid death\nRoll vs. HT-4 every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
-						"multiplier": -4,
-						"divisor": 1,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -255,10 +219,8 @@
 					},
 					{
 						"state": "Dying #3",
+						"expression": "round(-$hp*3)",
 						"explanation": "Roll vs. HT to avoid death\nRoll vs. HT-3 every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
-						"multiplier": -3,
-						"divisor": 1,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -266,10 +228,8 @@
 					},
 					{
 						"state": "Dying #2",
+						"expression": "round(-$hp*2)",
 						"explanation": "Roll vs. HT to avoid death\nRoll vs. HT-2 every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
-						"multiplier": -2,
-						"divisor": 1,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -277,10 +237,8 @@
 					},
 					{
 						"state": "Dying #1",
+						"expression": "-$hp",
 						"explanation": "Roll vs. HT to avoid death\nRoll vs. HT-1 every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
-						"multiplier": -1,
-						"divisor": 1,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -288,10 +246,8 @@
 					},
 					{
 						"state": "Collapse",
+						"expression": "0",
 						"explanation": "Roll vs. HT every second to avoid falling unconscious\nMove and Dodge are halved (B419)",
-						"multiplier": 0,
-						"divisor": 1,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -299,10 +255,8 @@
 					},
 					{
 						"state": "Reeling",
+						"expression": "round($hp/3)",
 						"explanation": "Move and Dodge are halved (B419)",
-						"multiplier": 1,
-						"divisor": 3,
-						"addition": 0,
 						"ops": [
 							"halve_move",
 							"halve_dodge"
@@ -310,29 +264,16 @@
 					},
 					{
 						"state": "Wounded",
-						"explanation": "",
-						"multiplier": 1,
-						"divisor": 1,
-						"addition": -1,
-						"ops": [
-
-						]
+						"expression": "$hp-1"
 					},
 					{
 						"state": "Healthy",
-						"explanation": "",
-						"multiplier": 1,
-						"divisor": 1,
-						"addition": 0,
-						"ops": [
-
-						]
+						"expression": "$hp"
 					}
 				]
 			}
 		],
-		"hit_locations": {
-			"id": "humanoid",
+		"body_type": {
 			"name": "Humanoid",
 			"roll": "3d",
 			"locations": [
@@ -340,10 +281,8 @@
 					"id": "eye",
 					"choice_name": "Eyes",
 					"table_name": "Eyes",
-					"slots": 0,
 					"hit_penalty": -9,
-					"dr_bonus": 0,
-					"description": "An attack that misses by 1 hits the torso instead. Only impaling (imp), piercing (pi-, pi, pi+, pi++), and tight-beam burning (burn) attacks can target the eye – and only from the front or sides. Injury over HP÷10 blinds the eye. Otherwise, treat as skull, but without the extra DR!",
+					"description": "An attack that misses by 1 hits the torso instead. Only\nimpaling (imp), piercing (pi-, pi, pi+, pi++), and\ntight-beam burning (burn) attacks can target the eye – and\nonly from the front or sides. Injury over HP÷10 blinds the\neye. Otherwise, treat as skull, but without the extra DR!",
 					"calc": {
 						"roll_range": "-",
 						"dr": {
@@ -358,7 +297,7 @@
 					"slots": 2,
 					"hit_penalty": -7,
 					"dr_bonus": 2,
-					"description": "An attack that misses by 1 hits the torso instead. Wounding modifier is x4. Knockdown rolls are at -10. Critical hits use the Critical Head Blow Table (B556). Exception: These special effects do not apply to toxic (tox) damage.",
+					"description": "An attack that misses by 1 hits the torso instead. Wounding\nmodifier is x4. Knockdown rolls are at -10. Critical hits\nuse the Critical Head Blow Table (B556). Exception: These\nspecial effects do not apply to toxic (tox) damage.",
 					"calc": {
 						"roll_range": "3-4",
 						"dr": {
@@ -372,8 +311,7 @@
 					"table_name": "Face",
 					"slots": 1,
 					"hit_penalty": -5,
-					"dr_bonus": 0,
-					"description": "An attack that misses by 1 hits the torso instead. Jaw, cheeks, nose, ears, etc. If the target has an open-faced helmet, ignore its DR. Knockdown rolls are at -5. Critical hits use the Critical Head Blow Table (B556). Corrosion (cor) damage gets a x1½ wounding modifier, and if it inflicts a major wound, it also blinds one eye (both eyes on damage over full HP). Random attacks from behind hit the skull instead.",
+					"description": "An attack that misses by 1 hits the torso instead. Jaw,\ncheeks, nose, ears, etc. If the target has an open-faced\nhelmet, ignore its DR. Knockdown rolls are at -5. Critical\nhits use the Critical Head Blow Table (B556). Corrosion\n(cor) damage gets a x1½ wounding modifier, and if it\ninflicts a major wound, it also blinds one eye (both eyes on\ndamage over full HP). Random attacks from behind hit the\nskull instead.",
 					"calc": {
 						"roll_range": "5",
 						"dr": {
@@ -387,8 +325,7 @@
 					"table_name": "Right Leg",
 					"slots": 2,
 					"hit_penalty": -2,
-					"dr_bonus": 0,
-					"description": "Reduce the wounding multiplier of large piercing (pi+), huge piercing (pi++), and impaling (imp) damage to x1. Any major wound (loss of over ½ HP from one blow) cripples the limb. Damage beyond that threshold is lost.",
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ½ HP from one blow) cripples the limb.\nDamage beyond that threshold is lost.",
 					"calc": {
 						"roll_range": "6-7",
 						"dr": {
@@ -402,8 +339,7 @@
 					"table_name": "Right Arm",
 					"slots": 1,
 					"hit_penalty": -2,
-					"dr_bonus": 0,
-					"description": "Reduce the wounding multiplier of large piercing (pi+), huge piercing (pi++), and impaling (imp) damage to x1. Any major wound (loss of over ½ HP from one blow) cripples the limb. Damage beyond that threshold is lost. If holding a shield, double the penalty to hit: -4 for shield arm instead of -2.",
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ½ HP from one blow) cripples the limb.\nDamage beyond that threshold is lost. If holding a shield,\ndouble the penalty to hit: -4 for shield arm instead of -2.",
 					"calc": {
 						"roll_range": "8",
 						"dr": {
@@ -416,9 +352,6 @@
 					"choice_name": "Torso",
 					"table_name": "Torso",
 					"slots": 2,
-					"hit_penalty": 0,
-					"dr_bonus": 0,
-					"description": "",
 					"calc": {
 						"roll_range": "9-10",
 						"dr": {
@@ -432,8 +365,7 @@
 					"table_name": "Groin",
 					"slots": 1,
 					"hit_penalty": -3,
-					"dr_bonus": 0,
-					"description": "An attack that misses by 1 hits the torso instead. Human males and the males of similar species suffer double shock from crushing (cr) damage, and get -5 to knockdown rolls. Otherwise, treat as a torso hit.",
+					"description": "An attack that misses by 1 hits the torso instead. Human\nmales and the males of similar species suffer double shock\nfrom crushing (cr) damage, and get -5 to knockdown rolls.\nOtherwise, treat as a torso hit.",
 					"calc": {
 						"roll_range": "11",
 						"dr": {
@@ -447,8 +379,7 @@
 					"table_name": "Left Arm",
 					"slots": 1,
 					"hit_penalty": -2,
-					"dr_bonus": 0,
-					"description": "Reduce the wounding multiplier of large piercing (pi+), huge piercing (pi++), and impaling (imp) damage to x1. Any major wound (loss of over ½ HP from one blow) cripples the limb. Damage beyond that threshold is lost. If holding a shield, double the penalty to hit: -4 for shield arm instead of -2.",
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ½ HP from one blow) cripples the limb.\nDamage beyond that threshold is lost. If holding a shield,\ndouble the penalty to hit: -4 for shield arm instead of -2.",
 					"calc": {
 						"roll_range": "12",
 						"dr": {
@@ -462,8 +393,7 @@
 					"table_name": "Left Leg",
 					"slots": 2,
 					"hit_penalty": -2,
-					"dr_bonus": 0,
-					"description": "Reduce the wounding multiplier of large piercing (pi+), huge piercing (pi++), and impaling (imp) damage to x1. Any major wound (loss of over ½ HP from one blow) cripples the limb. Damage beyond that threshold is lost.",
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ½ HP from one blow) cripples the limb.\nDamage beyond that threshold is lost.",
 					"calc": {
 						"roll_range": "13-14",
 						"dr": {
@@ -477,8 +407,7 @@
 					"table_name": "Hand",
 					"slots": 1,
 					"hit_penalty": -4,
-					"dr_bonus": 0,
-					"description": "If holding a shield, double the penalty to hit: -8 for shield hand instead of -4. Reduce the wounding multiplier of large piercing (pi+), huge piercing (pi++), and impaling (imp) damage to x1. Any major wound (loss of over ⅓ HP from one blow) cripples the extremity. Damage beyond that threshold is lost.",
+					"description": "If holding a shield, double the penalty to hit: -8 for\nshield hand instead of -4. Reduce the wounding multiplier of\nlarge piercing (pi+), huge piercing (pi++), and impaling\n(imp) damage to x1. Any major wound (loss of over ⅓ HP\nfrom one blow) cripples the extremity. Damage beyond that\nthreshold is lost.",
 					"calc": {
 						"roll_range": "15",
 						"dr": {
@@ -492,8 +421,7 @@
 					"table_name": "Foot",
 					"slots": 1,
 					"hit_penalty": -4,
-					"dr_bonus": 0,
-					"description": "Reduce the wounding multiplier of large piercing (pi+), huge piercing (pi++), and impaling (imp) damage to x1. Any major wound (loss of over ⅓ HP from one blow) cripples the extremity. Damage beyond that threshold is lost.",
+					"description": "Reduce the wounding multiplier of large piercing (pi+), huge\npiercing (pi++), and impaling (imp) damage to x1. Any major\nwound (loss of over ⅓ HP from one blow) cripples the\nextremity. Damage beyond that threshold is lost.",
 					"calc": {
 						"roll_range": "16",
 						"dr": {
@@ -507,8 +435,7 @@
 					"table_name": "Neck",
 					"slots": 2,
 					"hit_penalty": -5,
-					"dr_bonus": 0,
-					"description": "An attack that misses by 1 hits the torso instead. Neck and throat. Increase the wounding multiplier of crushing (cr) and corrosion (cor) attacks to x1½, and that of cutting (cut) damage to x2. At the GM’s option, anyone killed by a cutting (cut) blow to the neck is decapitated!",
+					"description": "An attack that misses by 1 hits the torso instead. Neck and\nthroat. Increase the wounding multiplier of crushing (cr)\nand corrosion (cor) attacks to x1½, and that of cutting\n(cut) damage to x2. At the GM’s option, anyone killed by a\ncutting (cut) blow to the neck is decapitated!",
 					"calc": {
 						"roll_range": "17-18",
 						"dr": {
@@ -520,10 +447,8 @@
 					"id": "vitals",
 					"choice_name": "Vitals",
 					"table_name": "Vitals",
-					"slots": 0,
 					"hit_penalty": -3,
-					"dr_bonus": 0,
-					"description": "An attack that misses by 1 hits the torso instead. Heart, lungs, kidneys, etc. Increase the wounding modifier for an impaling (imp) or any piercing (pi-, pi, pi+, pi++) attack to x3. Increase the wounding modifier for a tight-beam burning (burn) attack to x2. Other attacks cannot target the vitals.",
+					"description": "An attack that misses by 1 hits the torso instead. Heart,\nlungs, kidneys, etc. Increase the wounding modifier for an\nimpaling (imp) or any piercing (pi-, pi, pi+, pi++) attack\nto x3. Increase the wounding modifier for a tight-beam\nburning (burn) attack to x2. Other attacks cannot target the\nvitals.",
 					"calc": {
 						"roll_range": "-",
 						"dr": {
@@ -532,25 +457,16 @@
 					}
 				}
 			]
-		}
-	},
-	"created_date": "Jul 7, 2018, 12:00 AM",
-	"modified_date": "May 2, 2022, 6:27 PM",
-	"profile": {
-		"player_name": "test",
-		"name": "Mama V",
-		"title": "Bokor",
-		"age": "43",
-		"birthday": "Oct. 31",
-		"eyes": "Vivid Purple",
-		"hair": "Grey, Unruly, Long",
-		"skin": "Pale with freckles",
-		"handedness": "Right",
-		"height": "5' 1\"",
-		"weight": "151 lb",
-		"gender": "Female",
-		"tech_level": "3",
-		"religion": "Voodou"
+		},
+		"damage_progression": "basic_set",
+		"default_length_units": "ft_in",
+		"default_weight_units": "lb",
+		"user_description_display": "tooltip",
+		"modifiers_display": "inline",
+		"notes_display": "inline",
+		"skill_level_adj_display": "tooltip",
+		"show_spell_adj": true,
+		"exclude_unspent_points_from_total": false
 	},
 	"attributes": [
 		{
@@ -660,7 +576,6 @@
 		{
 			"attr_id": "fp",
 			"adj": 4,
-			"damage": 0,
 			"calc": {
 				"value": 19,
 				"current": 19,
@@ -670,7 +585,6 @@
 		{
 			"attr_id": "hp",
 			"adj": 3,
-			"damage": 0,
 			"calc": {
 				"value": 13,
 				"current": 13,
@@ -678,628 +592,612 @@
 			}
 		}
 	],
-	"total_points": 216,
-	"advantages": [
+	"traits": [
 		{
-			"type": "advantage",
 			"id": "c88c6654-ebd3-49ae-89e8-b236ccefa430",
+			"type": "trait",
 			"name": "Agoraphobia (Open Spaces)",
-			"mental": true,
+			"reference": "B150",
+			"tags": [
+				"Disadvantage",
+				"Mental"
+			],
 			"base_points": -10,
 			"cr": 12,
-			"reference": "B150",
 			"calc": {
 				"points": -10
-			},
-			"categories": [
-				"Disadvantage"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "2913de26-5a8a-4b9d-8475-1cd9521e2206",
+			"type": "trait",
 			"name": "Ailurophobia (Cats)",
-			"mental": true,
+			"reference": "B149",
+			"tags": [
+				"Disadvantage",
+				"Mental"
+			],
 			"base_points": -5,
 			"cr": 12,
-			"reference": "B149",
 			"calc": {
 				"points": -5
-			},
-			"categories": [
-				"Disadvantage"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "70e4e923-3ed3-4fa6-8b53-41d828be1657",
+			"type": "trait",
 			"name": "Bad Sight (Farsighted)",
-			"physical": true,
-			"base_points": -25,
+			"reference": "B123",
+			"notes": "-6 to Vision rolls to spot items within 1 yd; -3 DX to any close manual task, including close combat",
+			"tags": [
+				"Disadvantage",
+				"Physical"
+			],
 			"modifiers": [
 				{
-					"type": "modifier",
 					"id": "f2ad3bd8-4bd1-4f9f-909d-0ef4405a3eb4",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Mitigator",
-					"cost_type": "percentage",
+					"notes": "Glasses",
 					"cost": -60,
-					"affects": "total",
-					"notes": "Glasses"
+					"disabled": true
 				}
 			],
-			"reference": "B123",
+			"base_points": -25,
 			"calc": {
 				"points": -25
-			},
-			"notes": "-6 to Vision rolls to spot items within 1 yd; -3 DX to any close manual task, including close combat",
-			"categories": [
-				"Disadvantage"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "70745ea8-6639-4fa9-abe6-c664d10c0795",
+			"type": "trait",
 			"name": "Compulsive Vowing",
-			"mental": true,
+			"reference": "B129",
+			"tags": [
+				"Disadvantage",
+				"Mental"
+			],
 			"base_points": -5,
 			"cr": 12,
-			"reference": "B129",
 			"calc": {
 				"points": -5
-			},
-			"categories": [
-				"Disadvantage"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "afaa75d1-f434-4603-aded-d5cf8434e8c1",
+			"type": "trait",
 			"name": "Curious",
-			"mental": true,
+			"reference": "B129",
+			"tags": [
+				"Disadvantage",
+				"Mental"
+			],
 			"base_points": -5,
 			"cr": 12,
-			"reference": "B129",
 			"calc": {
 				"points": -5
-			},
-			"categories": [
-				"Disadvantage"
-			]
+			}
 		},
 		{
-			"type": "advantage",
 			"id": "8168f3d2-1852-4b1b-9e8e-48cf7702b208",
+			"type": "trait",
 			"name": "Delusions",
-			"mental": true,
-			"levels": "0",
-			"base_points": -1,
 			"reference": "B164",
-			"calc": {
-				"points": -1
-			},
 			"notes": "Believes Papa Ghede is hergreat grandfather",
-			"categories": [
+			"tags": [
+				"Mental",
 				"Quirk"
-			]
-		},
-		{
-			"type": "advantage",
-			"id": "2d083e34-c1be-473e-9cf9-333bc07b16c1",
-			"name": "Distractible",
-			"mental": true,
-			"base_points": -1,
-			"reference": "B164",
-			"calc": {
-				"points": -1
-			},
-			"categories": [
-				"Quirk"
-			]
-		},
-		{
-			"type": "advantage",
-			"id": "4aadbb2f-c09f-4ae8-982b-6678675312c2",
-			"name": "I took two air spells which are from a disallowed college",
-			"physical": true,
+			],
 			"base_points": -1,
 			"calc": {
 				"points": -1
 			}
 		},
 		{
-			"type": "advantage",
-			"id": "a8520d86-ccf7-4bdd-8a97-d80ff49bd947",
-			"name": "Impulsiveness",
-			"mental": true,
-			"base_points": -10,
-			"cr": 12,
-			"reference": "B139",
-			"calc": {
-				"points": -10
-			},
-			"categories": [
-				"Disadvantage"
-			]
-		},
-		{
-			"type": "advantage",
-			"id": "4b40c859-fa9b-41a1-ad54-6988489f03f4",
-			"name": "Like Shiny objects",
-			"mental": true,
-			"levels": "0",
-			"base_points": -1,
+			"id": "2d083e34-c1be-473e-9cf9-333bc07b16c1",
+			"type": "trait",
+			"name": "Distractible",
 			"reference": "B164",
+			"tags": [
+				"Mental",
+				"Quirk"
+			],
+			"base_points": -1,
 			"calc": {
 				"points": -1
-			},
-			"categories": [
-				"Quirk"
-			]
+			}
 		},
 		{
-			"type": "advantage",
+			"id": "4aadbb2f-c09f-4ae8-982b-6678675312c2",
+			"type": "trait",
+			"name": "I took two air spells which are from a disallowed college",
+			"tags": [
+				"Physical"
+			],
+			"base_points": -1,
+			"calc": {
+				"points": -1
+			}
+		},
+		{
+			"id": "a8520d86-ccf7-4bdd-8a97-d80ff49bd947",
+			"type": "trait",
+			"name": "Impulsiveness",
+			"reference": "B139",
+			"tags": [
+				"Disadvantage",
+				"Mental"
+			],
+			"base_points": -10,
+			"cr": 12,
+			"calc": {
+				"points": -10
+			}
+		},
+		{
+			"id": "4b40c859-fa9b-41a1-ad54-6988489f03f4",
+			"type": "trait",
+			"name": "Like Shiny objects",
+			"reference": "B164",
+			"tags": [
+				"Mental",
+				"Quirk"
+			],
+			"base_points": -1,
+			"calc": {
+				"points": -1
+			}
+		},
+		{
 			"id": "e47f7280-4b07-467a-b5a0-31510c0a2718",
+			"type": "trait",
 			"name": "Lwa (Bokor)",
-			"mental": true,
-			"supernatural": true,
+			"tags": [
+				"Mental",
+				"Supernatural"
+			],
 			"modifiers": [
 				{
-					"type": "modifier",
 					"id": "55f2a248-c5b9-42c7-8a6c-704fe1473c86",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Damballah",
-					"cost_type": "points",
 					"cost": 6,
-					"affects": "total",
+					"cost_type": "points",
+					"disabled": true,
 					"features": [
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Knowledge"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 2,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Weather"
-							}
+							},
+							"amount": 2
 						}
 					]
 				},
 				{
-					"type": "modifier",
 					"id": "802e9298-5155-4af8-afd8-9f04ed74852f",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Erzulie Freda",
-					"cost_type": "points",
 					"cost": 6,
-					"affects": "total",
+					"cost_type": "points",
+					"disabled": true,
 					"features": [
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Body Control"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
-								"qualifier": "Communication & Empathy"
-							}
+								"qualifier": "Communication \u0026 Empathy"
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Healing"
-							}
+							},
+							"amount": 1
 						}
 					]
 				},
 				{
-					"type": "modifier",
 					"id": "4388efdd-82e2-474c-a065-f50e98c4803a",
+					"type": "modifier",
 					"name": "Papa Ghede",
-					"cost_type": "points",
 					"cost": 8,
-					"affects": "total",
+					"cost_type": "points",
 					"features": [
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Body Control"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Healing"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 2,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Necromancy"
-							}
+							},
+							"amount": 2
 						}
 					]
 				},
 				{
-					"type": "modifier",
 					"id": "d1731494-271c-4e14-860d-1490d9860155",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Gran Bwa",
-					"cost_type": "points",
 					"cost": 6,
-					"affects": "total",
+					"cost_type": "points",
+					"disabled": true,
 					"features": [
 						{
 							"type": "spell_bonus",
-							"amount": 2,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Animal"
-							}
+							},
+							"amount": 2
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Plant"
-							}
+							},
+							"amount": 1
 						}
 					]
 				},
 				{
-					"type": "modifier",
 					"id": "0be33b62-0076-4d69-9710-e6cbe3f2e0ad",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Kalfu",
-					"cost_type": "points",
 					"cost": 10,
-					"affects": "total",
+					"cost_type": "points",
+					"disabled": true,
 					"features": [
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Animal"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Gate"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Mind Control"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Enchantment"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Meta"
-							}
+							},
+							"amount": 1
 						}
 					]
 				},
 				{
-					"type": "modifier",
 					"id": "ab58c621-9816-42a5-9fc3-17ba15af7e52",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Papa Legba",
-					"cost_type": "points",
 					"cost": 10,
-					"affects": "total",
+					"cost_type": "points",
+					"disabled": true,
 					"features": [
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Gate"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Protection"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Enchantment"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Meta"
-							}
+							},
+							"amount": 1
 						}
 					]
 				},
 				{
-					"type": "modifier",
 					"id": "d1c57bef-02bc-4fa9-aaa3-e06a6094f223",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Loco",
-					"cost_type": "points",
 					"cost": 10,
-					"affects": "total",
+					"cost_type": "points",
+					"disabled": true,
 					"features": [
 						{
 							"type": "spell_bonus",
-							"amount": 2,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Healing"
-							}
+							},
+							"amount": 2
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 2,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Plant"
-							}
+							},
+							"amount": 2
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Knowledge"
-							}
+							},
+							"amount": 1
 						}
 					]
 				},
 				{
-					"type": "modifier",
 					"id": "67f6b832-90b8-4d68-b39c-bc35354994ea",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Loco Dan Pedro",
-					"cost_type": "points",
 					"cost": 6,
-					"affects": "total",
+					"cost_type": "points",
+					"disabled": true,
 					"features": [
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Body Control"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Plant"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Healing"
-							}
+							},
+							"amount": 1
 						}
 					]
 				},
 				{
-					"type": "modifier",
 					"id": "da2f7d73-eb7b-4071-aa43-1ae68682ed52",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Ogoun",
-					"cost_type": "points",
 					"cost": 6,
-					"affects": "total",
+					"cost_type": "points",
+					"disabled": true,
 					"features": [
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Technological"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Weather"
-							}
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Protection"
-							}
+							},
+							"amount": 1
 						}
 					]
 				},
 				{
-					"type": "modifier",
 					"id": "9199d79b-1a43-4361-8d8d-2222b67c086b",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Simbi",
-					"cost_type": "points",
 					"cost": 8,
-					"affects": "total",
+					"cost_type": "points",
+					"disabled": true,
 					"features": [
 						{
 							"type": "spell_bonus",
-							"amount": 2,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Technological"
-							}
+							},
+							"amount": 2
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
-								"qualifier": "Communication & Empathy"
-							}
+								"qualifier": "Communication \u0026 Empathy"
+							},
+							"amount": 1
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Necromancy"
-							}
+							},
+							"amount": 1
 						}
 					]
 				},
 				{
-					"type": "modifier",
 					"id": "4e939679-c387-425a-bf35-d3447f14c8d8",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Sobo Kessou",
-					"cost_type": "points",
 					"cost": 10,
-					"affects": "total",
+					"cost_type": "points",
+					"disabled": true,
 					"features": [
 						{
 							"type": "spell_bonus",
-							"amount": 2,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Healing"
-							}
+							},
+							"amount": 2
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 2,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Protection"
-							}
+							},
+							"amount": 2
 						},
 						{
 							"type": "spell_bonus",
-							"amount": 1,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Weather"
-							}
+							},
+							"amount": 1
 						}
 					]
 				},
 				{
-					"type": "modifier",
 					"id": "05286a74-7649-440b-bee0-4e7f847abe8a",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Tia-Jean Petro",
-					"cost_type": "points",
 					"cost": 4,
-					"affects": "total",
+					"cost_type": "points",
+					"disabled": true,
 					"features": [
 						{
 							"type": "spell_bonus",
-							"amount": 2,
 							"match": "college_name",
 							"name": {
 								"compare": "is",
 								"qualifier": "Meta"
-							}
+							},
+							"amount": 2
 						}
 					]
 				}
 			],
-			"calc": {
-				"points": 8
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
-						"type": "advantage_prereq",
+						"type": "trait_prereq",
 						"has": true,
 						"name": {
 							"compare": "starts_with",
@@ -1311,117 +1209,120 @@
 						}
 					}
 				]
+			},
+			"calc": {
+				"points": 8
 			}
 		},
 		{
-			"type": "advantage",
 			"id": "938fa527-b3de-4de6-a955-ca438a4b6755",
+			"type": "trait",
 			"name": "Personality Change",
-			"mental": true,
-			"levels": "0",
-			"base_points": -1,
 			"reference": "B164",
-			"calc": {
-				"points": -1
-			},
 			"notes": "Overt non-belief in Voodou makes her furious",
-			"categories": [
+			"tags": [
+				"Mental",
 				"Quirk"
-			]
-		},
-		{
-			"type": "advantage",
-			"id": "67a0dbdb-1ed4-447c-a0fa-406a275d5065",
-			"name": "Responsive",
-			"mental": true,
+			],
 			"base_points": -1,
-			"reference": "B164",
 			"calc": {
 				"points": -1
-			},
-			"categories": [
-				"Quirk"
-			]
+			}
 		},
 		{
-			"type": "advantage",
+			"id": "67a0dbdb-1ed4-447c-a0fa-406a275d5065",
+			"type": "trait",
+			"name": "Responsive",
+			"reference": "B164",
+			"tags": [
+				"Mental",
+				"Quirk"
+			],
+			"base_points": -1,
+			"calc": {
+				"points": -1
+			}
+		},
+		{
 			"id": "d1e10811-b648-4792-b607-163b397a4648",
+			"type": "trait",
 			"name": "Vodou Practitioner",
-			"mental": true,
-			"supernatural": true,
-			"base_points": 5,
+			"notes": "As Magery 0 [Basic 66].  Gain vague detect magic item or practitioner [Basic 48].",
+			"tags": [
+				"Mental",
+				"Supernatural"
+			],
 			"modifiers": [
 				{
-					"type": "modifier",
 					"id": "93d66d7e-0cd7-4de0-a79e-fe2af2f55807",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Hougan / Mambo level 1",
-					"cost_type": "points",
+					"notes": "Hougan / Mambo, can have lwa.",
 					"cost": 10,
-					"affects": "total",
-					"notes": "Hougan / Mambo, can have lwa."
+					"cost_type": "points",
+					"disabled": true
 				},
 				{
-					"type": "modifier",
 					"id": "5ed1076e-634d-4bba-a932-1ce606bd750f",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Hougan / Mambo level 2",
-					"cost_type": "points",
+					"notes": "Hougan / Mambo, can have lwa.",
 					"cost": 20,
-					"affects": "total",
-					"notes": "Hougan / Mambo, can have lwa."
+					"cost_type": "points",
+					"disabled": true
 				},
 				{
-					"type": "modifier",
 					"id": "408af4ef-3d13-47b6-a63d-8b4c85009187",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Hougan / Mambo level 3",
-					"cost_type": "points",
+					"notes": "Hougan / Mambo, can have lwa.",
 					"cost": 30,
-					"affects": "total",
-					"notes": "Hougan / Mambo, can have lwa."
+					"cost_type": "points",
+					"disabled": true
 				},
 				{
-					"type": "modifier",
 					"id": "85882cdb-7ad8-4895-aef9-3eac49bdc2b1",
+					"type": "modifier",
 					"name": "Bokor level 1",
-					"cost_type": "points",
+					"notes": "Bokor, can have lwa.",
 					"cost": 15,
-					"affects": "total",
-					"notes": "Bokor, can have lwa."
+					"cost_type": "points"
 				},
 				{
-					"type": "modifier",
 					"id": "ae3471fd-2af0-40b7-af8a-b12e531b7c10",
+					"type": "modifier",
 					"name": "Bokor level 2",
-					"cost_type": "points",
+					"notes": "Bokor, can have lwa.",
 					"cost": 25,
-					"affects": "total",
-					"notes": "Bokor, can have lwa."
+					"cost_type": "points"
 				},
 				{
-					"type": "modifier",
 					"id": "e57e9e75-653f-4473-bf4e-2bd5e73f55c5",
-					"disabled": true,
+					"type": "modifier",
 					"name": "Bokor level 3",
-					"cost_type": "points",
+					"notes": "Bokor, can have lwa.",
 					"cost": 30,
-					"affects": "total",
-					"notes": "Bokor, can have lwa."
+					"cost_type": "points",
+					"disabled": true
 				}
 			],
+			"base_points": 5,
 			"calc": {
 				"points": 45
-			},
-			"notes": "As Magery 0 [Basic 66].  Gain vague detect magic item or practitioner [Basic 48]."
+			}
 		}
 	],
 	"skills": [
 		{
-			"type": "skill",
 			"id": "2b3fd738-82c8-436a-b520-723d97133f62",
+			"type": "skill",
 			"name": "Beam Weapons",
 			"reference": "B179",
+			"tags": [
+				"Combat",
+				"Ranged Combat",
+				"Weapon"
+			],
 			"specialization": "Pistol",
 			"tech_level": "8",
 			"difficulty": "dx/e",
@@ -1432,10 +1333,6 @@
 				"level": 4,
 				"adjusted_level": 4,
 				"points": -4
-			},
-			"calc": {
-				"level": 14,
-				"rsl": "DX+6"
 			},
 			"defaults": [
 				{
@@ -1454,33 +1351,38 @@
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Combat/Weapon",
-				"Ranged Combat"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "DX+6"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "d27c0256-170a-406a-8d8c-e190cb3c2000",
+			"type": "skill",
 			"name": "Fast-Draw",
 			"reference": "B194",
+			"tags": [
+				"Combat",
+				"Ranged Combat",
+				"Weapon"
+			],
 			"specialization": "Pistol",
 			"difficulty": "dx/e",
 			"points": 2,
 			"calc": {
 				"level": 9,
 				"rsl": "DX+1"
-			},
-			"categories": [
-				"Combat/Weapon",
-				"Ranged Combat"
-			]
+			}
 		},
 		{
-			"type": "skill",
 			"id": "d517c1de-b051-4db6-887e-dcbf572285f4",
+			"type": "skill",
 			"name": "First Aid",
 			"reference": "B195",
+			"tags": [
+				"Everyman",
+				"Medical"
+			],
 			"tech_level": "8",
 			"difficulty": "iq/e",
 			"points": 1,
@@ -1490,10 +1392,6 @@
 				"level": 14,
 				"adjusted_level": 14,
 				"points": -14
-			},
-			"calc": {
-				"level": 17,
-				"rsl": "IQ+1"
 			},
 			"defaults": [
 				{
@@ -1514,16 +1412,22 @@
 					"modifier": -4
 				}
 			],
-			"categories": [
-				"Everyman",
-				"Medical"
-			]
+			"calc": {
+				"level": 17,
+				"rsl": "IQ+1"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "708de810-8f4c-4502-aa2b-8606c2377e9f",
+			"type": "skill",
 			"name": "Law",
 			"reference": "B204",
+			"tags": [
+				"Business",
+				"Humanities",
+				"Police",
+				"Social Sciences"
+			],
 			"specialization": "Conglomerate, Trans territorial jurisdiction/the void",
 			"difficulty": "iq/h",
 			"points": 1,
@@ -1534,27 +1438,25 @@
 				"adjusted_level": 10,
 				"points": -10
 			},
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"defaults": [
 				{
 					"type": "iq",
 					"modifier": -6
 				}
 			],
-			"categories": [
-				"Business",
-				"Police",
-				"Social Sciences/Humanities"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "skill",
 			"id": "24859274-fc80-4385-927c-d9c22f9cb5fd",
+			"type": "skill",
 			"name": "Physician",
 			"reference": "B213",
+			"tags": [
+				"Medical"
+			],
 			"tech_level": "3",
 			"difficulty": "iq/h",
 			"points": 1,
@@ -1564,10 +1466,6 @@
 				"level": 9,
 				"adjusted_level": 9,
 				"points": -9
-			},
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
 			},
 			"defaults": [
 				{
@@ -1585,17 +1483,21 @@
 					"modifier": -5
 				}
 			],
-			"categories": [
-				"Medical"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		}
 	],
 	"spells": [
 		{
-			"type": "spell",
 			"id": "d69a0765-f2d4-457a-b5e8-0c2a67645ea3",
+			"type": "spell",
 			"name": "Agonize",
 			"reference": "M40",
+			"tags": [
+				"Body Control"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Body Control"
@@ -1607,10 +1509,6 @@
 			"casting_time": "1 sec",
 			"duration": "1 min",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
@@ -1620,7 +1518,7 @@
 						"all": false,
 						"prereqs": [
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -1632,7 +1530,7 @@
 								}
 							},
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -1647,8 +1545,8 @@
 					},
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "sensitize"
@@ -1660,15 +1558,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Body Control"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "b0f96030-1593-4e39-bd54-92902362d6cf",
+			"type": "spell",
 			"name": "Analyze Magic",
 			"reference": "M102",
+			"tags": [
+				"Knowledge"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Knowledge"
@@ -1680,18 +1582,14 @@
 			"casting_time": "1 hr",
 			"duration": "Instant",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "identify spell"
@@ -1703,18 +1601,22 @@
 					}
 				]
 			},
-			"categories": [
-				"Knowledge"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "5d3703ad-cc1d-40eb-a8af-1c9d13e8c03c",
+			"type": "spell",
 			"name": "Compel Truth",
 			"reference": "M47",
+			"tags": [
+				"Communication"
+			],
 			"difficulty": "iq/h",
 			"college": [
-				"Communication & Empathy"
+				"Communication \u0026 Empathy"
 			],
 			"power_source": "Arcane",
 			"spell_class": "Info",
@@ -1723,10 +1625,6 @@
 			"casting_time": "1 sec",
 			"duration": "5 min",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
@@ -1736,7 +1634,7 @@
 						"all": false,
 						"prereqs": [
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -1748,7 +1646,7 @@
 								}
 							},
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -1763,8 +1661,8 @@
 					},
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "truthsayer"
@@ -1776,15 +1674,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Communication"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "6092f1c4-546e-4dfb-a216-125b2a353d37",
+			"type": "spell",
 			"name": "Conceal Magic",
 			"reference": "M122",
+			"tags": [
+				"Meta"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Meta"
@@ -1796,18 +1698,14 @@
 			"casting_time": "3 sec",
 			"duration": "10 hrs",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "detect magic"
@@ -1822,7 +1720,7 @@
 						"all": false,
 						"prereqs": [
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -1837,18 +1735,22 @@
 					}
 				]
 			},
-			"categories": [
-				"Meta"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "a7a5a9b4-1919-4dbe-ad49-3b27010687ce",
+			"type": "spell",
 			"name": "Control Person",
 			"reference": "M49",
+			"tags": [
+				"Communication"
+			],
 			"difficulty": "iq/h",
 			"college": [
-				"Communication & Empathy"
+				"Communication \u0026 Empathy"
 			],
 			"power_source": "Arcane",
 			"spell_class": "Regular",
@@ -1857,18 +1759,14 @@
 			"casting_time": "10 sec",
 			"duration": "1 min",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": false,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "soul rider"
@@ -1880,8 +1778,8 @@
 					},
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "telepathy"
@@ -1893,15 +1791,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Communication"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "eec908e2-b602-4d5b-bf03-c6aec2b8ac0b",
+			"type": "spell",
 			"name": "Control Zombie",
 			"reference": "M152",
+			"tags": [
+				"Necromancy"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Necromancy"
@@ -1912,18 +1814,14 @@
 			"casting_time": "1 sec",
 			"duration": "Permanent",
 			"points": 1,
-			"calc": {
-				"level": 16,
-				"rsl": "IQ+0"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "zombie"
@@ -1935,15 +1833,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Necromancy"
-			]
+			"calc": {
+				"level": 16,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "e61be06e-d7c3-412c-9395-82fc4d04b1c7",
+			"type": "spell",
 			"name": "Counterspell",
 			"reference": "M121",
+			"tags": [
+				"Meta"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Meta"
@@ -1954,16 +1856,12 @@
 			"casting_time": "5 sec",
 			"duration": "Instant",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": false,
 				"prereqs": [
 					{
-						"type": "advantage_prereq",
+						"type": "trait_prereq",
 						"has": true,
 						"name": {
 							"compare": "starts_with",
@@ -1976,15 +1874,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Meta"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "374e791c-1085-4308-8483-23c11887aaaa",
+			"type": "spell",
 			"name": "Cure Disease",
 			"reference": "M91",
+			"tags": [
+				"Healing"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Healing"
@@ -1996,18 +1898,14 @@
 			"casting_time": "10 min",
 			"duration": "Permanent",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "relieve sickness"
@@ -2019,8 +1917,8 @@
 					},
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "major healing"
@@ -2032,15 +1930,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Healing"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "a394c09a-2126-426e-bf67-e4ac081a5e3f",
+			"type": "spell",
 			"name": "Death Vision",
 			"reference": "M149",
+			"tags": [
+				"Necromancy"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Necromancy"
@@ -2052,16 +1954,12 @@
 			"casting_time": "3 sec",
 			"duration": "1 sec",
 			"points": 1,
-			"calc": {
-				"level": 16,
-				"rsl": "IQ+0"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": false,
 				"prereqs": [
 					{
-						"type": "advantage_prereq",
+						"type": "trait_prereq",
 						"has": true,
 						"name": {
 							"compare": "starts_with",
@@ -2074,15 +1972,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Necromancy"
-			]
+			"calc": {
+				"level": 16,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "49203e89-8de5-4743-a3cf-0010c4d19d9e",
+			"type": "spell",
 			"name": "Detect Magic",
 			"reference": "M101",
+			"tags": [
+				"Knowledge"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Knowledge"
@@ -2094,16 +1996,12 @@
 			"casting_time": "5 sec",
 			"duration": "Instant",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": false,
 				"prereqs": [
 					{
-						"type": "advantage_prereq",
+						"type": "trait_prereq",
 						"has": true,
 						"name": {
 							"compare": "starts_with",
@@ -2115,7 +2013,7 @@
 						}
 					},
 					{
-						"type": "advantage_prereq",
+						"type": "trait_prereq",
 						"has": true,
 						"name": {
 							"compare": "starts_with",
@@ -2128,15 +2026,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Knowledge"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "817bc6f5-e625-46c2-8133-5c98b9000375",
+			"type": "spell",
 			"name": "Dispel Magic",
 			"reference": "M126",
+			"tags": [
+				"Meta"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Meta"
@@ -2148,18 +2050,14 @@
 			"casting_time": "sec=cost",
 			"duration": "Permanent",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "any",
+						"has": true,
 						"quantity": {
 							"compare": "at_least",
 							"qualifier": 12
@@ -2167,8 +2065,8 @@
 					},
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "counterspell"
@@ -2180,18 +2078,22 @@
 					}
 				]
 			},
-			"categories": [
-				"Meta"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "d76deb75-2225-4bf4-ad05-f0647fe66604",
+			"type": "spell",
 			"name": "Dispel Possession",
 			"reference": "M49",
+			"tags": [
+				"Communication"
+			],
 			"difficulty": "iq/h",
 			"college": [
-				"Communication & Empathy"
+				"Communication \u0026 Empathy"
 			],
 			"power_source": "Arcane",
 			"spell_class": "Regular",
@@ -2200,18 +2102,14 @@
 			"casting_time": "10 sec",
 			"duration": "Instant",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "soul rider"
@@ -2223,8 +2121,8 @@
 					},
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "possession"
@@ -2236,15 +2134,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Communication"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "5a0df5c1-820b-4c11-a437-4f00e1c4cc12",
+			"type": "spell",
 			"name": "Enchant",
 			"reference": "M56",
+			"tags": [
+				"Enchantment"
+			],
 			"difficulty": "iq/vh",
 			"college": [
 				"Enchantment"
@@ -2256,18 +2158,14 @@
 			"casting_time": "Varies",
 			"duration": "Permanent",
 			"points": 1,
-			"calc": {
-				"level": 13,
-				"rsl": "IQ-3"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "college_count",
+						"has": true,
 						"quantity": {
 							"compare": "at_least",
 							"qualifier": 10
@@ -2278,7 +2176,7 @@
 						"all": false,
 						"prereqs": [
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -2293,15 +2191,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Enchantment"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "IQ-3"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "532edf25-e85c-40c8-b0f0-7b332c39eefe",
+			"type": "spell",
 			"name": "Fear",
 			"reference": "M134",
+			"tags": [
+				"Mind Control"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Mind Control"
@@ -2313,18 +2215,14 @@
 			"casting_time": "1 sec",
 			"duration": "10 min",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": false,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "sense emotion"
@@ -2335,7 +2233,7 @@
 						}
 					},
 					{
-						"type": "advantage_prereq",
+						"type": "trait_prereq",
 						"has": true,
 						"name": {
 							"compare": "is",
@@ -2344,15 +2242,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Mind Control"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "37e029c4-5a6f-4c50-9508-5fb12f39cfbf",
+			"type": "spell",
 			"name": "Identify Spell",
 			"reference": "M102",
+			"tags": [
+				"Knowledge"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Knowledge"
@@ -2364,18 +2266,14 @@
 			"casting_time": "1 sec",
 			"duration": "Instant",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "detect magic"
@@ -2387,15 +2285,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Knowledge"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "427e54ba-c7b0-47e6-8c64-2c3a113a3ba6",
+			"type": "spell",
 			"name": "Itch",
 			"reference": "M35",
+			"tags": [
+				"Body Control"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Body Control"
@@ -2410,16 +2312,16 @@
 			"calc": {
 				"level": 15,
 				"rsl": "IQ-1"
-			},
-			"categories": [
-				"Body Control"
-			]
+			}
 		},
 		{
-			"type": "spell",
 			"id": "ebd8666f-bf42-4ff2-9a6f-17d7356304fc",
+			"type": "spell",
 			"name": "Lend Energy",
 			"reference": "M89",
+			"tags": [
+				"Healing"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Healing"
@@ -2431,10 +2333,6 @@
 			"casting_time": "1 sec",
 			"duration": "Permanent",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": false,
@@ -2444,7 +2342,7 @@
 						"all": false,
 						"prereqs": [
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -2456,7 +2354,7 @@
 								}
 							},
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -2470,7 +2368,7 @@
 						]
 					},
 					{
-						"type": "advantage_prereq",
+						"type": "trait_prereq",
 						"has": true,
 						"name": {
 							"compare": "is",
@@ -2479,15 +2377,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Healing"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "7a01a4e3-c7d9-41d6-9457-01b020b430f3",
+			"type": "spell",
 			"name": "Lend Vitality",
 			"reference": "M89",
+			"tags": [
+				"Healing"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Healing"
@@ -2499,18 +2401,14 @@
 			"casting_time": "1 sec",
 			"duration": "1 hour",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "lend energy"
@@ -2522,18 +2420,22 @@
 					}
 				]
 			},
-			"categories": [
-				"Healing"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "bc9ff372-9276-4eb0-9c11-89252e6328e8",
+			"type": "spell",
 			"name": "Light",
 			"reference": "M110",
+			"tags": [
+				"Light"
+			],
 			"difficulty": "iq/h",
 			"college": [
-				"Light & Darkness"
+				"Light \u0026 Darkness"
 			],
 			"power_source": "Arcane",
 			"spell_class": "Regular",
@@ -2545,16 +2447,16 @@
 			"calc": {
 				"level": 14,
 				"rsl": "IQ-2"
-			},
-			"categories": [
-				"Light"
-			]
+			}
 		},
 		{
-			"type": "spell",
 			"id": "58598351-fdb5-4407-9cab-4b5371f4bda1",
+			"type": "spell",
 			"name": "Major Healing",
 			"reference": "M91",
+			"tags": [
+				"Healing"
+			],
 			"difficulty": "iq/vh",
 			"college": [
 				"Healing"
@@ -2566,10 +2468,6 @@
 			"casting_time": "1 sec",
 			"duration": "Permanent",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
@@ -2579,7 +2477,7 @@
 						"all": false,
 						"prereqs": [
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -2591,7 +2489,7 @@
 								}
 							},
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -2606,8 +2504,8 @@
 					},
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "minor healing"
@@ -2619,18 +2517,22 @@
 					}
 				]
 			},
-			"categories": [
-				"Healing"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "63b405da-de72-4a55-8728-116e973e6b2e",
+			"type": "spell",
 			"name": "Mind-Reading",
 			"reference": "M46",
+			"tags": [
+				"Communication"
+			],
 			"difficulty": "iq/h",
 			"college": [
-				"Communication & Empathy"
+				"Communication \u0026 Empathy"
 			],
 			"power_source": "Arcane",
 			"spell_class": "Regular",
@@ -2639,18 +2541,14 @@
 			"casting_time": "10 sec",
 			"duration": "1 min",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": false,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "truthsayer"
@@ -2662,8 +2560,8 @@
 					},
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "borrow language"
@@ -2675,18 +2573,22 @@
 					}
 				]
 			},
-			"categories": [
-				"Communication"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "fbb217a2-e793-4e54-9ceb-001a77e55a34",
+			"type": "spell",
 			"name": "Mind-Search",
 			"reference": "M46",
+			"tags": [
+				"Communication"
+			],
 			"difficulty": "iq/vh",
 			"college": [
-				"Communication & Empathy"
+				"Communication \u0026 Empathy"
 			],
 			"power_source": "Arcane",
 			"spell_class": "Regular",
@@ -2695,18 +2597,14 @@
 			"casting_time": "1 min",
 			"duration": "1 min",
 			"points": 1,
-			"calc": {
-				"level": 13,
-				"rsl": "IQ-3"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "mind-reading"
@@ -2718,15 +2616,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Communication"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "IQ-3"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "e9319861-342b-4374-aeea-9b1405f3e38e",
+			"type": "spell",
 			"name": "Minor Healing",
 			"reference": "M91",
+			"tags": [
+				"Healing"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Healing"
@@ -2738,18 +2640,14 @@
 			"casting_time": "1 sec",
 			"duration": "Permanent",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "lend vitality"
@@ -2761,15 +2659,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Healing"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "75dde6b0-958a-48f1-a9f6-97fbefd9b1f1",
+			"type": "spell",
 			"name": "Pain",
 			"reference": "M36",
+			"tags": [
+				"Body Control"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Body Control"
@@ -2781,18 +2683,14 @@
 			"casting_time": "2 sec",
 			"duration": "1 sec",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "spasm"
@@ -2804,18 +2702,22 @@
 					}
 				]
 			},
-			"categories": [
-				"Body Control"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "ea070b24-8bbe-4576-a4d0-bd46ada90cfb",
+			"type": "spell",
 			"name": "Possession",
 			"reference": "M49",
+			"tags": [
+				"Communication"
+			],
 			"difficulty": "iq/vh",
 			"college": [
-				"Communication & Empathy"
+				"Communication \u0026 Empathy"
 			],
 			"power_source": "Arcane",
 			"spell_class": "Regular",
@@ -2824,10 +2726,6 @@
 			"casting_time": "1 min",
 			"duration": "1 min",
 			"points": 1,
-			"calc": {
-				"level": 13,
-				"rsl": "IQ-3"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
@@ -2837,7 +2735,7 @@
 						"all": false,
 						"prereqs": [
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -2849,7 +2747,7 @@
 								}
 							},
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -2868,8 +2766,8 @@
 						"prereqs": [
 							{
 								"type": "spell_prereq",
-								"has": true,
 								"sub_type": "name",
+								"has": true,
 								"qualifier": {
 									"compare": "is",
 									"qualifier": "control person"
@@ -2881,8 +2779,8 @@
 							},
 							{
 								"type": "spell_prereq",
-								"has": true,
 								"sub_type": "name",
+								"has": true,
 								"qualifier": {
 									"compare": "is",
 									"qualifier": "beast possession"
@@ -2896,15 +2794,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Communication"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "IQ-3"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "9a195dd6-e6c1-40d8-9042-085bbc4f01c9",
+			"type": "spell",
 			"name": "Powerstone",
 			"reference": "M69",
+			"tags": [
+				"Enchantment"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Enchantment"
@@ -2916,18 +2818,14 @@
 			"casting_time": "Varies",
 			"duration": "Permanent",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "enchant"
@@ -2939,15 +2837,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Enchantment"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "029bf728-c1bf-41bf-ba64-c811d59ed0c0",
+			"type": "spell",
 			"name": "Purify Air",
 			"reference": "M23",
+			"tags": [
+				"Air"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Air"
@@ -2962,16 +2864,16 @@
 			"calc": {
 				"level": 14,
 				"rsl": "IQ-2"
-			},
-			"categories": [
-				"Air"
-			]
+			}
 		},
 		{
-			"type": "spell",
 			"id": "21893424-656a-4738-80e8-dad54877075b",
+			"type": "spell",
 			"name": "Recover Energy",
 			"reference": "M89",
+			"tags": [
+				"Healing"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Healing"
@@ -2983,10 +2885,6 @@
 			"casting_time": "1 sec",
 			"duration": "Special",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
@@ -2996,7 +2894,7 @@
 						"all": false,
 						"prereqs": [
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -3008,7 +2906,7 @@
 								}
 							},
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -3023,8 +2921,8 @@
 					},
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "lend energy"
@@ -3036,15 +2934,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Healing"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "a333f8d1-b898-4e80-b779-69505a98dc5b",
+			"type": "spell",
 			"name": "Regeneration",
 			"reference": "M93",
+			"tags": [
+				"Healing"
+			],
 			"difficulty": "iq/vh",
 			"college": [
 				"Healing"
@@ -3056,10 +2958,6 @@
 			"casting_time": "1 min",
 			"duration": "Permanent",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
@@ -3069,7 +2967,7 @@
 						"all": false,
 						"prereqs": [
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -3081,7 +2979,7 @@
 								}
 							},
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -3096,8 +2994,8 @@
 					},
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "restoration"
@@ -3109,15 +3007,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Healing"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "e9cb53ae-6ca9-458b-9370-c3e23359f561",
+			"type": "spell",
 			"name": "Relieve Sickness",
 			"reference": "M90",
+			"tags": [
+				"Healing"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Healing"
@@ -3129,18 +3031,14 @@
 			"casting_time": "10 sec",
 			"duration": "10 min",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "lend vitality"
@@ -3152,15 +3050,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Healing"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "cb73de0b-2478-4743-b9fd-345a762135ce",
+			"type": "spell",
 			"name": "Resist Pain",
 			"reference": "M38",
+			"tags": [
+				"Body Control"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Body Control"
@@ -3172,10 +3074,6 @@
 			"casting_time": "1 sec",
 			"duration": "1 min",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
@@ -3185,7 +3083,7 @@
 						"all": false,
 						"prereqs": [
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -3197,7 +3095,7 @@
 								}
 							},
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -3212,8 +3110,8 @@
 					},
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "pain"
@@ -3225,15 +3123,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Body Control"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "5abadb6e-ac3b-4b2d-8dfe-65217a1e435b",
+			"type": "spell",
 			"name": "Restoration",
 			"reference": "M93",
+			"tags": [
+				"Healing"
+			],
 			"difficulty": "iq/vh",
 			"college": [
 				"Healing"
@@ -3245,18 +3147,14 @@
 			"casting_time": "1 min",
 			"duration": "Permanent",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": false,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "major healing"
@@ -3276,8 +3174,8 @@
 								"prereqs": [
 									{
 										"type": "spell_prereq",
-										"has": true,
 										"sub_type": "name",
+										"has": true,
 										"qualifier": {
 											"compare": "is",
 											"qualifier": "relieve paralysis"
@@ -3291,8 +3189,8 @@
 							},
 							{
 								"type": "spell_prereq",
-								"has": true,
 								"sub_type": "name",
+								"has": true,
 								"qualifier": {
 									"compare": "contains",
 									"qualifier": "restore"
@@ -3306,17 +3204,22 @@
 					}
 				]
 			},
-			"categories": [
-				"Healing"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "f5fa32b1-e245-4324-8c9f-8b4fdc3e675c",
+			"type": "spell",
 			"name": "Seek Machine",
 			"reference": "M175",
-			"difficulty": "iq/h",
+			"tags": [
+				"Machine",
+				"Technological"
+			],
 			"tech_level": "3",
+			"difficulty": "iq/h",
 			"college": [
 				"Technological",
 				"Machine"
@@ -3331,17 +3234,16 @@
 			"calc": {
 				"level": 14,
 				"rsl": "IQ-2"
-			},
-			"categories": [
-				"Machine",
-				"Technological"
-			]
+			}
 		},
 		{
-			"type": "spell",
 			"id": "6d6050ae-1094-4289-8e4f-0dbed3130a53",
+			"type": "spell",
 			"name": "Seek Plant",
 			"reference": "M161",
+			"tags": [
+				"Plant"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Plant"
@@ -3356,19 +3258,19 @@
 			"calc": {
 				"level": 14,
 				"rsl": "IQ-2"
-			},
-			"categories": [
-				"Plant"
-			]
+			}
 		},
 		{
-			"type": "spell",
 			"id": "4e21f8d8-6e01-46a3-a2d7-5e0bf4ea2653",
+			"type": "spell",
 			"name": "Sense Emotion",
 			"reference": "M45",
+			"tags": [
+				"Communication"
+			],
 			"difficulty": "iq/h",
 			"college": [
-				"Communication & Empathy"
+				"Communication \u0026 Empathy"
 			],
 			"power_source": "Arcane",
 			"spell_class": "Regular",
@@ -3377,18 +3279,14 @@
 			"casting_time": "1 sec",
 			"duration": "Instant",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "sense foes"
@@ -3400,18 +3298,22 @@
 					}
 				]
 			},
-			"categories": [
-				"Communication"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "09a5e9d9-bed5-4437-9651-bf79a07103d6",
+			"type": "spell",
 			"name": "Sense Foes",
 			"reference": "M44",
+			"tags": [
+				"Communication"
+			],
 			"difficulty": "iq/h",
 			"college": [
-				"Communication & Empathy"
+				"Communication \u0026 Empathy"
 			],
 			"power_source": "Arcane",
 			"spell_class": "Info/Area",
@@ -3423,16 +3325,16 @@
 			"calc": {
 				"level": 14,
 				"rsl": "IQ-2"
-			},
-			"categories": [
-				"Communication"
-			]
+			}
 		},
 		{
-			"type": "spell",
 			"id": "15a5a220-14c8-4dd2-bb3f-cb020849142a",
+			"type": "spell",
 			"name": "Sensitize",
 			"reference": "M39",
+			"tags": [
+				"Body Control"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Body Control"
@@ -3444,10 +3346,6 @@
 			"casting_time": "1 sec",
 			"duration": "1 min",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
@@ -3457,7 +3355,7 @@
 						"all": false,
 						"prereqs": [
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -3469,7 +3367,7 @@
 								}
 							},
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -3484,8 +3382,8 @@
 					},
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "stun"
@@ -3497,15 +3395,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Body Control"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "bb20144c-da6c-429e-8d16-d42be6d54dac",
+			"type": "spell",
 			"name": "Share Energy",
 			"reference": "M89",
+			"tags": [
+				"Healing"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Healing"
@@ -3517,18 +3419,14 @@
 			"casting_time": "1 sec",
 			"duration": "1 sec",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "lend energy"
@@ -3540,15 +3438,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Healing"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "af8fb4c5-5e76-4763-8841-f1410d1a3e63",
+			"type": "spell",
 			"name": "Share Vitality",
 			"reference": "M90",
+			"tags": [
+				"Healing"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Healing"
@@ -3560,18 +3462,14 @@
 			"casting_time": "1 sec/HP",
 			"duration": "Permanent",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "lend vitality"
@@ -3583,15 +3481,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Healing"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "5d4714e8-2fb4-4476-bbeb-e1a54ac68a32",
+			"type": "spell",
 			"name": "Shield",
 			"reference": "M167",
+			"tags": [
+				"Protection"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Protection"
@@ -3603,16 +3505,12 @@
 			"casting_time": "1 sec",
 			"duration": "1 min",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": false,
 				"prereqs": [
 					{
-						"type": "advantage_prereq",
+						"type": "trait_prereq",
 						"has": true,
 						"name": {
 							"compare": "starts_with",
@@ -3624,7 +3522,7 @@
 						}
 					},
 					{
-						"type": "advantage_prereq",
+						"type": "trait_prereq",
 						"has": true,
 						"name": {
 							"compare": "starts_with",
@@ -3637,18 +3535,22 @@
 					}
 				]
 			},
-			"categories": [
-				"Protection"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "41e1f888-367e-4be8-a5b3-40c1b8b9b1d2",
+			"type": "spell",
 			"name": "Soul Rider",
 			"reference": "M49",
+			"tags": [
+				"Communication"
+			],
 			"difficulty": "iq/h",
 			"college": [
-				"Communication & Empathy"
+				"Communication \u0026 Empathy"
 			],
 			"power_source": "Arcane",
 			"spell_class": "Regular",
@@ -3657,18 +3559,14 @@
 			"casting_time": "3 sec",
 			"duration": "1 min",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "mind-reading"
@@ -3680,15 +3578,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Communication"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "57879c81-374e-4893-a3fc-b1f3d5233d5b",
+			"type": "spell",
 			"name": "Spasm",
 			"reference": "M35",
+			"tags": [
+				"Body Control"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Body Control"
@@ -3700,18 +3602,14 @@
 			"casting_time": "1 sec",
 			"duration": "Instant",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "itch"
@@ -3723,15 +3621,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Body Control"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "f5cb7427-790d-4d8e-8829-f34a2fee7360",
+			"type": "spell",
 			"name": "Steal Energy",
 			"reference": "M150",
+			"tags": [
+				"Necromancy"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Necromancy"
@@ -3743,18 +3645,14 @@
 			"casting_time": "1 min per 3 FP drained",
 			"duration": "Permanent",
 			"points": 1,
-			"calc": {
-				"level": 16,
-				"rsl": "IQ+0"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "minor healing"
@@ -3766,15 +3664,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Necromancy"
-			]
+			"calc": {
+				"level": 16,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "2ef69355-96b6-46a8-8d58-5d8dcbd2cd19",
+			"type": "spell",
 			"name": "Steal Vitality",
 			"reference": "M150",
+			"tags": [
+				"Necromancy"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Necromancy"
@@ -3786,18 +3688,14 @@
 			"casting_time": "1 min per 3 HP drained",
 			"duration": "Permanent",
 			"points": 1,
-			"calc": {
-				"level": 16,
-				"rsl": "IQ+0"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "steal energy"
@@ -3809,15 +3707,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Necromancy"
-			]
+			"calc": {
+				"level": 16,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "05b4993f-bd93-4b31-8d3f-e6f0549c6869",
+			"type": "spell",
 			"name": "Stun",
 			"reference": "M37",
+			"tags": [
+				"Body Control"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Body Control"
@@ -3829,18 +3731,14 @@
 			"casting_time": "1 sec",
 			"duration": "Instant",
 			"points": 1,
-			"calc": {
-				"level": 15,
-				"rsl": "IQ-1"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "pain"
@@ -3852,15 +3750,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Body Control"
-			]
+			"calc": {
+				"level": 15,
+				"rsl": "IQ-1"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "27427a54-b3ed-4e8e-bd98-c07d52255133",
+			"type": "spell",
 			"name": "Summon Spirit",
 			"reference": "M150",
+			"tags": [
+				"Necromancy"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Necromancy"
@@ -3872,18 +3774,14 @@
 			"casting_time": "5 min",
 			"duration": "1 min",
 			"points": 1,
-			"calc": {
-				"level": 16,
-				"rsl": "IQ+0"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "death vision"
@@ -3898,7 +3796,7 @@
 						"all": false,
 						"prereqs": [
 							{
-								"type": "advantage_prereq",
+								"type": "trait_prereq",
 								"has": true,
 								"name": {
 									"compare": "starts_with",
@@ -3913,15 +3811,20 @@
 					}
 				]
 			},
-			"categories": [
-				"Necromancy"
-			]
+			"calc": {
+				"level": 16,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "df396747-a64b-47d0-98f9-5a30ad25d325",
+			"type": "spell",
 			"name": "Teleport",
 			"reference": "M147",
+			"tags": [
+				"Gate",
+				"Movement"
+			],
 			"difficulty": "iq/vh",
 			"college": [
 				"Gate"
@@ -3933,18 +3836,14 @@
 			"casting_time": "1 sec",
 			"duration": "Instant",
 			"points": 1,
-			"calc": {
-				"level": 13,
-				"rsl": "IQ-3"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": false,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "hawk flight"
@@ -3961,16 +3860,16 @@
 							{
 								"type": "attribute_prereq",
 								"has": true,
-								"which": "iq",
 								"qualifier": {
 									"compare": "at_least",
 									"qualifier": 13
-								}
+								},
+								"which": "iq"
 							},
 							{
 								"type": "spell_prereq",
-								"has": true,
 								"sub_type": "college_count",
+								"has": true,
 								"quantity": {
 									"compare": "at_least",
 									"qualifier": 10
@@ -3980,16 +3879,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Gate",
-				"Movement"
-			]
+			"calc": {
+				"level": 13,
+				"rsl": "IQ-3"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "88b48dfa-dfbe-47ec-a00e-c598aa93be41",
+			"type": "spell",
 			"name": "Terror",
 			"reference": "M134",
+			"tags": [
+				"Mind Control"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Mind Control"
@@ -4001,18 +3903,14 @@
 			"casting_time": "1 sec",
 			"duration": "1 sec",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "fear"
@@ -4024,18 +3922,22 @@
 					}
 				]
 			},
-			"categories": [
-				"Mind Control"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "f6e2c751-a1c9-4a51-94e5-49795e41641e",
+			"type": "spell",
 			"name": "Truthsayer",
 			"reference": "M45",
+			"tags": [
+				"Communication"
+			],
 			"difficulty": "iq/h",
 			"college": [
-				"Communication & Empathy"
+				"Communication \u0026 Empathy"
 			],
 			"power_source": "Arcane",
 			"spell_class": "Info",
@@ -4044,18 +3946,14 @@
 			"casting_time": "1 sec",
 			"duration": "Instant",
 			"points": 1,
-			"calc": {
-				"level": 14,
-				"rsl": "IQ-2"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "sense emotion"
@@ -4067,15 +3965,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Communication"
-			]
+			"calc": {
+				"level": 14,
+				"rsl": "IQ-2"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "b6764ead-3c7d-4c20-8102-05a3fed4edb5",
+			"type": "spell",
 			"name": "Turn Zombie",
 			"reference": "M152",
+			"tags": [
+				"Necromancy"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Necromancy"
@@ -4087,18 +3989,14 @@
 			"casting_time": "4 sec",
 			"duration": "Turned undead will avoid caster for 1 day",
 			"points": 1,
-			"calc": {
-				"level": 16,
-				"rsl": "IQ+0"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "zombie"
@@ -4110,15 +4008,19 @@
 					}
 				]
 			},
-			"categories": [
-				"Necromancy"
-			]
+			"calc": {
+				"level": 16,
+				"rsl": "IQ+0"
+			}
 		},
 		{
-			"type": "spell",
 			"id": "1754677f-8b90-45b4-899f-99cdb99219db",
+			"type": "spell",
 			"name": "Zombie",
 			"reference": "M151",
+			"tags": [
+				"Necromancy"
+			],
 			"difficulty": "iq/h",
 			"college": [
 				"Necromancy"
@@ -4130,18 +4032,14 @@
 			"casting_time": "1 min",
 			"duration": "until destroyed",
 			"points": 1,
-			"calc": {
-				"level": 16,
-				"rsl": "IQ+0"
-			},
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
 				"prereqs": [
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "summon spirit"
@@ -4153,8 +4051,8 @@
 					},
 					{
 						"type": "spell_prereq",
-						"has": true,
 						"sub_type": "name",
+						"has": true,
 						"qualifier": {
 							"compare": "is",
 							"qualifier": "lend vitality"
@@ -4166,24 +4064,29 @@
 					}
 				]
 			},
-			"categories": [
-				"Necromancy"
-			]
+			"calc": {
+				"level": 16,
+				"rsl": "IQ+0"
+			}
 		}
 	],
 	"equipment": [
 		{
-			"type": "equipment",
 			"id": "ddbef8d8-aba7-4071-91bd-002508f35655",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Sick Stick",
+			"notes": "On hit: make HT roll or vomit (out 1d/3 turns)",
 			"tech_level": "9",
 			"legality_class": "3",
-			"value": "500",
+			"tags": [
+				"Melee Weapon"
+			],
+			"quantity": 1,
+			"value": 500,
 			"weight": "2 lb",
 			"weapons": [
 				{
+					"id": "13033dd2-6dc7-4816-b3dd-0a096abf1c37",
 					"type": "melee_weapon",
 					"damage": {
 						"type": "fat",
@@ -4194,12 +4097,6 @@
 					"reach": "1",
 					"parry": "0",
 					"block": "No",
-					"calc": {
-						"level": 3,
-						"parry": "4",
-						"block": "No",
-						"damage": "1d+1 fat"
-					},
 					"defaults": [
 						{
 							"type": "dx",
@@ -4238,30 +4135,38 @@
 							"type": "skill",
 							"name": "Axe/Mace"
 						}
-					]
+					],
+					"calc": {
+						"level": 3,
+						"parry": "4",
+						"block": "No",
+						"damage": "1d+1 fat"
+					}
 				}
 			],
+			"equipped": true,
 			"calc": {
-				"extended_value": "500",
+				"extended_value": 500,
 				"extended_weight": "2 lb"
-			},
-			"notes": "On hit: make HT roll or vomit (out 1d/3 turns)",
-			"categories": [
-				"Melee Weapon"
-			]
+			}
 		},
 		{
-			"type": "equipment",
 			"id": "aa330a92-8810-44ae-a5aa-96f1a9839588",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Blaster Pistol, Sig Sauer D65",
+			"notes": "C/9 shots",
 			"tech_level": "9",
 			"legality_class": "3",
-			"value": "2000",
+			"tags": [
+				"Missile Weapon",
+				"Weaponry"
+			],
+			"quantity": 1,
+			"value": 2000,
 			"weight": "1.5 lb",
 			"weapons": [
 				{
+					"id": "b1fc3abb-24f7-429a-8836-9459553aa30f",
 					"type": "ranged_weapon",
 					"damage": {
 						"type": "",
@@ -4274,11 +4179,6 @@
 					"shots": "9(3)",
 					"bulk": "-2",
 					"recoil": "2",
-					"calc": {
-						"level": 14,
-						"range": "200/400",
-						"damage": "1d+4"
-					},
 					"defaults": [
 						{
 							"type": "dx",
@@ -4300,31 +4200,37 @@
 							"specialization": "Pistol",
 							"modifier": -4
 						}
-					]
+					],
+					"calc": {
+						"level": 14,
+						"range": "200/400",
+						"damage": "1d+4"
+					}
 				}
 			],
+			"equipped": true,
 			"calc": {
-				"extended_value": "2000",
+				"extended_value": 2000,
 				"extended_weight": "1.5 lb"
-			},
-			"notes": "C/9 shots",
-			"categories": [
-				"Missile Weapon",
-				"Weaponry"
-			]
+			}
 		},
 		{
-			"type": "equipment",
 			"id": "22fd5f7c-5f50-4a05-acdf-71da86d907f5",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Laser pistol from David Smith Austin Diamond Protocol",
+			"notes": "C/7 shots",
 			"tech_level": "8",
 			"legality_class": "3",
-			"value": "800",
+			"tags": [
+				"Missile Weapon",
+				"Weaponry"
+			],
+			"quantity": 1,
+			"value": 800,
 			"weight": "2 lb",
 			"weapons": [
 				{
+					"id": "24a74323-15c1-4194-bc9b-93aefb77c56f",
 					"type": "ranged_weapon",
 					"damage": {
 						"type": "",
@@ -4337,11 +4243,6 @@
 					"shots": "7(3)",
 					"bulk": "-2",
 					"recoil": "2",
-					"calc": {
-						"level": 14,
-						"range": "150/300",
-						"damage": "2d+1"
-					},
 					"defaults": [
 						{
 							"type": "dx",
@@ -4363,130 +4264,143 @@
 							"specialization": "Pistol",
 							"modifier": -4
 						}
-					]
+					],
+					"calc": {
+						"level": 14,
+						"range": "150/300",
+						"damage": "2d+1"
+					}
 				}
 			],
+			"equipped": true,
 			"calc": {
-				"extended_value": "800",
+				"extended_value": 800,
 				"extended_weight": "2 lb"
-			},
-			"notes": "C/7 shots",
-			"categories": [
-				"Missile Weapon",
-				"Weaponry"
-			]
+			}
 		},
 		{
-			"type": "equipment",
 			"id": "3c657e98-edb5-4fd4-8948-68ae893fe4c0",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Papa Jorge's Blazer",
-			"value": "0",
-			"weight": "0 lb",
+			"notes": "-5 damage reduction.",
+			"quantity": 1,
+			"equipped": true,
 			"calc": {
-				"extended_value": "0",
+				"extended_value": 0,
 				"extended_weight": "0 lb"
-			},
-			"notes": "-5 damage reduction."
+			}
 		},
 		{
-			"type": "equipment",
 			"id": "5f28796c-8743-4e0c-aeee-d6c8036646d2",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Plans for my character",
-			"value": "0",
-			"weight": "0 lb",
-			"calc": {
-				"extended_value": "0",
-				"extended_weight": "0 lb"
-			},
-			"notes": "Add blink, Add points to the pain spell to get to 20 so it goes faster."
-		},
-		{
-			"type": "equipment",
-			"id": "7bf5f59b-3dc8-4b8f-bd9c-b590ff86fb1b",
-			"equipped": true,
-			"quantity": 3,
-			"description": "C cells",
-			"value": "0",
-			"weight": "0 lb",
-			"calc": {
-				"extended_value": "0",
-				"extended_weight": "0 lb"
-			},
-			"notes": " shots each xxxxxxx xxxxxxx in weapon: 1234567"
-		},
-		{
-			"type": "equipment",
-			"id": "7c036339-488e-4776-b0dd-89fca7848c3e",
-			"equipped": true,
-			"quantity": 6,
-			"description": "Antitoxin Kit",
-			"tech_level": "6",
-			"value": "25",
-			"weight": "0.5 lb",
-			"reference": "B289",
-			"calc": {
-				"extended_value": "150",
-				"extended_weight": "3 lb"
-			},
-			"notes": "Antidote for specific poison. 10 uses",
-			"categories": [
-				"Medical Gear"
-			]
-		},
-		{
-			"type": "equipment",
-			"id": "47511f3b-ccea-48d0-acfe-1eeef05242f2",
-			"equipped": true,
-			"quantity": 8,
-			"description": "Antibiotic",
-			"tech_level": "6",
-			"value": "20",
-			"weight": "0 lb",
-			"reference": "B289",
-			"calc": {
-				"extended_value": "160",
-				"extended_weight": "0 lb"
-			},
-			"notes": "Prevents or cures (in 1d days) infections.",
-			"categories": [
-				"Medical Gear"
-			]
-		},
-		{
-			"type": "equipment",
-			"id": "c5d5903d-09ad-4004-8311-fb5f4aa7f423",
-			"equipped": true,
+			"notes": "Add blink, Add points to the pain spell to get to 20 so it goes faster.",
 			"quantity": 1,
-			"description": "Bandages",
-			"value": "10",
-			"weight": "2 lb",
-			"reference": "B289",
+			"equipped": true,
 			"calc": {
-				"extended_value": "10",
-				"extended_weight": "2 lb"
-			},
-			"notes": "Bandages for a  half-dozen wounds. Might be clean cloth, adhesive dressings, or spray-on \"Plastiskin\", depending on TL. Basic equipment for First Aid skill.",
-			"categories": [
-				"Medical Gear"
-			]
+				"extended_value": 0,
+				"extended_weight": "0 lb"
+			}
 		},
 		{
-			"type": "equipment_container",
-			"id": "1d77145d-69c6-4489-879d-a1e4befdfc95",
+			"id": "7bf5f59b-3dc8-4b8f-bd9c-b590ff86fb1b",
+			"type": "equipment",
+			"description": "C cells",
+			"notes": " shots each xxxxxxx xxxxxxx in weapon: 1234567",
+			"quantity": 3,
 			"equipped": true,
-			"description": "Backpack, Small",
-			"tech_level": "1",
-			"value": "60",
-			"weight": "3 lb",
-			"reference": "B288",
 			"calc": {
-				"extended_value": "510",
+				"extended_value": 0,
+				"extended_weight": "0 lb"
+			}
+		},
+		{
+			"id": "7c036339-488e-4776-b0dd-89fca7848c3e",
+			"type": "equipment",
+			"description": "Antitoxin Kit",
+			"reference": "B289",
+			"notes": "Antidote for specific poison. 10 uses",
+			"tech_level": "6",
+			"tags": [
+				"Medical Gear"
+			],
+			"quantity": 6,
+			"value": 25,
+			"weight": "0.5 lb",
+			"equipped": true,
+			"calc": {
+				"extended_value": 150,
 				"extended_weight": "3 lb"
-			},
+			}
+		},
+		{
+			"id": "47511f3b-ccea-48d0-acfe-1eeef05242f2",
+			"type": "equipment",
+			"description": "Antibiotic",
+			"reference": "B289",
+			"notes": "Prevents or cures (in 1d days) infections.",
+			"tech_level": "6",
+			"tags": [
+				"Medical Gear"
+			],
+			"quantity": 8,
+			"value": 20,
+			"equipped": true,
+			"calc": {
+				"extended_value": 160,
+				"extended_weight": "0 lb"
+			}
+		},
+		{
+			"id": "c5d5903d-09ad-4004-8311-fb5f4aa7f423",
+			"type": "equipment",
+			"description": "Bandages",
+			"reference": "B289",
+			"notes": "Bandages for a  half-dozen wounds. Might be clean cloth, adhesive dressings, or spray-on \"Plastiskin\", depending on TL. Basic equipment for First Aid skill.",
+			"tags": [
+				"Medical Gear"
+			],
+			"quantity": 1,
+			"value": 10,
+			"weight": "2 lb",
+			"equipped": true,
+			"calc": {
+				"extended_value": 10,
+				"extended_weight": "2 lb"
+			}
+		},
+		{
+			"id": "1d77145d-69c6-4489-879d-a1e4befdfc95",
+			"type": "equipment_container",
+			"open": true,
+			"children": [
+				{
+					"id": "e5edab74-25d1-4f3d-805e-d2418aee73ec",
+					"type": "equipment",
+					"description": "Eyeglasses",
+					"reference": "HT225",
+					"tech_level": "5",
+					"tags": [
+						"Surgery"
+					],
+					"quantity": 3,
+					"value": 150,
+					"equipped": true,
+					"calc": {
+						"extended_value": 450,
+						"extended_weight": "0 lb"
+					}
+				}
+			],
+			"description": "Backpack, Small",
+			"reference": "B288",
+			"tech_level": "1",
+			"tags": [
+				"Camping and Survival Gear"
+			],
+			"quantity": 1,
+			"value": 60,
+			"weight": "3 lb",
 			"prereqs": {
 				"type": "prereq_list",
 				"all": true,
@@ -4501,198 +4415,162 @@
 					}
 				]
 			},
-			"categories": [
-				"Camping and Survival Gear"
-			],
-			"open": true,
-			"children": [
-				{
-					"type": "equipment",
-					"id": "e5edab74-25d1-4f3d-805e-d2418aee73ec",
-					"equipped": true,
-					"quantity": 3,
-					"description": "Eyeglasses",
-					"tech_level": "5",
-					"value": "150",
-					"weight": "0 lb",
-					"reference": "HT225",
-					"calc": {
-						"extended_value": "450",
-						"extended_weight": "0 lb"
-					},
-					"categories": [
-						"Surgery"
-					]
-				}
-			]
+			"equipped": true,
+			"calc": {
+				"extended_value": 510,
+				"extended_weight": "3 lb"
+			}
 		},
 		{
-			"type": "equipment",
 			"id": "4d72a83d-63b8-4d39-b1e7-1d0eb6c174de",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "First Aid Kit",
-			"value": "50",
-			"weight": "2 lb",
 			"reference": "B289",
-			"calc": {
-				"extended_value": "50",
-				"extended_weight": "2 lb"
-			},
+			"notes": "A complete kit for treating wounds, with bandages, ointments, etc.",
+			"tags": [
+				"Medical Gear"
+			],
+			"quantity": 1,
+			"value": 50,
+			"weight": "2 lb",
 			"features": [
 				{
 					"type": "skill_bonus",
-					"amount": 1,
 					"selection_type": "skills_with_name",
 					"name": {
 						"compare": "is",
 						"qualifier": "First Aid"
-					}
+					},
+					"amount": 1
 				}
 			],
-			"notes": "A complete kit for treating wounds, with bandages, ointments, etc.",
-			"categories": [
-				"Medical Gear"
-			]
+			"equipped": true,
+			"calc": {
+				"extended_value": 50,
+				"extended_weight": "2 lb"
+			}
 		},
 		{
-			"type": "equipment",
 			"id": "a89880fa-1ad7-4279-8dd1-3f0972e17667",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Orb",
-			"value": "0",
-			"weight": "0 lb",
+			"quantity": 1,
+			"equipped": true,
 			"calc": {
-				"extended_value": "0",
+				"extended_value": 0,
 				"extended_weight": "0 lb"
 			}
 		},
 		{
-			"type": "equipment",
 			"id": "7303759f-978e-4a55-baba-1b10e1fb3924",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Teddy Bear",
-			"value": "25",
+			"quantity": 1,
+			"value": 25,
 			"weight": "1.8 lb",
+			"equipped": true,
 			"calc": {
-				"extended_value": "25",
+				"extended_value": 25,
 				"extended_weight": "1.8 lb"
 			}
 		},
 		{
-			"type": "equipment",
 			"id": "0bdf8c2e-18e3-4fcc-8a60-b8fc9970186f",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Armor ",
-			"value": "0",
-			"weight": "0 lb",
-			"calc": {
-				"extended_value": "0",
-				"extended_weight": "0 lb"
-			},
+			"quantity": 1,
 			"features": [
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "torso"
+					"location": "torso",
+					"amount": 5
 				},
 				{
 					"type": "dr_bonus",
-					"amount": 5,
-					"location": "vitals"
+					"location": "vitals",
+					"amount": 5
 				}
-			]
+			],
+			"equipped": true,
+			"calc": {
+				"extended_value": 0,
+				"extended_weight": "0 lb"
+			}
 		},
 		{
-			"type": "equipment",
 			"id": "b7a2ac3b-4968-4f60-98af-754106c8f3ce",
-			"equipped": true,
-			"quantity": 100000,
+			"type": "equipment",
 			"description": "Erubles (divide by 20 for dollars)",
-			"value": "0",
-			"weight": "0 lb",
+			"quantity": 100000,
+			"equipped": true,
 			"calc": {
-				"extended_value": "0",
+				"extended_value": 0,
 				"extended_weight": "0 lb"
 			}
 		},
 		{
-			"type": "equipment",
 			"id": "bd9ca46b-f87f-4f01-9ea9-19e9aa5586c1",
-			"equipped": true,
-			"quantity": 2,
+			"type": "equipment",
 			"description": "fog fingerbone",
-			"value": "0",
-			"weight": "0 lb",
+			"quantity": 2,
+			"equipped": true,
 			"calc": {
-				"extended_value": "0",
+				"extended_value": 0,
 				"extended_weight": "0 lb"
 			}
 		},
 		{
-			"type": "equipment",
 			"id": "c9bfe412-ef34-4793-8289-658a959fcc6d",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Large Knife",
-			"value": "0",
-			"weight": "0 lb",
+			"quantity": 1,
+			"equipped": true,
 			"calc": {
-				"extended_value": "0",
+				"extended_value": 0,
 				"extended_weight": "0 lb"
 			}
 		},
 		{
-			"type": "equipment",
 			"id": "bad1cbf0-747a-414a-ac70-dae06b4206aa",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Brown finger bone of utter dome",
-			"value": "0",
-			"weight": "0 lb",
+			"quantity": 1,
+			"equipped": true,
 			"calc": {
-				"extended_value": "0",
+				"extended_value": 0,
 				"extended_weight": "0 lb"
 			}
 		},
 		{
-			"type": "equipment",
 			"id": "049866b3-eb65-40d2-98c4-f132cb92d11b",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Heavy heal patch2",
-			"value": "0",
-			"weight": "0 lb",
+			"notes": "2d healing for 1d6 hours if magically healed in that time it is permanent",
+			"quantity": 1,
+			"equipped": true,
 			"calc": {
-				"extended_value": "0",
+				"extended_value": 0,
 				"extended_weight": "0 lb"
-			},
-			"notes": "2d healing for 1d6 hours if magically healed in that time it is permanent"
+			}
 		},
 		{
-			"type": "equipment",
 			"id": "da8240d2-635a-43b0-80ad-917b239671b2",
-			"equipped": true,
-			"quantity": 1,
+			"type": "equipment",
 			"description": "Karen's cobbled together version of the Belt Holster from Master Library",
-			"value": "0",
-			"weight": "0 lb",
+			"quantity": 1,
+			"equipped": true,
 			"calc": {
-				"extended_value": "0",
+				"extended_value": 0,
 				"extended_weight": "0 lb"
 			}
 		}
 	],
+	"created_date": "2018-07-07T00:00:00-07:00",
+	"modified_date": "2023-08-08T21:57:34-07:00",
 	"calc": {
 		"swing": "1d",
 		"thrust": "1d-2",
 		"basic_lift": "20 lb",
-		"lifting_st_bonus": 0,
-		"striking_st_bonus": 0,
-		"throwing_st_bonus": 0,
 		"move": [
 			6,
 			4,
@@ -4706,9 +4584,6 @@
 			6,
 			5,
 			4
-		],
-		"dodge_bonus": 0,
-		"block_bonus": 0,
-		"parry_bonus": 0
+		]
 	}
 }

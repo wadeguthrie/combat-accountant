@@ -515,7 +515,7 @@ class Timers(object):
 
     def show_all(self):
         ''' Displays all timers.  '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         debug.print('\n<< Timer list')
         printed_something = False
         for timer in self.__timers['obj']:

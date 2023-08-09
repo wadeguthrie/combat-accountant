@@ -83,19 +83,19 @@ class GmTestCaseImport(GmTestCaseCommon):
                     "swung weapon": {
                       "damage": { "st": "sw", "plus": -2, "type": "cut" },
                       "skill": {
-                        "DX": -4, "Knife": 0, "Force Sword": -3, "Main-Gauche": -3,
+                        "dx": -4, "Knife": 0, "Force Sword": -3, "Main-Gauche": -3,
                         "Shortsword": -3, "Sword!": 0 }
                     },
                     "thrust weapon": {
                       "damage": { "st": "thr", "plus": 0, "type": "imp" },
                       "skill": {
-                        "DX": -4, "Knife": 0, "Force Sword": -3,
+                        "dx": -4, "Knife": 0, "Force Sword": -3,
                         "Main-Gauche": -3, "Shortsword": -3, "Sword!": 0
                       }
                     },
                     "ranged weapon": {
                       "damage": { "st": "thr", "plus": 0, "type": "imp" },
-                      "skill": { "DX": -4, "Thrown Weapon (Knife)": 0 }
+                      "skill": { "dx": -4, "Thrown Weapon (Knife)": 0 }
                     }
                   },
                   "count": 4, "notes": "", "owners": None, "parry": -1,
@@ -127,18 +127,18 @@ class GmTestCaseImport(GmTestCaseCommon):
                     "swung weapon": {
                       "damage": { "st": "sw", "plus": -3, "type": "cut" },
                       "skill": {
-                        "DX": -4, "Knife": 0, "Force Sword": -3,
+                        "dx": -4, "Knife": 0, "Force Sword": -3,
                         "Main-Gauche": -3, "Shortsword": -3, "Sword!": 0 }
                     },
                     "thrust weapon": {
                       "damage": { "st": "thr", "plus": -1, "type": "imp" },
                       "skill": {
-                        "DX": -4, "Knife": 0, "Force Sword": -3,
+                        "dx": -4, "Knife": 0, "Force Sword": -3,
                         "Main-Gauche": -3, "Shortsword": -3, "Sword!": 0 }
                     },
                     "ranged weapon": {
                       "damage": { "st": "thr", "plus": -1, "type": "imp" },
-                      "skill": { "DX": -4, "Thrown Weapon (Knife)": 0 }
+                      "skill": { "dx": -4, "Thrown Weapon (Knife)": 0 }
                     }
                   },
                   "count": 5, "notes": "", "owners": None, "parry": -1,
@@ -270,7 +270,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                           "dice": { "num_dice": 1, "plus": 1, "type": "fat" }
                       },
                       "skill": {
-                        "DX": -5, "Force Sword": -4, "Broadsword": 0,
+                        "dx": -5, "Force Sword": -4, "Broadsword": 0,
                         "Rapier": -4, "Saber": -4, "Shortsword": -2,
                         "Two-Handed Sword": -4, "Axe/Mace": 0
                       }
@@ -309,7 +309,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                         "dice": { "num_dice": 1, "plus": 4, "type": "HP" }
                       },
                       "skill": {
-                        "DX": -4, "Beam Weapons (Pistol)": 0,
+                        "dx": -4, "Beam Weapons (Pistol)": 0,
                         "Beam Weapons": -4, "Guns (Pistol)": -4
                       }
                     }
@@ -349,7 +349,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                       "type": {
                         "ranged weapon": {
                           "damage": { "st": "sw", "plus": 2, "type": "cr" },
-                          "skill": { "DX": -4, "Thrown Weapon (Axe/Mace)": 0 }
+                          "skill": { "dx": -4, "Thrown Weapon (Axe/Mace)": 0 }
                         }
                       },
                       "count": 1,
@@ -1726,7 +1726,6 @@ class GmTestCaseImport(GmTestCaseCommon):
                 { "name": "Zombie", "skill": 16 }
               ]
         },
-
         'unittest_import/Char7.gcs': {
               "actions_this_turn": [],
               "armor-index": [],
@@ -1822,7 +1821,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                                 "type": "cut"
                               },
                               "skill": {
-                                "DX": -4,
+                                "dx": -4,
                                 "Knife": 0,
                                 "Force Sword": -3,
                                 "Main-Gauche": -3,
@@ -1837,7 +1836,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                                 "type": "imp"
                               },
                               "skill": {
-                                "DX": -4,
+                                "dx": -4,
                                 "Knife": 0,
                                 "Force Sword": -3,
                                 "Main-Gauche": -3,
@@ -1852,7 +1851,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                                 "type": "imp"
                               },
                               "skill": {
-                                "DX": -4,
+                                "dx": -4,
                                 "Thrown Weapon (Knife)": 0
                               }
                             }
@@ -1891,7 +1890,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                                 "type": "cut"
                               },
                               "skill": {
-                                "DX": -4,
+                                "dx": -4,
                                 "Knife": 0,
                                 "Force Sword": -3,
                                 "Main-Gauche": -3,
@@ -1906,7 +1905,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                                 "type": "imp"
                               },
                               "skill": {
-                                "DX": -4,
+                                "dx": -4,
                                 "Knife": 0,
                                 "Force Sword": -3,
                                 "Main-Gauche": -3,
@@ -1920,7 +1919,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                                 "plus": -1,
                                 "type": "imp"
                               },
-                              "skill": { "DX": -4, "Thrown Weapon (Knife)": 0 }
+                              "skill": { "dx": -4, "Thrown Weapon (Knife)": 0 }
                             }
                           },
                           "count": 1,
@@ -1950,7 +1949,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                                 "type": "cr"
                               },
                               "skill": {
-                                "DX": 0,
+                                "dx": 0,
                                 "Boxing": 0,
                                 "Brawling": 0,
                                 "Karate": 0
@@ -1990,7 +1989,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                       "damage": {
                         "dice": { "num_dice": 3, "plus": 0, "type": "pi" }
                       },
-                      "skill": { "DX": -4, "Beam Weapons (Rifle)": 0 }
+                      "skill": { "dx": -4, "Beam Weapons (Rifle)": 0 }
                     }
                   },
                   "count": 1, "notes": "", "owners": None,
@@ -2015,7 +2014,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                             "dice": { "num_dice": 1, "plus": 4, "type": "fat" }
                           },
                           "skill": {
-                            "DX": -4, "Beam Weapons (Pistol)": 0,
+                            "dx": -4, "Beam Weapons (Pistol)": 0,
                             "Beam Weapons": -4, "Guns (Pistol)": -4
                           }
                         }
@@ -2041,7 +2040,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                         "dice": { "num_dice": 1, "plus": 4, "type": "fat" }
                       },
                       "skill": {
-                        "DX": -4, "Beam Weapons (Pistol)": 0,
+                        "dx": -4, "Beam Weapons (Pistol)": 0,
                         "Beam Weapons": -4, "Guns (Pistol)": -4
                       }
                     }
@@ -2085,7 +2084,7 @@ class GmTestCaseImport(GmTestCaseCommon):
                             }
                           },
                           "skill": {
-                            "DX": -5,
+                            "dx": -5,
                             "Force Sword": -4,
                             "Broadsword": 0,
                             "Rapier": -4,

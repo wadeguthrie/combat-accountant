@@ -5,6 +5,8 @@ import pprint
 import sys
 import traceback
 
+import ca_debug
+
 
 class GmJson(object):
     '''
@@ -121,105 +123,106 @@ class DiffJson(object):
                   rhs,
                   path  # string describing stack of containers that got us here
                   ):
+        debug = ca_debug.Debug(screen=True)
         if isinstance(lhs, dict):
             if not isinstance(rhs, dict):
-                print('\n---------------------')
-                print('** TYPE: %s%s is a DICT, but not in %s' % (
+                debug.print('\n---------------------')
+                debug.print('** TYPE: %s%s is a DICT, but not in %s' % (
                         self.__first_input_string, path, self.__second_input_string))
                 if self.__verbose:
-                    print('\nlhs')
-                    self.__PP.pprint(lhs)
-                    print('\nrhs')
-                    self.__PP.pprint(rhs)
+                    debug.print('\nlhs')
+                    debug.pprint(lhs)
+                    debug.print('\nrhs')
+                    debug.pprint(rhs)
                 return False
             for key in rhs.keys():
                 if key not in lhs:
-                    print('\n---------------------')
-                    print('** KEY (%s): %s%s[%s] does not exist' % (
+                    debug.print('\n---------------------')
+                    debug.print('** KEY (%s): %s%s[%s] does not exist' % (
                             path, self.__first_input_string, path, key))
                     if self.__verbose:
-                        print('\nlhs')
-                        self.__PP.pprint(lhs)
-                        print('\nrhs')
-                        self.__PP.pprint(rhs)
+                        debug.print('\nlhs')
+                        debug.pprint(lhs)
+                        debug.print('\nrhs')
+                        debug.pprint(rhs)
                     else:
-                        print('\n%s%s[%s]:' % (self.__second_input_string, path, key))
-                        self.__PP.pprint(rhs[key])
+                        debug.print('\n%s%s[%s]:' % (self.__second_input_string, path, key))
+                        debug.pprint(rhs[key])
                     return False
             result = True
             for key in lhs.keys():
                 new_path = path + ('[%s]' % key)
                 if key not in rhs:
-                    print('\n---------------------')
-                    print('** KEY (%s): %s%s[%s] does not exist' % (
+                    debug.print('\n---------------------')
+                    debug.print('** KEY (%s): %s%s[%s] does not exist' % (
                             key, self.__second_input_string, path, key))
                     if self.__verbose:
-                        print('\nlhs')
-                        self.__PP.pprint(lhs)
-                        print('\nrhs')
-                        self.__PP.pprint(rhs)
+                        debug.print('\nlhs')
+                        debug.pprint(lhs)
+                        debug.print('\nrhs')
+                        debug.pprint(rhs)
                     else:
-                        print('\n%s%s[%s]:' % (self.__first_input_string, path, key))
-                        self.__PP.pprint(lhs[key])
+                        debug.print('\n%s%s[%s]:' % (self.__first_input_string, path, key))
+                        debug.pprint(lhs[key])
                     result = False
                 elif not self.are_equal(lhs[key], rhs[key], new_path):
-                    print('\nSo, %s%s[%r] != %s[...][%r]' % (
+                    debug.print('\nSo, %s%s[%r] != %s[...][%r]' % (
                             self.__first_input_string, path, key,
                             self.__second_input_string, key))
-                    # print '\nlhs'
-                    # self.__PP.pprint(lhs)
-                    # print '\nrhs'
-                    # self.__PP.pprint(rhs)
+                    # debug.print '\nlhs'
+                    # debug.pprint(lhs)
+                    # debug.print '\nrhs'
+                    # debug.pprint(rhs)
                     result = False
             return result
 
         elif isinstance(lhs, list):
             if not isinstance(rhs, list):
-                print('\n---------------------')
-                print('** TYPE: %s%s is a LIST, not so in %s' % (
+                debug.print('\n---------------------')
+                debug.print('** TYPE: %s%s is a LIST, not so in %s' % (
                         self.__first_input_string, path, self.__second_input_string))
                 if self.__verbose:
-                    print('\nlhs')
-                    self.__PP.pprint(lhs)
-                    print('\nrhs')
-                    self.__PP.pprint(rhs)
+                    debug.print('\nlhs')
+                    debug.pprint(lhs)
+                    debug.print('\nrhs')
+                    debug.pprint(rhs)
                 return False
             if len(lhs) != len(rhs):
-                print('\n---------------------')
-                print('** LENGTH: len(%s%s) =%d != len(%s[...]) =%d' % (
+                debug.print('\n---------------------')
+                debug.print('** LENGTH: len(%s%s) =%d != len(%s[...]) =%d' % (
                         self.__first_input_string, path, len(lhs),
                         self.__second_input_string, len(rhs)))
                 if self.__verbose:
-                    print('\nlhs')
-                    self.__PP.pprint(lhs)
-                    print('\nrhs')
-                    self.__PP.pprint(rhs)
+                    debug.print('\nlhs')
+                    debug.pprint(lhs)
+                    debug.print('\nrhs')
+                    debug.pprint(rhs)
                 return False
             result = True
             for i in range(len(lhs)):
                 new_path = path + ('[%d]' % i)
                 if not self.are_equal(lhs[i], rhs[i], new_path):
-                    print('\nSo, %s%s[%d] != %s[...][%d]' % (
+                    debug.print('\nSo, %s%s[%d] != %s[...][%d]' % (
                             self.__first_input_string, path, i,
                             self.__second_input_string, i))
-                    # print '\nlhs'
-                    # self.__PP.pprint(lhs)
-                    # print '\nrhs'
-                    # self.__PP.pprint(rhs)
+                    # debug.print '\nlhs'
+                    # debug.pprint(lhs)
+                    # debug.print '\nrhs'
+                    # debug.pprint(rhs)
                     result = False
             return result
 
         else:
             if lhs != rhs:
-                print('\n---------------------')
-                print('** VALUE: %s%s =%r != %s[...] =%r' % (
+                debug.print('\n---------------------')
+                debug.print('** VALUE: %s%s =%r != %s[...] =%r' % (
                         self.__first_input_string, path, lhs,
                         self.__second_input_string, rhs))
                 if self.__verbose:
-                    print('\nlhs')
-                    self.__PP.pprint(lhs)
-                    print('\nrhs')
-                    self.__PP.pprint(rhs)
+                    debug.print('\nlhs')
+                    debug.pprint(lhs)
+                    debug.print('\nrhs')
+                    debug.pprint(rhs)
                 return False
             else:
                 return True
