@@ -6,6 +6,28 @@ import pprint
 
 import ca_debug
 
+# The JSON source to objects in the 'stuff' array is expected to look like
+# this:
+#
+# {
+#      "name": "<name of the item>"
+#      "count": <number of items>,
+#      "notes": "<whatever>",
+#      "owners": [ <list of strings> ],
+#      "type": { <type> : <value> },
+# }
+#
+# <type> is one or more of:
+#   o misc            - miscellaneous item, value is '1' (arbitrary)
+#   o container       - container, value is '1' (arbitrary)
+#                       dict contains "stuff": [array of items]
+#   o ranged weapon   - see the ruleset file for details
+#   o swung weapon    - see the ruleset file for details
+#   o thrust weapon   - see the ruleset file for details
+#   o natural weapon  - see the ruleset file for details
+#   o armor           - see the ruleset file for details
+#   o natural armor   - see the ruleset file for details
+
 class Equipment(object):
     (RELOAD_NONE,   # for a thrown dagger or suriken
      RELOAD_ONE,    # for a shotgun or grenade launcher, loaded one at a time

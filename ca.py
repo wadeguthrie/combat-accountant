@@ -57,6 +57,18 @@ import ca_timers
 # NOTE: debugging thoughts:
 #   - traceback.print_stack()
 
+# The JSON ile that defines a campaign is expected to look like:
+# {
+#   'templates':        {...}, # described in TODO
+#   'fights':           {...}, # described in ca_fighters at the top of file
+#   'PCs':              {...}, # described in TODO
+#   'NPCs':             {...}, # described in TODO
+#   'dead-monsters':    {...}, # described below in remove_fight()
+#   'current-fight':    {...}, # described in TODO
+#   'stuff':            {...}, # described in ca_equipment at the top of file
+#   'names':            {...}, # described below in get_random_name()
+#   'options':          {...}  # described below in the Options class
+# }
 
 class CaGmWindowManager(ca_gui.GmWindowManager):
     def __init__(self):
@@ -1014,6 +1026,15 @@ class World(object):
         Returns a tuple that contains the name, the country name, and the
         gender of the creature.
         '''
+        # The JSON file contains a structure for this as follows:
+        #
+        # 'names': {<country>: {'male':   [<name>, <name>, ...],
+        #                       'female': [<name>, <name>, ...],
+        #                       'last':   [<name>, <name>, ...]},
+        #           ...}
+        # where <country> and <name> are all strings
+        #
+
         # TODO (eventually): should return an array so that any structure of
         # naming categories is permitted.
         randomly_generate = False
@@ -1032,6 +1053,7 @@ class World(object):
 
         # Gender
 
+        # TODO: could pick the genders out of the file to allow more fluidity
         gender_list = ['male', 'female']
         if not randomly_generate:
             gender_menu = [(x, x) for x in gender_list]
@@ -1068,6 +1090,18 @@ class World(object):
 
         Returns nothing.
         '''
+
+        # The JSON file section that describes 'dead-monsters' is expected to
+        # look like this:
+        #
+        # 'dead-monsters': [ {'name': <string: fight name>,
+        #                     'date': <string: date of fight>,
+        #                     'monsters': <monsters>}, ... ]
+        #
+        # where: <date of fight> is in the following format:
+        #           YYYY-MM-DD-HH-MM-SS
+        #        <monsters> is the monster list described under the JSON
+        #           section ['fights'][<group name>]['monsters']
 
         if group_name in self.details['fights']:
             # Put fight in dead-monsters list
@@ -7681,6 +7715,14 @@ class Program(object):
 
 
 class Options(object):
+    # The JSON file that contains options is expected to look like this:
+    #
+    # 'options: {<option>: <value>, ...}
+    # where:
+    #   <option> is a string.  A search for 'get_option' will give you the
+    #       current option list
+    #   <value> is an option-specific value, usually true or false
+
     def __init__(self,
                  global_options,    # dict, options for program
                  campaign_options   # dict, options for campaign

@@ -7,6 +7,21 @@ import pprint
 import ca_equipment
 import ca_timers
 
+# The section in the JSON file describing 'fights' should look like this:
+#
+# 'fights': {
+#   <fight name>: { 'monsters': { <monster name>: { <creature-description> },
+#                                 ... }},
+#   ... }
+#
+# where:
+#   <fight name> is a unique string describing the fight
+#   <monster name> is a string that is unique under the 'fight name'.  One
+#       name every fight has is '<< ROOM >>'.  This allows the room to contain
+#       objects that can be transferred to the PCs, notes that can be read to
+#       the PCs, and timers that aren't specific to any creature.
+#   <creature-description> is a structure that is the same as the top-level
+#       JSON section 'PCs' in ca.py
 
 class ThingsInFight(object):
     '''

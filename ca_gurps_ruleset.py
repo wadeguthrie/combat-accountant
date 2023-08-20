@@ -15,6 +15,95 @@ import ca_json
 import ca_ruleset
 import ca_timers
 
+# The JSON source to a "ranged weapon", "swung weapon", "thrust weapon",
+#   "natural weapon", "armor" or "natural armor" is expected to look like this:
+#
+# {
+#      "name": "<name of the item>"
+#      "count": <number of items>,
+#      "notes": "<whatever>",
+#      "owners": [ <list of strings> ],
+#      "type": { <type> : <value> },
+# }
+#
+# <type> is one of:
+#   o armor
+#   o natural armor
+#       "type": { "armor":         { "dr": <int: damage resistance> } },
+#       "type": { "natural armor": { "dr": <int: damage resistance> } },
+#
+#       neither of these have extra entries in the object dict
+#
+#   o thrown weapon -- TBS
+#   o shield -- TBS
+#
+#   o swung weapon
+#   o thrust weapon
+#       "type": {"swung weapon": {<skill>, <damage>}
+#       "type": {"thrust weapon": {<skill>, <damage>}
+#
+#           <skill> (see below)
+#           <damage> is "damage": { "type": <damage type>,
+#                                   "plus": <int: plus value>,
+#                                   "st": <st type> }
+#               <damage type> is one of "cr", "imp", ...
+#               <st type> is one of "sw" (for swing damage),
+#                                   "thr" (for thrust damage)
+#       these require an additional entry in the dict:
+#           "parry": <int: plus to parry due to this weapon>
+#
+#   o ranged weapon
+#       "type": {"ranged weapon": {<skill>, <damage>} }
+#
+#           <skill> (see below)
+#           <damaage> is "damaage": { "dice": {"num_dice": <num dice>,
+#                                              "plus": <plus>,
+#                                              "type": <type>} }
+#               <num dice> is number of 6-sided dice to roll
+#               <plus> is value added to die roll
+#               <type> is "pi", "pi+", "imp", etc.
+#
+#       this requires the following additional entries:
+#
+#           "acc": <int: acc> -- GURPS acc value
+#           "reload": <int: reload> -- GURPS reload value (rounds to reload)
+#           "bulk": <int: bulk> -- GURPS bulk value
+#           "reload_type": <int: reload type>
+#               0 = Equipment.RELOAD_NONE # for a thrown dagger or suriken,
+#                                           no reloads
+#               1 = Equipment.RELOAD_ONE  # for a shotgun or grenade launcher,
+#                                           loaded one shell or grenade at a
+#                                           time
+#               2 = Equipment.RELOAD_CLIP # for weapons that are reloaded one
+#                                           magazine at a time
+#           "clip": <clip> -- externally loaded magazine containing shots
+#               <clip> is { "type": { "misc": 1 },
+#                           "name": <string>,
+#                           "shots": <int: shots in this magazine>,
+#                           "shots_left": <int: shots remaining before empty> }
+#
+#           "ammo": <ammo> -- describes a magazine
+#               <ammo> is { "count": <int: ignored>,
+#                           "name": <name of external object to find / load>,
+#                           "shots": <int: number of shots in a magazine> }
+#           "shots_per_round": <int: rate of fire of machine gun> -- optional
+#           "pellets_per_shot": <int: pellets in shotgun shell> -- optional
+#
+#   o natural weapon
+#       "type": {"natural weapon": {<skill>, <damage>}
+#
+#           <skill> (see below)
+#           <damaage> (see damage from 'ranged weapon', 'thrust weapon', or
+#                      'swung weapon', as appropriate)
+#
+#   <skill> is "skill": {<skill name>: <skill minus>, ... }
+#       <skill name> is a list of skills that may apply to using this
+#           weapon.
+#       <skill minus> is the penalty for using this skill if you're not
+#           using the weapon's primary skill.  This value is 0 for the
+#           weapon's primary skill.
+
+
 class GurpsRuleset(ca_ruleset.Ruleset):
     '''
     GURPS is a trademark of Steve Jackson Games, and its rules and art are
@@ -1807,8 +1896,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 skill += 2
 
         # Shotgun? - B373
-        if ('shots_per_round' in weapon.details and
-                'pellets_per_shot' in weapon.details):
+        if 'shots_per_round' in weapon.details:
+            pellets_per_shot = (1 if 'pellets_per_shot' not in weapon.details
+                    else weapon.details['pellets_per_shot'])
             to_hit_bonus = [
                     {'shots': 4, 'bonus': +0},
                     {'shots': 8, 'bonus': +1},
@@ -1833,14 +1923,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             if shots_fired is None:
                 shots_fired = weapon.details['shots_per_round']
 
-            total_shots = shots_fired * weapon.details['pellets_per_shot']
+            total_shots = shots_fired * pellets_per_shot
             for entry in to_hit_bonus:
                 if total_shots <= entry['shots']:
                     skill += entry['bonus']
                     why.append('  %+d for %d shots x %d pellets (B373)' %
                             (entry['bonus'],
                              shots_fired,
-                             weapon.details['pellets_per_shot']))
+                             pellets_per_shot))
                     break
 
         # Shock
@@ -4366,13 +4456,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                              damage['dice']['plus']))
 
             # Shotguns need more explanation B373
+            # TODO: B373 - one hit per multiple of 'rcl'.  We're treating rcl as 1,
+            #   here.
             debug.print('is ranged?')
             if weapon.is_ranged_weapon():
                 debug.print('*IS* ranged')
                 pellets_per_shot = weapon.get_param('pellets_per_shot',
                                                     'ranged weapon')
-                debug.print('pellets_per_shot: %r' % pellets_per_shot)
-                if pellets_per_shot is not None:
+                if pellets_per_shot is None:
+                    pellets_per_shot = 1
+                debug.print('pellets_per_shot: %d' % pellets_per_shot)
+                if pellets_per_shot > 1:
                     mult_factor = int(pellets_per_shot / 2)
 
                     why.append('    Shotgun range is 50/125 (so 5 yards for CLOSE range)')
@@ -4385,7 +4479,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     why.append('    Dodge success removes 1 pellet + 1 pellet per margin ')
                     why.append('      of success (closer than 5 yards, it\'s the shot,')
                     why.append('      not the pellet that\'s dodged)')
-                    why.append('    See B409, B373 (rapid fire), B375 (dodge)')
+                    why.append('    See B409, B373 (rapid fire), and B375 (dodge)')
+                else:
+                    why.append('    Number of bullets that hit is 1 (on hit success)')
+                    why.append('      + margin of HIT success')
+                    why.append('    Dodge success removes 1 pellet + 1 pellet per margin ')
+                    why.append('      of success')
+                    why.append('    See B373 (rapid fire) and B375 (dodge)')
 
 
 
