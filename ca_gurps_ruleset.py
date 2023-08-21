@@ -1927,10 +1927,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             for entry in to_hit_bonus:
                 if total_shots <= entry['shots']:
                     skill += entry['bonus']
-                    why.append('  %+d for %d shots x %d pellets (B373)' %
-                            (entry['bonus'],
-                             shots_fired,
-                             pellets_per_shot))
+                    if pellets_per_shot <= 1:
+                        why.append('  %+d for %d shots (B373)' %
+                                (entry['bonus'], shots_fired))
+                    else:
+                        why.append('  %+d for %d shots x %d pellets (B373)' %
+                                (entry['bonus'],
+                                 shots_fired,
+                                 pellets_per_shot))
                     break
 
         # Shock
@@ -2500,9 +2504,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             item_skill in creature['skills']):
                         found_skill = True
             elif ca_equipment.Weapon.is_weapon(item):
+                debug = ca_debug.Debug()
                 weapon = ca_equipment.Weapon(item)
+                debug.header1('check_creature_consistent: %s' % weapon.name)
                 modes = weapon.get_attack_modes()
+                debug.print('modes:')
+                debug.pprint(modes)
+                debug.print('item:')
+                debug.pprint(item)
                 for mode in modes:
+                    debug.header2(mode)
                     if found_skill:
                         break
                     if mode == 'misc':
@@ -4024,6 +4035,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # the action asks questions of the user and sends the
             # second part.  The 1st part isn't executed when playing
             # back.
+            debug = ca_debug.Debug()
 
             # Multiple shots per round describes machine guns or shotguns
             weapon_needs_multiple_shot_handling = True
@@ -4046,24 +4058,30 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             # Does the weapon shoot multiple rounds?
             if weapon_needs_multiple_shot_handling:
+                debug.header1('do_attack: %s' % weapon.name)
                 if ('shots_per_round' not in weapon.details or
                         weapon.details['shots_per_round'] <= 1):
+                    #debug.print('shots_per_round: %d' % weapon.details['shots_per_round'])
                     weapon_needs_multiple_shot_handling = False
 
             max_shots_this_round = 1    # Just a default value
             if weapon_needs_multiple_shot_handling:
                 max_shots_this_round = weapon.details['shots_per_round']
+                debug.print('max_shots_this_round: %d' % max_shots_this_round)
                 if max_shots_this_round <= 1:
                     weapon_needs_multiple_shot_handling = False
 
             # Do we have more than 1 round in the clip?
             if weapon_needs_multiple_shot_handling:
                 clip = weapon.get_clip()
+                debug.print('clip:')
+                debug.pprint(clip)
                 if clip is None:
                     weapon_needs_multiple_shot_handling = False
 
             if weapon_needs_multiple_shot_handling:
                 shots_left = weapon.shots_left()
+                debug.print('shots left: %d' % shots_left)
                 if shots_left < max_shots_this_round:
                     max_shots_this_round = shots_left
                     if max_shots_this_round <= 0:
