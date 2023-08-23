@@ -2479,7 +2479,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Make sure creature has skills for all their stuff.  Trying to make
         sure that one or the other of the skills wasn't entered incorrectly.
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
 
         result = super(GurpsRuleset,
                        self).check_creature_consistent(name,
@@ -2504,7 +2504,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             item_skill in creature['skills']):
                         found_skill = True
             elif ca_equipment.Weapon.is_weapon(item):
-                debug = ca_debug.Debug()
                 weapon = ca_equipment.Weapon(item)
                 debug.header1('check_creature_consistent: %s' % weapon.name)
                 modes = weapon.get_attack_modes()
@@ -4035,7 +4034,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # the action asks questions of the user and sends the
             # second part.  The 1st part isn't executed when playing
             # back.
-            debug = ca_debug.Debug()
+            debug = ca_debug.Debug(quiet=True)
 
             # Multiple shots per round describes machine guns or shotguns
             weapon_needs_multiple_shot_handling = True
