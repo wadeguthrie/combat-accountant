@@ -46,16 +46,11 @@ import ca_timers
 
 # TODO: PC joins NPCs in PC editing mode
 
-# TODO: consistency check for preferred weapons/armor should only ask once
-
 # TODO: have some token for an item that a) replaces most of the information
 #   about that item and b) points to that same item in the equipment list.
 #   This saves space in the campaign file, informs the reader that the item
 #   is a 'standard' version of the item, and allows changes in the item in
 #   the master equipment list to propogate to all users of that item.
-
-# NOTE: debugging thoughts:
-#   - traceback.print_stack()
 
 # The JSON ile that defines a campaign is expected to look like:
 # {
@@ -1053,17 +1048,24 @@ class World(object):
 
         # Gender
 
-        # TODO: could pick the genders out of the file to allow more fluidity
-        gender_list = ['male', 'female']
         if not randomly_generate:
-            gender_menu = [(x, x) for x in gender_list]
+            gender_menu = [(x, x) for x in self.details['names'][country_name]]
+
             gender, ignore = self.__window_manager.menu('What Gender',
                                                         gender_menu)
             if gender is None:
                 randomly_generate = True
 
         if randomly_generate:
-            gender = random.choice(gender_list)
+            debug = ca_debug.Debug(quiet=True)
+            debug.header1('Gender')
+            genders = list(self.details['names'][country_name].keys())
+            debug.pprint(genders)
+            genders.remove('last')  # last names are treated diferently
+            debug.pprint(genders)
+
+            debug.pprint(genders)
+            gender = random.choice(genders)
 
         # Name
 
@@ -4409,7 +4411,7 @@ class FightHandler(ScreenHandler):
                  ):
         super(FightHandler, self).__init__(window_manager, world)
 
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         self.__bodies_looted = False
         self.__keep_monsters = False  # Move monsters to 'dead' after fight
         self.__equipment_manager = ca_equipment.EquipmentManager(

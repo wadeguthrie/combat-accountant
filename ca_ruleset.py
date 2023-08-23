@@ -582,7 +582,7 @@ class Ruleset(object):
         '''
         Make sure creature's information makes sense.
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         result = Ruleset.KEEP_CHECKING_CONSISTENCY
 
         # Don't need to check if the room is consistent.
@@ -900,7 +900,7 @@ class Ruleset(object):
             natural armor/weapons, wear that.
         '''
         result = Ruleset.KEEP_CHECKING_CONSISTENCY
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         if is_armor:
             index_list = fighter.get_current_armor_indexes()
             preferred_index = 'preferred-armor-index'
