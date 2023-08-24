@@ -179,7 +179,7 @@ class Ruleset(object):
                     holding_loaded_ranged = True
             else:
                 holding_melee = True
-            if ca_equipment.Weapon.is_natural_weapon(weapon.details):
+            if ca_equipment.Equipment.is_natural_weapon(weapon.details):
                 holding_natural_weapon = True
             else:
                 holding_non_natural_weapon = True
@@ -391,7 +391,7 @@ class Ruleset(object):
         if holding_non_natural_weapon:
             for index, weapon in enumerate(weapons):
                 weapon_index = weapon_indexes[index]
-                if not ca_equipment.Weapon.is_natural_weapon(weapon.details):
+                if not ca_equipment.Equipment.is_natural_weapon(weapon.details):
                     action_menu.append(
                             (('holster/sheathe %s' % weapon.details['name']),
                              {'action': {'action-name': 'holster-weapon',
@@ -909,7 +909,6 @@ class Ruleset(object):
             action_index = 'armor-index'
             item_string = 'armor'
             items_string = 'armor'
-            natural_item = 'natural-armor'
         else:
             index_list = fighter.get_current_weapon_indexes()
             preferred_index = 'preferred-weapon-index'
@@ -918,7 +917,6 @@ class Ruleset(object):
             action_index = 'weapon-index'
             item_string = 'weapon'
             items_string = 'weapons'
-            natural_item = 'natural-weapon'
 
         # Dump non-armor/weapon being worn as armor/weapon
 
@@ -987,12 +985,16 @@ class Ruleset(object):
         if len(fighter.details[preferred_index]) == 0:
             owned_item_count = 0
             item_index = None
-            for index, item in enumerate(fighter.details['stuff']):
-                if ((is_armor and 'armor' in item['type']) or
-                        (not is_armor and
-                            ca_equipment.Weapon.is_weapon(item))):
-                    owned_item_count += 1
-                    item_index = index # only useful w/just 1 owned armor
+            if is_armor:
+                for index, item in enumerate(fighter.details['stuff']):
+                    if ca_equipment.Equipment.is_armor(item):
+                        owned_item_count += 1
+                        item_index = index # only useful w/just 1 owned armor
+            else:
+                for index, item in enumerate(fighter.details['stuff']):
+                    if ca_equipment.Weapon.is_weapon(item):
+                        owned_item_count += 1
+                        item_index = index # only useful w/just 1 owned armor
             if owned_item_count == 0:
                 pass
             elif owned_item_count == 1:
@@ -1011,18 +1013,27 @@ class Ruleset(object):
                 fighter.get_current_weapon_indexes())
             item_list_menu = []
             for item_index in index_list:
-                if item_index not in fighter.details[preferred_index]:
-                    item = fighter.equipment.get_item_by_index(
-                            item_index)
-                    item_list_menu.append(('stop using %s' % item['name'],
-                                            ('stop', item_index)))
-                    # If the preferred list is not full, ask user if s/he wants
-                    # to add _this_ item to the preferred list.
-                    if (not is_armor or
-                            len(fighter.details[preferred_index])
-                            < ca_fighter.Fighter.MAX_WEAPONS):
-                        item_list_menu.append(('prefer %s' % item['name'],
-                                                ('prefer', item_index)))
+                item = fighter.equipment.get_item_by_index(
+                        item_index)
+
+                if is_armor:
+                    if ca_equipment.Equipment.is_natural_armor(item):
+                        continue # don't remove natural armor
+                else:
+                    if ca_equipment.Equipment.is_natural_weapon(item):
+                        continue # don't remove natural weapons
+                if item_index in fighter.details[preferred_index]:
+                    continue # don't remove preferred weapons/armor
+
+                item_list_menu.append(('stop using %s' % item['name'],
+                                        ('stop', item_index)))
+                # If the preferred list is not full, ask user if s/he wants
+                # to add _this_ item to the preferred list.
+                if (not is_armor or
+                        len(fighter.details[preferred_index])
+                        < ca_fighter.Fighter.MAX_WEAPONS):
+                    item_list_menu.append(('prefer %s' % item['name'],
+                                            ('prefer', item_index)))
             if len(item_list_menu) == 0:
                 keep_asking = False
             else:
@@ -1053,7 +1064,26 @@ class Ruleset(object):
                     result = item_index[1]
                     keep_asking = False
 
+        # Add natural weapon/armor
+
+        for index, item in enumerate(fighter.details['stuff']):
+            addit = False
+            if is_armor:
+                if ca_equipment.Equipment.is_natural_armor(item):
+                    addit = True
+            else:
+                if ca_equipment.Equipment.is_natural_weapon(item):
+                    addit = True
+
+            if addit:
+                self.do_action(fighter,
+                               {'action-name': on_action,
+                                action_index: index,
+                                'notimer': True},
+                               None)
+
         # Now, add preferred armor/weapon
+
         keep_asking = True if result == Ruleset.KEEP_CHECKING_CONSISTENCY else False
         while keep_asking:
             # Get list of items currently in use
@@ -1105,20 +1135,6 @@ class Ruleset(object):
                 elif preferred_item_index[0] == 'quit':
                     result = preferred_item_index[1]
                     keep_asking = False
-
-        # Add natural weapon/armor if they're not wearing any other kind -- ok, I think
-
-        # TODO (now): natural ARMOR should _always_ be selected, not just if
-        # there's no other armor.
-
-        if len(index_list) == 0:
-            for index, item in enumerate(fighter.details['stuff']):
-                if natural_item in item and item[natural_item]:
-                    self.do_action(fighter,
-                                   {'action-name': on_action,
-                                    action_index: index,
-                                    'notimer': True},
-                                   None)
 
         # Make sure that all missile weapons have their associated ammo.
 
@@ -1939,14 +1955,12 @@ class Ruleset(object):
             action_index = 'armor-index'
             item_string = 'armor'
             items_string = 'armor'
-            natural_item = 'natural-armor'
         else:
             index_list = fighter.get_current_weapon_indexes()
             preferred_index = 'preferred-weapon-index'
             action_index = 'weapon-index'
             item_string = 'weapon'
             items_string = 'weapons'
-            natural_item = 'natural-weapon'
 
         print('\n--- %s\'s %s ---' % (fighter.name, items_string))
         for index in index_list:

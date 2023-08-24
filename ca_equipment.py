@@ -44,6 +44,33 @@ class Equipment(object):
         self.owner_name = owner_name
         self.__equipment = equipment
 
+    @staticmethod
+    def is_armor(item   # dict from JSON
+            ):
+        if 'armor' in item['type']:
+            return True
+        return False
+
+    @staticmethod
+    def is_natural_armor(item  # dict from JSON
+                  ):
+        if not Equipment.is_armor(item):
+            return False
+
+        if 'natural-armor' in item and item['natural-armor']:
+            return True
+        return False
+
+    @staticmethod
+    def is_natural_weapon(item  # dict from JSON
+                  ):
+        if not Weapon.is_weapon(item):
+            return False
+
+        if 'natural-weapon' in item and item['natural-weapon']:
+            return True
+        return False
+
     def add(self,
             new_item,       # dict describing new equipment
             source=None,    # string describing where equipment came from (None
@@ -236,15 +263,11 @@ class Equipment(object):
         if item_count <= 0:
             return None
 
-        if ('natural-weapon' in container[item_index] and
-                container[item_index]['natural-weapon']):
-            # Can't remove a natural weapon
-            return None
+        if Equipment.is_natural_weapon(container[item_index]):
+            return None     # Can't remove a natural weapon
 
-        if ('natural-armor' in container[item_index] and
-                container[item_index]['natural-armor']):
-            # Can't remove a natural armor
-            return None
+        if Equipment.is_natural_armor(container[item_index]):
+            return None     # Can't remove a natural armor
 
         remove_all = False
         if ('count' in container[item_index] and
@@ -534,9 +557,9 @@ class EquipmentManager(object):
         item_menu = []
         for index, item in enumerate(fighter.details['stuff']):
             if limit_to_removable:
-                if 'natural-weapon' in item and item['natural-weapon']:
+                if Equipment.is_natural_weapon(item):
                     continue  # Can't remove natural weapons
-                if 'natural-armor' in item and item['natural-armor']:
+                if Equipment.is_natural_armor(item):
                     continue  # Can't remove natural armor
             output = []
             EquipmentManager.get_description(item, '', [], False, output)
@@ -558,16 +581,6 @@ class EquipmentManager(object):
 
 
 class Weapon(object):
-    @staticmethod
-    def is_natural_weapon(item  # dict from JSON
-                  ):
-        if not Weapon.is_weapon(item):
-            return False
-
-        if 'natural-weapon' in item and item['natural-weapon']:
-            return True
-        return False
-
     @staticmethod
     def is_item_melee_weapon(item  # dict from JSON
                              ):
