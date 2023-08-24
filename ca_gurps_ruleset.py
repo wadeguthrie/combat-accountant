@@ -1049,7 +1049,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         for armor in armor_list:
             dr += armor['type']['armor']['dr']
-            dr_text_array.append(armor['name'])
+
+            if ca_equipment.Equipment.is_natural_armor(armor):
+                dr_text_array.append('%s, natural armor' % armor['name'])
+            else:
+                dr_text_array.append(armor['name'])
 
         if 'Damage Resistance' in fighter.details['advantages']:
             # GURPS rules, B46, 5 points per level of DR advantage
@@ -2496,7 +2500,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             found_skill = False
             skills = {}
-            if 'skill' in item:
+            if (ca_equipment.Equipment.is_natural_weapon(item) or
+                    ca_equipment.Equipment.is_natural_armor(item)):
+                found_skill = True # you can always use your natural items
+            elif 'skill' in item:
                 for item_skill in item['skill'].keys():
                     if item_skill.lower() not in creature['current']:
                         skills[item_skill] = 1
