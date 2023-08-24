@@ -23,6 +23,8 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: redirect entries shouldn't have any other entries in them
+
 # TODO: on importing advantages: "notes" should be included in name in parens
 # TODO: should ask when update character wants to delete a spell
 
@@ -655,7 +657,7 @@ class FightGmWindow(ca_gui.GmWindow):
 
         top_line = self.__FIGHTER_LINE  # Start after the main fighter info
 
-        # TODO: eventually, make these ca_gui.GmScrollableWindow windows
+        # TODO (eventually): make these ca_gui.GmScrollableWindow windows
         self.__character_window = self._window_manager.new_native_window(
                 height,
                 self.fighter_win_width,
@@ -5060,7 +5062,7 @@ class FightHandler(ScreenHandler):
         # Make the redirect entry
 
         group = self.world.get_creature_details_list(new_NPC.group)
-        group[new_NPC.name] = {"redirect": "NPCs"}
+        group[new_NPC.name] = {'redirect': 'NPCs'}
 
         # Replace fighter information with new fighter information
 
@@ -7965,6 +7967,11 @@ if __name__ == '__main__':
             # Enter into the mainloop
             main_handler = MainHandler(window_manager, world)
             orderly_shutdown = main_handler.handle_user_input_until_done()
+
+            # TODO (remove): Bokor Requiem
+            #debug = ca_debug.Debug()
+            #debug.header1('Exit')
+            #debug.pprint(campaign.read_data['PCs'])
 
         # Write a crashdump of the shutdown
         debug = ca_debug.Debug()

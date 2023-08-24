@@ -4,7 +4,7 @@ import copy
 import curses
 import ca_debug
 
-# TODO:
+# TODO (eventually):
 # 1) spells should have the option to go off 1 round earlier than
 #    specified
 
@@ -476,7 +476,7 @@ class Timers(object):
 
         Returns nothing.
         '''
-        self.show_all() # TODO: remove
+        self.show_all() # TODO (now): remove
         fire_and_remove_these = []
         for index, timer in enumerate(self.__timers['obj']):
             if timer.details['rounds'] <= 0:

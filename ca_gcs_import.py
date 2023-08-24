@@ -21,9 +21,9 @@ import ca_json
 
 # This code converts a Gurps Character Sheet (GCS v4.37.1) file to the local format.
 
-# TODO: damage type should be 'pi' by default
-# TODO: fast-draw(knife) doesn't include +1 from combat reflexes
-# TODO: spells don't deal with more points than 24 or 28
+# TODO (now): damage type should be 'pi' by default
+# TODO (now): fast-draw(knife) doesn't include +1 from combat reflexes
+# TODO (now): spells don't deal with more points than 24 or 28
 
 class SkillsCalcs(object):
     # Techniques:
@@ -67,7 +67,7 @@ class SkillsCalcs(object):
                             skill_name,       # name of skill
                             cost              # points spent on skill
                            ):
-        # TODO: the following skills are augmented by stuff
+        # TODO (now): the following skills are augmented by stuff
         #   - axe/mace: ?
         #   - armory: good quality equipment and ?
         #   - fast draw ammo: ?
@@ -158,7 +158,7 @@ class SkillsCalcs(object):
         #   include a laser sight for 'beam weapons' skill -- this code applies
         #   that the laser sight benefit later.
         level = char.char['permanent'][skill_native['attr']]
-        debug.print('  %s = %d' % (skill_native['attr'], level)) # TODO: remove
+        debug.print('  %s = %d' % (skill_native['attr'], level))
         level += SkillsCalcs.level_from_cost[cost]
         level += SkillsCalcs.difficulty_offset[skill_native['diff']]
         debug.print('  %s (paid %d) = %d' % (skill_native['diff'],
@@ -168,7 +168,7 @@ class SkillsCalcs(object):
         # Add modifiers due to equipment
         plus = self.__get_equipment_bonuses(char.stuff, 'skill', skill_name)
         level += plus
-        debug.print('  equipment +%d = %d' % (plus, level)) # TODO: remove
+        debug.print('  equipment +%d = %d' % (plus, level))
 
         #if 'equip' in skill_native:
         #    PP = pprint.PrettyPrinter(indent=3, width=150) # Do Not Remove
@@ -179,7 +179,7 @@ class SkillsCalcs(object):
             for looking_for, plus in skill_native['advantage'].items():
                 if looking_for in char.char['advantages']:
                     level += plus
-        debug.print('  after advantages: %d' % level) # TODO: remove
+        debug.print('  after advantages: %d' % level)
 
         return level
 
@@ -825,7 +825,7 @@ class FromGcs(object):
                     #
                     #elif feature['type'] == 'attribute_bonus':
 				    #    # { "type": "attribute_bonus", "amount": 3, "attribute": "dodge" },
-                    #    # TODO: fill this in
+                    #    # TODO (eventually): fill this in
 
         # Is it a weapon?
         if 'weapons' in item:
@@ -953,7 +953,7 @@ class FromGcs(object):
         '''
         self.char['permanent'] = {} # name: value
 
-        # TODO: add move, and speed -- gcs has points spent / json
+        # TODO (eventually): add move, and speed -- gcs has points spent / json
         # has result
         # CA names are lower_case, GCS names are upper_case
         #   'gcs stat' = the base attribute in GCS
@@ -1141,7 +1141,7 @@ class FromGcs(object):
         for skill_gcs in self.__gcs_data['skills']:
             base_name = skill_gcs['name']
 
-            debug.header3(base_name) # TODO: remove
+            debug.header3(base_name)
 
             if 'type' not in skill_gcs:
                 pass
@@ -1151,7 +1151,7 @@ class FromGcs(object):
                         len(skill_gcs['specialization']) > 0):
                     name_text = '%s (%s)' % (skill_gcs['name'],
                                              skill_gcs['specialization'])
-                    debug.print(' %s' % name_text) # TODO: remove
+                    debug.print(' %s' % name_text)
                 else:
                     name_text = skill_gcs['name']
 
@@ -1161,7 +1161,7 @@ class FromGcs(object):
                         self.__window_manager, self, skill_gcs, name_text, cost_gcs)
                 self.char['skills'][name_text] = level_gcs
             elif skill_gcs['type'] == 'technique':
-                debug.print('\n=== Technique: %s ===' % base_name) # TODO: remove
+                debug.print('\n=== Technique: %s ===' % base_name)
                 difficulty = skill_gcs['difficulty'] # 'H', 'A'
                 cost_gcs = 0 if 'points' not in skill_gcs else skill_gcs['points']
                 plus = SkillsCalcs.tech_plus_from_pts(difficulty, cost_gcs) ###################33
@@ -1171,7 +1171,7 @@ class FromGcs(object):
                     default += (' (%s)' % skill_gcs['default']['specialization'])
                 skill_base = (0 if 'modifier' not in skill_gcs['default'] else ####################
                               skill_gcs['default']['modifier'])
-                debug.print('based on %s = %d+%d' % (default, plus, skill_base)) # TODO: remove
+                debug.print('based on %s = %d+%d' % (default, plus, skill_base))
 
                 technique = {
                     'name': base_name,
@@ -1247,7 +1247,7 @@ class FromGcs(object):
 
             # Points they need put into this spell to cast
             # match = re.match('^(?P<cost>[0-9]+)$', spell_gcs['casting_cost'])
-            # TODO (now_: this should be 'None' or 0
+            # TODO (now): this should be 'None' or 0
             #points = 1 if match is None else int(match.group('cost'))
             points = 1 if 'points' not in spell_gcs else spell_gcs['points']
 
@@ -1357,7 +1357,7 @@ class FromGcs(object):
                 # "damage": { "type": "cut", "st": "sw", "base": "1d"}
                 if there_is_a_d:
                     # Not the usual case
-                    # TODO: support strength + dice of damage.  It's easy,
+                    # TODO (eventually): support strength + dice of damage.  It's easy,
                     # here, but it's a little harder in ca_gurps_ruleset.
                     # Such as in:
                     # "damage": { "type": "cut", "st": "sw", "base": "1d"},
@@ -1406,7 +1406,7 @@ class FromGcs(object):
                             'type': _type}
             else:
                 # "damage": { "type": "HT-4 aff" }, # tear gas
-                pass # TODO
+                pass # TODO (eventually)
 
         return damage
 
@@ -1595,8 +1595,8 @@ class FromGcs(object):
                         weapon['parry'])
                 # Modifier would be 'F' (meaning fencing weapon) or 'U' meaning
                 # unbalenced).  See B269.
-                # TODO: do something with the modifier here and in the fighting
-                # rules.
+                # TODO (eventually): do something with the modifier here and
+                #   in the fighting rules.
                 if match is not None:
                     new_thing['parry'] = int(match.group('value'))
 
@@ -1646,7 +1646,7 @@ class FromGcs(object):
                         '\( *(?P<reload>[0-9]+)' +
                         '(?P<individual>i?)\).*',
                         weapon['shots'])
-                # TODO: eventually handle 'plus_one' (one in the chamber)
+                # TODO (eventually):  handle 'plus_one' (one in the chamber)
                 if match:
                     if match.group('shots') == 'T': # Thrown
                         new_thing['reload_type'] = (
@@ -1656,7 +1656,7 @@ class FromGcs(object):
                                 ca_equipment.Equipment.UNKNOWN_STRING}
                         shots = int(match.group('shots'))
                         new_thing['ammo']['shots'] = shots
-                        new_thing['ammo']['shots_left'] = shots # TODO: remove?
+                        new_thing['ammo']['shots_left'] = shots # TODO (now): remove?
                         if len(match.group('individual')) > 0:
                             new_thing['reload_type'] = (
                                     ca_equipment.Equipment.RELOAD_ONE)
@@ -1790,7 +1790,7 @@ class ToNative(object):
         This routine imports the list of advantages from which a character can
         choose to improve the character.
         '''
-        # TODO: combine the import functions
+        # TODO (eventually): combine the import functions
         PP = pprint.PrettyPrinter(indent=3, width=150) # Do not remove
         for gcs_name, gcs_advantage in gcs_advantages.items():
             if gcs_name not in native_data:
@@ -2392,8 +2392,8 @@ class ToNative(object):
         return changes
 
     def __import_techniques(self):
-        # TODO: there's probably a way to combine techniques and skills (since
-        # they're both lists as opposed to the dicts examined by
+        # TODO (eventually): there's probably a way to combine techniques and
+        # skills (since they're both lists as opposed to the dicts examined by
         # |__import_heading|).  The challenge is that skills and techniques look
         # different under the hood so the 'do we copy' stuff needs to be
         # custom.

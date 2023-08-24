@@ -174,7 +174,7 @@ class Ruleset(object):
                 continue
             if weapon.is_ranged_weapon():
                 holding_ranged = True
-                # TODO: not?
+                # TODO (now): not?
                 if not weapon.uses_ammo() or weapon.shots_left() > 0:
                     holding_loaded_ranged = True
             else:
@@ -589,7 +589,7 @@ class Ruleset(object):
         if name == ca_fighter.Venue.name:
             return result
 
-        # TODO: remove <<<
+        # TODO (now): remove <<<
         # This is just a shim to let pre-2-weapon crash files work (for
         # testing).  If we get a 'draw' action with None weapon, we'll turn
         # it into a 'holster' action for all of the weapons we're carrying.
@@ -1345,7 +1345,7 @@ class Ruleset(object):
                     ca_equipment.Equipment.RELOAD_ONE):
                 reload_by_1 = True
 
-            # TODO: only do this if the shots_left is < shots
+            # TODO (now): only do this if the shots_left is < shots
 
             # Put a non-zero count clip back in equipment list
             if (not infinite_clips and weapon.shots_left() > 0 and
@@ -1520,7 +1520,7 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
-        # TODO: remove <<<
+        # TODO (now): remove <<<
         # This is just a shim to let pre-2-weapon crash files work (for
         # testing).  If we get a 'draw' action with None weapon, we'll turn
         # it into a 'holster' action for all of the weapons we're carrying.
@@ -1556,10 +1556,10 @@ class Ruleset(object):
         '''
 
         if self._char_being_timed is None:
-            pass # TODO: error
+            pass # TODO (now): error
         elif (fighter.name != self._char_being_timed['name'] or
                 fighter.group != self._char_being_timed['group']):
-            pass # TODO: error
+            pass # TODO (now): error
         else:
             self._char_being_timed['end'] = datetime.datetime.now()
             self._char_being_timed['time'] = (self._char_being_timed['end'] -
@@ -1888,7 +1888,7 @@ class Ruleset(object):
         action_name = (None if 'action-name' not in action else
                 action['action-name'])
         if self._char_being_timed is None:
-            pass # TODO: error
+            pass # TODO (now): error
         elif (fighter.name != self._char_being_timed['name'] or
                 fighter.group != self._char_being_timed['group']):
             pass # This happens, e.g., when the opponent loses HP
@@ -1999,7 +1999,7 @@ class Ruleset(object):
         # weapon-index list (i.e., the weapon in the fighter's dominant hand.
         fighter.details['current-weapon'] = 0
 
-        # TODO: if _char_being_timed is None, do whatever we do
+        # TODO (eventually): if _char_being_timed is None, do whatever we do
         self._char_being_timed = {'name': fighter.name,
                                   'group': fighter.group,
                                   'start': datetime.datetime.now(),

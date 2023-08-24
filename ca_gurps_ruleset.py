@@ -490,8 +490,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         '''
         super(GurpsRuleset, self).do_save_on_exit()
 
-        # TODO: only set the following if BOTH do_save_on_exit is called _and_
-        #   we've added data with an import.
+        # TODO (eventually): only set the following if BOTH do_save_on_exit
+        #   is called _and_ we've added data with an import.
         self.__gurps_info.write_data = self.__gurps_info.read_data
 
     def does_weapon_use_unarmed_skills(self,
@@ -600,7 +600,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 continue
             if weapon.is_ranged_weapon():
                 holding_ranged = True
-                # TODO: not?
+                # TODO (now): not?
                 if not weapon.uses_ammo() or weapon.shots_left() > 0:
                     holding_loaded_ranged = True
             else:
@@ -1011,8 +1011,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             why.extend(dodge_why)
             notes.append(dodge_string)
 
-        # TODO: figure out how to pull the unarmed stuff out of the loop
-        # TODO: this doesn't work if there're no weapons -- unarmed
+        # TODO (now): figure out how to pull the unarmed stuff out of the loop
+        # TODO (now): this doesn't work if there're no weapons -- unarmed
         for weapon in weapons:
             if weapon is None:
                 continue
@@ -1548,7 +1548,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             world   # World object
                             ):
         '''
-        TODO: fix this
         Returns fight commands that are specific to the GURPS ruleset.  These
         commands are structured for a command ribbon.  The functions point
         right back to local functions of the GurpsRuleset.
@@ -1750,9 +1749,6 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                               }
           }
         }
-
-        # TODO:
-        # weapon = ca_equipment.Weapon(item)
         return None
 
     def get_to_hit(self,
@@ -1793,7 +1789,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     skill_modifier)
 
         # Dual-Weapon Attacking
-        # TODO: break this section out into its own function so that it can be used unarmed
+        # TODO (now): break this section out into its own function so that it
+        #   can be used unarmed
         weapons = fighter.get_current_weapons()
         if len(weapons) == ca_fighter.Fighter.MAX_WEAPONS:
             weapon_1ary = weapons[0]
@@ -1911,7 +1908,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     {'shots': 24, 'bonus': +4},
                     {'shots': 49, 'bonus': +5},
                     {'shots': 99, 'bonus': +6},
-                    # TODO: each x2, +1 to hit
+                    # TODO (now): each x2, +1 to hit
                     ]
 
             # If shots_fired is None, check to see if we've already done an
@@ -4108,7 +4105,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         )
                         shots_fired = None
 
-            # TODO: In other event, maybe, show the tables and such
+            # TODO (eventually): In other event, maybe, show the tables and such
 
             # Send the action for the second part
 
@@ -4454,7 +4451,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         GurpsRuleset.melee_damage[st][attack_type]['num_dice'],
                         GurpsRuleset.melee_damage[st][attack_type]['plus']))
             if damage['plus'] != 0:
-                # TODO: attack_type = 'sw' and there's none of that in |damage|
+                # TODO (eventually): attack_type = 'sw' and there's none of that in |damage|
                 why.append('  ...%+d for the weapon' % damage['plus'])
             why.append('  ...damage: %dd%+d' %
                        (GurpsRuleset.melee_damage[st][attack_type]['num_dice'],
@@ -4480,7 +4477,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                              damage['dice']['plus']))
 
             # Shotguns need more explanation B373
-            # TODO: B373 - one hit per multiple of 'rcl'.  We're treating rcl as 1,
+            # TODO (now): B373 - one hit per multiple of 'rcl'.  We're treating rcl as 1,
             #   here.
             debug.print('is ranged?')
             if weapon.is_ranged_weapon():
@@ -4610,7 +4607,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             why = []
 
         # FP: B426
-        # TODO: do unarmed move and attack
+        # TODO (now): do unarmed move and attack
         '''
         if self.does_weapon_use_unarmed_skills(weapon):
             unarmed_info = self.get_unarmed_info(fighter,
