@@ -15,6 +15,8 @@ import ca_debug
 #      "notes": "<whatever>",
 #      "owners": [ <list of strings> ],
 #      "type": { <type> : <value> },
+#      "mana": <int> # optional: for powerstones, current mana
+#      "max mana": <int> # optional: for powerstones, maximum mana
 # }
 #
 # <type> is one or more of:
