@@ -23,6 +23,21 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
+# TODO: ISSUE 57 - duplicate creature in creature creation
+# TODO: ISSUE 56 - reload at end of round rather than beginning (option)
+# TODO: ISSUE 51 - timer to trigger an action
+# TODO: ISSUE 48 - failed spells should not get timers
+# TODO: ISSUE 47 - configurable colors
+# TODO: ISSUE 42 - make this an executable
+# TODO: ISSUE 36 - generalize scrolling commands
+# TODO: ISSUE 19 - optimize curses commands
+# TODO: ISSUE 17 - allow markdown in notes and fight notes
+# TODO: ISSUE 16 - ready weapon
+# TODO: ISSUE 15 - rules-specific equipment
+# TODO: ISSUE 12 - timeslots
+# TODO: ISSUE 6 - monsters should be able to get pocket lint
+
+# TODO: @xxx@ in equipment should ask for the xxx value when item is purchased
 # TODO: redirect entries shouldn't have any other entries in them
 
 # TODO: on importing advantages: "notes" should be included in name in parens
@@ -54,7 +69,7 @@ import ca_timers
 #   is a 'standard' version of the item, and allows changes in the item in
 #   the master equipment list to propogate to all users of that item.
 
-# The JSON ile that defines a campaign is expected to look like:
+# The JSON file that defines a campaign is expected to look like:
 # {
 #   'templates':        {...}, # described in TODO
 #   'fights':           {...}, # described in ca_fighters at the top of file
@@ -3191,6 +3206,14 @@ class PersonnelHandler(ScreenHandler):
                 sub_menu.extend([
                     ('Doff armor',  {'doit': self.__doff_armor})
                 ])
+
+        # Powerstone (or other rule-specific options)?
+
+        options = self.world.ruleset.add_equipment_options(fighter)
+        if len(options) > 0:
+            sub_menu.extend(options)
+
+        # Weapons
 
         if 'weapon-index' in fighter.details:
             if owns_weapon:

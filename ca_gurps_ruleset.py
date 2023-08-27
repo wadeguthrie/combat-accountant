@@ -425,6 +425,31 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         window_manager.display_window('Spells', spell_info)
 
+    def add_equipment_options(self,
+                              fighter   # Fighter object: person being equipped
+                              ):
+        '''
+        Builds a list of ruleset-specific menu options for equipping a
+        character.  One example is recharging powerstones.
+
+        Returns array of menu entries.
+        '''
+
+        result = []
+
+        for index, item in enumerate(fighter.details['stuff']):
+            if ('mana' in item and 'max mana' in item and
+                    item['mana'] < item['max mana']):
+                result.extend([
+                    ('Charge %s (%d/%d)' % (item['name'],
+                                            item['mana'],
+                                            item['max mana']),
+                        {'doit': self.__charge_powerstone,
+                         'param': {'fighter': fighter, 'index': index}})
+                ])
+        return result
+
+
     def can_finish_turn(self,
                         fighter,        # Fighter object
                         fight_handler   # FightHandler object
@@ -3258,12 +3283,23 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             # Charge the spell caster for the spell.
 
-            if complete_spell['cost'] > 0:
-                self.do_action(fighter,
-                               {'action-name': 'adjust-fp',
-                                'adj': -complete_spell['cost']},
-                               fight_handler,
-                               logit=False)
+            cost = complete_spell['cost']
+            if cost > 0:
+                # Powerstone
+                if 'source' in complete_spell:
+                    item = fighter.details['stuff'][complete_spell['source']]
+                    from_powerstone = (cost if cost <= item['mana']
+                            else item['mana'])
+                    item['mana'] -= from_powerstone
+                    cost -= from_powerstone
+
+                # Fatigue / HP
+                if cost > 0:
+                    self.do_action(fighter,
+                                   {'action-name': 'adjust-fp',
+                                    'adj': -cost},
+                                   fight_handler,
+                                   logit=False)
 
             # Duration Timer
 
@@ -3432,6 +3468,32 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                                                      title)
                 complete_spell['cost'] *= diameter
 
+            # Source For Power
+
+            debug = ca_debug.Debug()
+            debug.header1('Casting %s for %d' % (complete_spell['name'],
+                                                 complete_spell['cost']))
+            debug.print('Fighter stuff:')
+            debug.pprint(fighter.details['stuff'])
+
+            if complete_spell['cost'] > 0:
+                power_source_menu = []
+                for index, item in enumerate(fighter.details['stuff']):
+                    if 'mana' in item and item['mana'] > 0:
+                        debug.print('item %s has %d mana' % (item['name'],
+                                                             item['mana']))
+                        name = '%s (%d/%d mana)' % (item['name'],
+                                                    item['mana'],
+                                                    item['max mana'])
+                        power_source_menu.append((name, index))
+                if len(power_source_menu) > 0:
+                    power_source_menu.append(('your fp', None))
+                    power_source, ignore = self._window_manager.menu(
+                        'Power Source For Spell',
+                        power_source_menu)
+                    if power_source is not None:
+                        complete_spell['source'] = power_source
+
             # Casting time
 
             if (complete_spell['casting time'] is None or
@@ -3556,6 +3618,26 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             return None  # No new timers
 
+    def __charge_powerstone(self,
+                            param_dict  # dict: {'fighter': <fighter object>,
+                                        #        'index': int, index into
+                                        #                 'stuff' of powerstone
+                            ):
+
+        fighter = param_dict['fighter']
+        index = param_dict['index']
+        item = fighter.details['stuff'][index]
+
+        title = 'Add how much mana  to %s (%d/%d)' % (item['name'],
+                                                      item['mana'],
+                                                      item['max mana'])
+        height = 1
+        width = len(title)
+        adj = self._window_manager.input_box_number(height, width, title)
+        if adj is not None:
+            item['mana'] += adj
+            if item['mana'] > item['max mana']:
+                item['mana'] = item['max mana']
 
     def __maintain_spell(self,
                          fighter,       # Fighter object
