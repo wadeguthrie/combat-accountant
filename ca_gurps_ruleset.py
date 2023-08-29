@@ -3297,7 +3297,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 if cost > 0:
                     self.do_action(fighter,
                                    {'action-name': 'adjust-fp',
-                                    'adj': -cost},
+                                    'adj': -cost,
+                                    'ignore-dr': True},
                                    fight_handler,
                                    logit=False)
 
@@ -3668,7 +3669,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         if complete_spell['maintain'] > 0:
             self.do_action(fighter,
                            {'action-name': 'adjust-fp',
-                            'adj': -complete_spell['maintain']},
+                            'adj': -complete_spell['maintain'],
+                            'ignore-dr': True},
                            fight_handler,
                            logit=False)
 
@@ -3872,6 +3874,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                        action,        # {'action-name': 'adjust-fp',
                                       #  'adj': <int> # number to add to FP
                                       #  'comment': <string>, # optional
+                                      #  'ignore-dr': <bool> # optional
                        fight_handler  # FightHandler object (for logging)
                        ):
         '''
@@ -3883,36 +3886,119 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
+        if 'part' in action and action['part'] == 2:
+            # This is the 2nd part of a 2-part action.  This part of the action
+            # actually perfoms all the GurpsRuleset-specific actions and
+            # side-effects of aiming the Fighter's current weapon.
 
-        # See B426 for consequences of loss of FP
-        adj = action['adj']  # Adj is likely negative
+            # See B426 for consequences of loss of FP
+            adj = action['adj']  # Adj is likely negative
 
-        # If FP go below zero, you lose HP along with FP (B328)
-        hp_adj = 0
-        if adj < 0 and -adj > fighter.details['current']['fp']:
-            hp_adj = adj
-            if fighter.details['current']['fp'] > 0:
-                hp_adj += fighter.details['current']['fp']
+            # If FP go below zero, you lose HP along with FP (B328)
+            fp_adj = 0
+            if adj < 0 and -adj > fighter.details['current']['fp']:
+                fp_adj = adj
+                if fighter.details['current']['fp'] > 0:
+                    fp_adj += fighter.details['current']['fp']
 
-        if hp_adj < 0:
-            self.do_action(fighter,
-                           {'action-name': 'adjust-hp',
-                            'adj': hp_adj,
-                            'quiet': True},
-                           fight_handler,
-                           logit=False)
+            if fp_adj < 0:
+                self.do_action(fighter,
+                               {'action-name': 'adjust-hp',
+                                'adj': fp_adj,
+                                'quiet': True},
+                               fight_handler,
+                               logit=False)
 
-        fighter.details['current']['fp'] += adj
+            fighter.details['current']['fp'] += adj
 
-        # (B328)
-        if (fighter.details['current']['fp'] <=
-                -fighter.details['permanent']['fp']):
-            self.do_action(fighter,
-                           {'action-name': 'set-consciousness',
-                            'level': ca_fighter.Fighter.UNCONSCIOUS},
-                           fight_handler,
-                           logit=False)
-        return None  # No timer
+            # (B328)
+            if (fighter.details['current']['fp'] <=
+                    -fighter.details['permanent']['fp']):
+                self.do_action(fighter,
+                               {'action-name': 'set-consciousness',
+                                'level': ca_fighter.Fighter.UNCONSCIOUS},
+                               fight_handler,
+                               logit=False)
+            return None  # No timer
+
+        else:
+            # This is the 1st part of a 2-part action.  This part of the
+            # action asks questions of the user and sends the second part
+            # The 1st part isn't executed when playing back.
+
+            # Adjust for armor
+            dr = 0
+            dr_text_array = []
+            use_armor = False
+            adj = action['adj']  # Adj is likely negative
+            quiet = False if 'quiet' not in action else action['quiet']
+
+            if 'ignore-dr' not in action or not action['ignore-dr']:
+                armor_index_list = fighter.get_current_armor_indexes()
+                armor_list = fighter.get_items_from_indexes(armor_index_list)
+                window_text = [
+                    [{'text': ('...%s' % fighter.name),
+                      'mode': curses.A_NORMAL}],
+                    [{'text': '', 'mode': curses.A_NORMAL}]
+                               ]
+
+                for armor in armor_list:
+                    dr += armor['type']['armor']['dr']
+                    dr_text_array.append(armor['name'])
+
+                if 'Damage Resistance' in fighter.details['advantages']:
+                    # GURPS rules, B46, 5 points per level of DR advantage
+                    dr += (fighter.details['advantages']['Damage Resistance']/5)
+                    dr_text_array.append('DR Advantage')
+
+                if not quiet and dr != 0:
+                    use_armor_menu = [('yes', True), ('no', False)]
+                    use_armor, ignore = self._window_manager.menu(
+                            'Use Armor\'s DR?', use_armor_menu)
+
+                if use_armor:
+                    if dr >= -adj:
+                        window_text = [
+                            [{'text': 'The armor absorbed all the damage',
+                              'mode': curses.A_NORMAL}]
+                        ]
+                        self._window_manager.display_window(
+                                ('Did *NO* damage to %s' % fighter.name),
+                                window_text)
+                        return ca_ruleset.Ruleset.HANDLED_OK
+
+                    original_adj = adj
+
+                    adj += dr
+                    action['adj'] = adj
+
+                    dr_text = '; '.join(dr_text_array)
+                    window_text.append(
+                        [{'text': ('%s was wearing %s (total dr:%d)' % (
+                                                                  fighter.name,
+                                                                  dr_text,
+                                                                  dr)),
+                          'mode': curses.A_NORMAL}]
+                                      )
+                    window_text.append(
+                        [{'text': ('so adj(%d) - dr(%d) = damage (%d)' % (
+                                                                  -original_adj,
+                                                                  dr,
+                                                                  -adj)),
+                          'mode': curses.A_NORMAL}]
+                                      )
+
+                self._window_manager.display_window(
+                                    ('Did %d fp damage to...' % -adj),
+                                    window_text)
+
+            # Send the action for the second part
+
+            new_action = copy.deepcopy(action)
+            new_action['part'] = 2
+            self.do_action(fighter, new_action, fight_handler)
+
+            return None  # No timer
 
     def __do_adjust_shock(self,
                           fighter,       # Fighter object
@@ -4822,6 +4908,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         has_2_parts = {
                        'adjust-attribute': True,
+                       'adjust-fp': True,
                        'aim': True,
                        'attack': True,
                        'cast-spell': True,
