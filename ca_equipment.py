@@ -479,6 +479,7 @@ class EquipmentManager(object):
 
     def add_equipment_from_store(
             self,
+            ruleset,              # Ruleset object
             fighter,              # Fighter object
             starting_index = 0    # index into the store's list of equipment.
                                   #     Multiple calls can go to the same spot
@@ -508,6 +509,7 @@ class EquipmentManager(object):
                 source = 'the store'
 
             ignore = fighter.add_equipment(copy.deepcopy(item), source)
+            ruleset.offer_to_add_dependencies(self.__world, fighter, item)
 
         return starting_index
 
