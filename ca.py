@@ -23,28 +23,16 @@ import ca_ruleset
 import ca_gurps_ruleset
 import ca_timers
 
-# TODO: ISSUE 57 - duplicate creature in creature creation
-# TODO: ISSUE 56 - reload at end of round rather than beginning (option)
-# TODO: ISSUE 51 - timer to trigger an action
-# TODO: ISSUE 48 - failed spells should not get timers
-# TODO: ISSUE 47 - configurable colors
-# TODO: ISSUE 42 - make this an executable
-# TODO: ISSUE 36 - generalize scrolling commands
-# TODO: ISSUE 19 - optimize curses commands
-# TODO: ISSUE 17 - allow markdown in notes and fight notes
-# TODO: ISSUE 16 - ready weapon
-# TODO: ISSUE 15 - rules-specific equipment
-# TODO: ISSUE 12 - timeslots
-# TODO: ISSUE 6 - monsters should be able to get pocket lint
+# in priority order:
 
 # TODO: @xxx@ in equipment should ask for the xxx value when item is purchased
-# TODO: redirect entries shouldn't have any other entries in them
+# TODO: ISSUE 15 - rules-specific equipment - buying items should ask to add
+#           ammo and add skills
+# TODO: ISSUE 57 - duplicate creature in creature creation
+# TODO: ISSUE 17 - allow markdown in notes and fight notes
 
-# TODO: on importing advantages: "notes" should be included in name in parens
-# TODO: should ask when update character wants to delete a spell
-
-# TODO: GmScrollableWindow should have their lines public and all access to
-#   those should be through the object's data
+# TODO: flesh-out attack, all-out
+# TODO: grenade support (missile-like but not with clips)
 
 # TODO: Make unarmed stuff more closely mirror the armed stuff.
 
@@ -53,13 +41,20 @@ import ca_timers
 #   * unarmed parry
 #   * brass knuckles
 
-# TODO: flesh-out attack, all-out
-# TODO: grenade support (missile-like but not with clips)
+# TODO: ISSUE 48 - failed spells should not get timers
+# TODO: ISSUE 51 - timer to trigger an action
+# TODO: ISSUE 56 - reload at end of round rather than beginning (option)
+# TODO: ISSUE 36 - generalize scrolling commands
+
+# TODO: redirect entries shouldn't have any other entries in them
+
+# TODO: on importing advantages: "notes" should be included in name in parens
+# TODO: should ask when update character wants to delete a spell
+
+# TODO: GmScrollableWindow should have their lines public and all access to
+#   those should be through the object's data
 
 # TODO: why do redirect entries have 'stuff' and 'timers' entries?
-
-# TODO: FP should ask if using DR
-# TODO: FP should actually subtract DR
 
 # TODO: PC joins NPCs in PC editing mode
 
@@ -68,6 +63,13 @@ import ca_timers
 #   This saves space in the campaign file, informs the reader that the item
 #   is a 'standard' version of the item, and allows changes in the item in
 #   the master equipment list to propogate to all users of that item.
+
+# TODO: ISSUE 42 - make this an executable
+# TODO: ISSUE 16 - ready weapon - maybe later
+# TODO: ISSUE 47 - configurable colors
+# TODO: ISSUE 19 - optimize curses commands
+# TODO: ? ISSUE 12 - timeslots (for other games)
+# TODO: ISSUE 6 - monsters should be able to get pocket lint
 
 # The JSON file that defines a campaign is expected to look like:
 # {
