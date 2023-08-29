@@ -1141,22 +1141,12 @@ class Ruleset(object):
         # Just weapons (just ranged weapons, actually)
         if result == Ruleset.KEEP_CHECKING_CONSISTENCY and not is_armor:
             for weapon in fighter.details['stuff']:
-                if ('ranged weapon' not in weapon['type'] or
-                        'ammo' not in weapon):
-                    continue
-                clip_name = weapon['ammo']['name']
-                if clip_name is None:
-                    continue
-                found_clip = False
-                for clip in fighter.details['stuff']:
-                    if clip['name'] == clip_name:
-                        found_clip = True
-                        break
-                if not found_clip:
+                missing_ammo = self._get_missing_ammo_names(fighter, weapon)
+                if len(missing_ammo) > 1:
                     self._window_manager.error([
                         '"%s"' % fighter.name,
                         '  is carrying a weapon (%s) with no ammo (%s).' % (
-                            weapon['name'], clip_name)])
+                            weapon['name'], missing_ammo[0])])
         return result
 
     def __do_attack(self,
@@ -1577,6 +1567,40 @@ class Ruleset(object):
             fighter.end_turn(fight_handler)
             fight_handler.modify_index(1)
         return Ruleset.HANDLED_OK
+
+
+    def _get_missing_ammo_names(self,
+                                fighter,   # Fighter object
+                                weapon     # dict: item in Fighter's equipment
+                                ):
+        '''
+        If the item takes ammo, checks fighter's equipment for said ammo.  If
+        it isn't in the fighter's inventory, its name will be returned to,
+        potentially, ask the user if he wants to add it.
+        '''
+        missing_ammo = []
+
+        if not ca_equipment.Weapon.is_weapon(weapon):
+            return missing_ammo
+
+        if 'ranged weapon' not in weapon['type'] or 'ammo' not in weapon:
+            return missing_ammo
+
+        clip_name = weapon['ammo']['name']
+        if clip_name is None:
+            return missing_ammo
+
+        found_clip = False
+        for clip in fighter.details['stuff']:
+            if clip['name'] == clip_name:
+                found_clip = True
+                break
+
+        if not found_clip:
+            missing_ammo.append(clip_name)
+
+        return missing_ammo
+
 
     def __give_equipment(self,
                          fighter,          # Fighter object

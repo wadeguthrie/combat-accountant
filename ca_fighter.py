@@ -528,6 +528,57 @@ class Fighter(ThingsInFight):
                     self.details['preferred-armor-index'].append(new_item_index)
         return new_item_index
 
+    def add_one_ability(
+            self,
+            param,          # string: Ruleset-defined ability
+                            #   category name (like 'skills' or
+                            #   'advantages')
+            ability_name    # string: name of skill or advantage
+            ):
+
+        # The predicate is the body of the skill (or whatever) in the GURPS
+        # info ile  It'll take one of several forms...
+        # 'name': {'ask': 'number' | 'string' }
+        #         {'value': value}
+        abilities = self._ruleset.get_creature_abilities()
+        if param not in abilities:
+            return None
+        if ability_name not in abilities[param]:
+            return None
+        predicate = abilities[param][ability_name]
+
+        result = None
+        if 'ask' in predicate:
+            if predicate['ask'] == 'number':
+                title = 'Value for %s' % ability_name
+                width = len(title) + 2  # Margin to make it prettier
+            else:
+                title = 'String for %s' % ability_name
+                lines, cols = self._window_manager.getmaxyx()
+                width = int(cols/2)
+            height = 1
+            adj_string = self._window_manager.input_box(height, width, title)
+            if adj_string is None or len(adj_string) <= 0:
+                return None
+
+            if predicate['ask'] == 'number':
+                result = int(adj_string)
+            else:
+                result = adj_string
+
+        elif 'value' in predicate:
+            result = predicate['value']
+        else:
+            result = None
+            self._window_manager.error(
+                    ['unknown predicate "%r" for "%s"' %
+                     (predicate, ability_name)])
+
+        if result is not None:
+            self.details[param][ability_name] = result
+
+        return result
+
     def doff_armor_by_index(self,
                             index  # Index of armor in fighter's 'stuff'
                                    # list.  'None' removes current armor.

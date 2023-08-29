@@ -25,9 +25,6 @@ import ca_timers
 
 # in priority order:
 
-# TODO: @xxx@ in equipment should ask for the xxx value when item is purchased
-# TODO: ISSUE 15 - rules-specific equipment - buying items should ask to add
-#           ammo and add skills
 # TODO: ISSUE 57 - duplicate creature in creature creation
 # TODO: ISSUE 17 - allow markdown in notes and fight notes
 
@@ -2352,7 +2349,7 @@ class PersonnelHandler(ScreenHandler):
             #   Fighter::add_equipment ->
             #   Equipment::add
             starting_index = self.__equipment_manager.add_equipment_from_store(
-                    fighter, starting_index)
+                    self.world.ruleset, fighter, starting_index)
             self._draw_screen()
             keep_asking, ignore = self._window_manager.menu(
                     'Add More Equipment', keep_asking_menu)
@@ -4236,9 +4233,8 @@ class PersonnelHandler(ScreenHandler):
         #       'Advantages': {'Bad Tempter': -10, 'Nosy': -1,},
         #   }
 
-        ability_menu = [(name, {'name': name, 'predicate': predicate})
-                        for name, predicate in
-                        self.__ruleset_abilities[param].items()]
+        ability_menu = [(name, name)
+                        for name in self.__ruleset_abilities[param]]
 
         keep_asking_menu = [('yes', True), ('no', False)]
 
@@ -4252,47 +4248,21 @@ class PersonnelHandler(ScreenHandler):
             if new_ability is None:
                 return None
 
-            # The predicate will take one of several forms...
-            # 'name': {'ask': 'number' | 'string' }
-            #         {'value': value}
+            value = fighter.add_one_ability(param, new_ability)
+            if value is None:
+                return None
 
-            result = None
-            if 'ask' in new_ability['predicate']:
-                if new_ability['predicate']['ask'] == 'number':
-                    title = 'Value for %s' % new_ability['name']
-                    width = len(title) + 2  # Margin to make it prettier
-                else:
-                    title = 'String for %s' % new_ability['name']
-                    lines, cols = self._window.getmaxyx()
-                    width = int(cols/2)
-                height = 1
-                adj_string = self._window_manager.input_box(height,
-                                                            width,
-                                                            title)
-                if adj_string is None or len(adj_string) <= 0:
-                    return None
-
-                if new_ability['predicate']['ask'] == 'number':
-                    result = int(adj_string)
-                else:
-                    result = adj_string
-
-            elif 'value' in new_ability['predicate']:
-                result = new_ability['predicate']['value']
-            else:
-                result = None
-                self._window_manager.error(
-                        ['unknown predicate "%r" for "%s"' %
-                         (new_ability['predicate'], new_ability['name'])])
-
-            if result is not None:
-                fighter.details[param][new_ability['name']] = result
             self._draw_screen()
 
             keep_asking, ignore = self._window_manager.menu(
                     ('Add More %s' % param), keep_asking_menu)
 
         return True  # Menu handler's success returns anything but 'None'
+
+
+    def get_ability_from_name(param, ability_name):
+        predicate = self.__ruleset_abilities[param][ability_name]
+
 
     def __ruleset_ability_rm(self,
                              param  # string: Ruleset-defined ability category

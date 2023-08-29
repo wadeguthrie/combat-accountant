@@ -2495,6 +2495,68 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 ca_ruleset.Ruleset.roll(1, 6)
                 )
 
+    def offer_to_add_dependencies(self,
+                                  world,    # World object, contains store
+                                  fighter,  # Fighter object
+                                  new_item      # dict just added to fighter's stuff
+                                  ):
+        '''
+        Asks the user if he wants to add ammo and skills required for a
+        recently added weapon.
+        '''
+
+        # Ammo
+
+        missing_ammo = self._get_missing_ammo_names(fighter, new_item)
+        missing_ammo_menu = [(item, item) for item in missing_ammo]
+        missing_ammo_menu.append(('Do not add', None))
+        ammo_name, ignore = self._window_manager.menu('Add necessary ammo',
+                                                      missing_ammo_menu)
+        if ammo_name is not None:
+            added_ammo = False
+            for item in world.details['stuff']:
+                if ammo_name == item['name']:
+                    item_copy = copy.deepcopy(item)
+                    source = None
+                    if (item_copy['owners'] is not None and
+                            len(item_copy['owners']) == 0):
+                        source = 'the store'
+
+                    title = 'How many %s do you want to add?' % ammo_name
+                    count = self._window_manager.input_box_number(1,
+                                                                  len(title),
+                                                                  title)
+                    if count is not None:
+                        item_copy['count'] = count
+
+                    ignore = fighter.add_equipment(item_copy, source)
+                    added_ammo = True
+                    break
+            if not added_ammo:
+                self._window_manager.error(['Could not find ammo %s' % ammo_name])
+
+        # Skills
+
+        debug = ca_debug.Debug()
+        debug.header1('offer_to_add_dependencies: skills')
+        missing_skills = self._get_missing_skill_names(fighter, new_item)
+        debug.print('missing_skills')
+        debug.pprint(missing_skills)
+        missing_skills_menu = [(item, item) for item in missing_skills]
+        debug.print('missing_skills_menu')
+        missing_skills_menu.append(('Do not add', None))
+        debug.pprint(missing_skills_menu)
+        skills_name, ignore = self._window_manager.menu('Add necessary skills',
+                                                        missing_skills_menu)
+        debug.print('Skills name: %r' % skills_name)
+
+        if skills_name is not None:
+            skills_value = fighter.add_one_ability('skills', skills_name)
+            debug.print('skills_value: %r' % skills_value)
+            if skills_value is None:
+                self._window_manager.error(['Could not find skills %s' % skills_name])
+
+
     def check_creature_consistent(self,
                                   name,     # string: creature's name
                                   creature, # dict from Game File
@@ -4697,6 +4759,70 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         else:
             damage_type_str = '%s' % damage_type
         return damage_type_str
+
+
+    def _get_missing_skill_names(self,
+                                 fighter,   # Fighter object
+                                 weapon     # dict: item in Fighter's equipment
+                                 ):
+        '''
+        If the fighter doesn't have SOME skill in at least one of the modes
+        that this weapon has, this method returns the name of at least one good
+        skill for the fighter to have.
+        '''
+        debug = ca_debug.Debug()
+        debug.header1('_get_missing_skill_names')
+        debug.print('weapon:')
+        debug.pprint(weapon)
+        missing_skills = []
+
+        if not ca_equipment.Weapon.is_weapon(weapon):
+            debug.print('** Not a weapon **')
+            return missing_skills
+
+        # Just going to add the easiest skill name
+
+        weapon_obj = ca_equipment.Weapon(weapon)
+        best_skill = None
+        for mode in weapon_obj.get_attack_modes():
+            if mode not in weapon['type']:
+                continue
+            if 'skill' not in weapon['type'][mode]:
+                continue
+            for name, value in weapon['type'][mode]['skill'].items():
+                if name.lower() in fighter.details['current']:
+                    continue # not interested if it's an attribute (e.g., DX)
+
+                if name in fighter.details['skills']:
+                    best_skill = None
+                    break # not interested if fighter has ANY skill in weapon
+
+                if best_skill is None or value > best_skill['value']:
+                    best_skill = {'name': name, 'value': value}
+
+        # Add all skills that are equal to the best
+
+        if best_skill is not None:
+            for mode in weapon_obj.get_attack_modes():
+                if mode not in weapon['type']:
+                    continue
+                if 'skill' not in weapon['type'][mode]:
+                    continue
+                for name, value in weapon['type'][mode]['skill'].items():
+                    if name in missing_skills:
+                        continue # only add a skill once
+
+                    if name.lower() in fighter.details['current']:
+                        continue # not interested if it's an attribute (e.g., DX)
+
+                    if name in fighter.details['skills']:
+                        break # not interested if fighter has ANY skill in weapon
+
+                    if value == best_skill['value']:
+                        missing_skills.append(name)
+
+        return missing_skills
+
 
     def __get_technique(self,
                         techniques,     # list from Fighter.details
