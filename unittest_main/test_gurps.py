@@ -25,7 +25,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         '''
         GURPS-specific test
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         # debug.header1('test_get_dodge_skill')
 
         # Deepcopy so that we don't taint the original
@@ -96,7 +96,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         '''
         GURPS-specific test
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         #debug.header1('test_get_block_skill')
 
         # TODO: need non-trivial block tests
@@ -144,7 +144,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         '''
         GURPS-specific test
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         #debug.header1('test_get_parry_skill')
 
         # Unarmed
@@ -257,7 +257,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         '''
         GURPS-specific test
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         #debug.header1('test_get_unarmed_info')
 
         # Vodou Priest
@@ -436,7 +436,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         '''
         GURPS-specific test
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         #debug.header1('test_ranged_to_hit')
 
         self._window_manager = MockWindowManager()
@@ -680,7 +680,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         '''
         GURPS-specific test
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         #debug.header1('test_messed_up_aim')
 
         self._window_manager = MockWindowManager()
@@ -919,7 +919,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         '''
         GURPS-specific test
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         #debug.header1('test_melee_to_hit')
 
         self._window_manager = MockWindowManager()
@@ -1025,7 +1025,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         '''
         GURPS-specific test
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         #debug.header1('test_adjust_hp')
 
         # Setup
@@ -1452,7 +1452,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         '''
         GURPS-specific test
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         #debug.header1('test_adjust_hp_2')
 
         # Setup
@@ -1610,7 +1610,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         '''
         GURPS-specific test
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         #debug.header1('test_spell_casting')
 
         # Setup
@@ -1865,7 +1865,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         '''
         GURPS test
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         #debug.header1('test_defend')
 
         # Setup
@@ -2121,7 +2121,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         This is just like test_initiative_order except the fighters are
         reordered randomly and a different random seed is used.
         '''
-        debug = ca_debug.Debug()
+        debug = ca_debug.Debug(quiet=True)
         #debug.header1('test_initiative_order_again')
 
         world_data = WorldData(self.init_world_dict_2)

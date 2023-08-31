@@ -1718,7 +1718,9 @@ class GmTestCase(GmTestCaseCommon):
                                                 'Arena Combat')
         self._window_manager.set_input_box_response('New Fight Name',
                                                      'test_new_fight')
-        self._window_manager.set_menu_response('Monster', 'VodouCleric')
+        self._window_manager.set_menu_response('Monster',
+                {'name': 'VodouCleric',
+                 'from': ca.PersonnelHandler.FROM_TEMPLATE} )
         self._window_manager.set_input_box_response('Monster Name', 'Horatio')
         self._window_manager.set_menu_response('What Next', 'quit')
 
@@ -1757,7 +1759,9 @@ class GmTestCase(GmTestCaseCommon):
                 ['Fight name "test_new_fight" already exists'])
 
         # These are just so that the test finishes.
-        self._window_manager.set_menu_response('Monster', 'VodouCleric')
+        self._window_manager.set_menu_response('Monster',
+                {'name': 'VodouCleric',
+                 'from': ca.PersonnelHandler.FROM_TEMPLATE} )
         self._window_manager.set_input_box_response('Monster Name', 'Horatio')
         self._window_manager.set_menu_response('What Next', 'quit')
 
@@ -1783,7 +1787,9 @@ class GmTestCase(GmTestCaseCommon):
         self._window_manager.set_menu_response('To Which Group',
                                                 'test_new_fight')
 
-        self._window_manager.set_menu_response('Monster', 'VodouCleric')
+        self._window_manager.set_menu_response('Monster',
+                {'name': 'VodouCleric',
+                 'from': ca.PersonnelHandler.FROM_TEMPLATE} )
         self._window_manager.set_input_box_response('Monster Name', 'Ophelia')
 
         build_fight = TestPersonnelHandler(self._window_manager,
@@ -1821,7 +1827,9 @@ class GmTestCase(GmTestCaseCommon):
         self._window_manager.clear_menu_responses()
         self._window_manager.set_menu_response('Which Template Group',
                                                 'Arena Combat')
-        self._window_manager.set_menu_response('Monster', 'VodouCleric')
+        self._window_manager.set_menu_response('Monster',
+                {'name': 'VodouCleric',
+                 'from': ca.PersonnelHandler.FROM_TEMPLATE} )
         self._window_manager.set_input_box_response('Monster Name', 'Skippy')
         self._window_manager.set_menu_response('What Next', 'quit')
 
@@ -1847,7 +1855,9 @@ class GmTestCase(GmTestCaseCommon):
         self._window_manager.clear_menu_responses()
         self._window_manager.set_menu_response('Which Template Group',
                                                 'Arena Combat')
-        self._window_manager.set_menu_response('Monster', 'VodouCleric')
+        self._window_manager.set_menu_response('Monster',
+                {'name': 'VodouCleric',
+                 'from': ca.PersonnelHandler.FROM_TEMPLATE} )
         self._window_manager.set_input_box_response('Monster Name', 'Stinky')
         self._window_manager.set_menu_response('What Next', 'quit')
         self._window_manager.set_menu_response(
