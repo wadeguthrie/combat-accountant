@@ -25,7 +25,6 @@ import ca_timers
 
 # in priority order:
 
-# TODO: ISSUE 57 - duplicate creature in creature creation
 # TODO: ISSUE 17 - allow markdown in notes and fight notes
 
 # TODO: flesh-out attack, all-out
@@ -1613,9 +1612,9 @@ class PersonnelHandler(ScreenHandler):
     monster list).  These creatures are created from one of the templates
     provided in the World's Game File file.
     '''
-    (NPCs,
-     PCs,
-     MONSTERs) = list(range(3))
+    (NPCs, PCs, MONSTERs) = list(range(3))
+    (FROM_TEMPLATE, FROM_CREATURE, FROM_EMPTY) = list(range(3))
+
 
     (CHAR_LIST,
      CHAR_DETAIL) = (1, 2)  # These are intended to be bits so they can be ored
@@ -2288,7 +2287,8 @@ class PersonnelHandler(ScreenHandler):
 
         keep_adding_creatures = True
         while keep_adding_creatures:
-            new_creature = self.__make_creature_from_template()
+            new_creature = self.__make_creature_from_template(
+                    self.__critters['data'])
             if new_creature is None:
                 keep_adding_creatures = False
                 break
@@ -3713,7 +3713,9 @@ class PersonnelHandler(ScreenHandler):
 
         return True  # anything but 'None' for a successful menu handler
 
-    def __make_creature_from_template(self):
+    def __make_creature_from_template(self,
+                                      critter_dict, # {dict based on creature name
+                                      ):
         '''
         Gets a template for the creature currently being added to the current
         group.
@@ -3723,43 +3725,52 @@ class PersonnelHandler(ScreenHandler):
         if self.__template_group is None:
             self.__change_template_group()
 
-        # Based on which creature from the template
-
-        empty_creature = 'Blank Template'
-        from_creature_name = empty_creature
-
         # None means there are no templates or the user decided against
         # a template.
 
+        from_creature_name = None
         monster_index = 0
+        creature_menu = []
+
+        debug = ca_debug.Debug()
+        debug.header1('__make_creature_from_template')
+
+        for from_creature_name, ignore in critter_dict.items():
+            # leading space on name for sort order
+            if from_creature_name != ca_fighter.Venue.name:
+                creature_menu.append((' %s' % from_creature_name,
+                                     {'name': from_creature_name,
+                                      'from': PersonnelHandler.FROM_CREATURE}))
+
         if self.__template_group is not None:
-            creature_menu = []
             for from_creature_name in (
                         self.world.details['templates'][
                             self.__template_group]):
-                if from_creature_name == empty_creature:
-                    self._window_manager.error(
-                            ['Template group "%s" contains bad template:' %
-                                self.__template_group,
-                             '"%s". Replacing with an empty creature.' %
-                                empty_creature])
-                else:
                     creature_menu.append((from_creature_name,
-                                          from_creature_name))
+                                         {'name': from_creature_name,
+                                          'from': PersonnelHandler.FROM_TEMPLATE}))
 
-            creature_menu = sorted(creature_menu, key=lambda x: x[0].upper())
-            creature_menu.append((empty_creature, empty_creature))
+        creature_menu = sorted(creature_menu, key=lambda x: x[0].upper())
+        creature_menu.append(('Blank Template',
+                              {'name': None, 'from': PersonnelHandler.FROM_EMPTY}))
 
-            from_creature_name, monster_index = self._window_manager.menu(
-                    'Monster', creature_menu, monster_index)
-            if from_creature_name is None:
-                return None
+        debug.print('menu')
+        debug.pprint(creature_menu)
+
+        from_creature_info, monster_index = self._window_manager.menu(
+                'Monster', creature_menu, monster_index)
+        if from_creature_info is None:
+            return None
 
         # Generate the creature for the template
 
-        to_creature = self.world.ruleset.make_empty_creature()
+        debug.print('from_creature_info')
+        debug.pprint(from_creature_info)
 
-        if from_creature_name != empty_creature:
+        from_creature_name = from_creature_info['name']
+
+        if from_creature_info['from'] == PersonnelHandler.FROM_TEMPLATE:
+            to_creature = self.world.ruleset.make_empty_creature()
             from_creature = (self.world.details['templates'][
                              self.__template_group][from_creature_name])
             for key, value in from_creature.items():
@@ -3773,6 +3784,11 @@ class PersonnelHandler(ScreenHandler):
                 else:
                     to_creature[key] = self.__get_value_from_template(
                                                     value, from_creature)
+        elif from_creature_info['from'] == PersonnelHandler.FROM_CREATURE:
+            from_creature_name = from_creature_name
+            to_creature = copy.deepcopy(critter_dict[from_creature_name])
+        elif from_creature_info['from'] == PersonnelHandler.FROM_EMPTY:
+            to_creature = self.world.ruleset.make_empty_creature()
 
         return to_creature
 
