@@ -181,7 +181,7 @@ class Ruleset(object):
 
         # OPEN CONTAINER
 
-        container_stack = fighter.details['open-container']
+        container_stack = fighter.rawdata['open-container']
         container = fighter.equipment.get_container(container_stack)
         containers = fighter.equipment.get_container_list(container)
 
@@ -297,11 +297,11 @@ class Ruleset(object):
 
         # Can't don/doff/draw/holster armor/weapons while a container is open
 
-        if len(fighter.details['open-container']) > 0:
+        if len(fighter.rawdata['open-container']) > 0:
             # Close Container
             item = fighter.equipment.get_item_by_index(
-                    fighter.details['open-container'][-1],
-                    fighter.details['open-container'][:-1])
+                    fighter.rawdata['open-container'][-1],
+                    fighter.rawdata['open-container'][:-1])
             name = ('container' if item is None or 'name' not in item else
                     item['name'])
 
@@ -316,7 +316,7 @@ class Ruleset(object):
         armor_indexes = fighter.get_current_armor_indexes()
 
         don_armor_menu = []   # list of armor that may be donned this turn
-        for index, item in enumerate(fighter.details['stuff']):
+        for index, item in enumerate(fighter.rawdata['stuff']):
             if 'armor' in item['type']:
                 if index not in armor_indexes:
                     verbose_option = self.get_option('verbose')
@@ -363,9 +363,9 @@ class Ruleset(object):
         if holding['non_natural_weapon']:
             for index, weapon in enumerate(weapons):
                 weapon_index = weapon_indexes[index]
-                if not ca_equipment.Equipment.is_natural_weapon(weapon.details):
+                if not ca_equipment.Equipment.is_natural_weapon(weapon.rawdata):
                     action_menu.append(
-                            (('holster/sheathe %s' % weapon.details['name']),
+                            (('holster/sheathe %s' % weapon.rawdata['name']),
                              {'action': {'action-name': 'holster-weapon',
                                          'weapon-index': weapon_index}
                               }))
@@ -374,13 +374,13 @@ class Ruleset(object):
             # Draw weapon SUB-menu
 
             draw_weapon_menu = []   # weapons that may be drawn this turn
-            for index, item in enumerate(fighter.details['stuff']):
+            for index, item in enumerate(fighter.rawdata['stuff']):
                 if (ca_equipment.Weapon.is_weapon(item) and
                         index not in weapon_indexes):
                     verbose_option = self.get_option('verbose')
                     if verbose_option is not None and verbose_option:
                         entry_name = '%d: %s' % (index, item['name'])
-                    elif index in fighter.details['preferred-weapon-index']:
+                    elif index in fighter.rawdata['preferred-weapon-index']:
                         # Add a leading space so it's sorted to the top
                         entry_name = ' %s (preferred)' % item['name']
                     else:
@@ -421,7 +421,7 @@ class Ruleset(object):
         # Use SUB-menu
 
         use_menu = []
-        for index, item in enumerate(fighter.details['stuff']):
+        for index, item in enumerate(fighter.rawdata['stuff']):
             if 'count' in item and item['count'] != 1:
                 name = '%s (%d remaining)' % (item['name'], item['count'])
             else:
@@ -499,20 +499,20 @@ class Ruleset(object):
 
         Returns: nothing.
         '''
-        if 'permanent' not in fighter.details:
+        if 'permanent' not in fighter.rawdata:
             return
 
-        for stat in fighter.details['permanent'].keys():
-            fighter.details['current'][stat] = (
-                                        fighter.details['permanent'][stat])
-        if fighter.details['state'] != 'fight':
-            fighter.details['state'] = 'alive'
+        for stat in fighter.rawdata['permanent'].keys():
+            fighter.rawdata['current'][stat] = (
+                                        fighter.rawdata['permanent'][stat])
+        if fighter.rawdata['state'] != 'fight':
+            fighter.rawdata['state'] = 'alive'
 
         reload_option = self.get_option('reload-on-heal')
         if (reload_option is not None and reload_option and
                 fighter.group == 'PCs'):
             weapon_indexes = fighter.get_current_weapon_indexes()
-            for index, item in enumerate(fighter.details['stuff']):
+            for index, item in enumerate(fighter.rawdata['stuff']):
                 if 'ranged weapon' in item['type']:
                     self.do_action(fighter,
                                    {'action-name': 'draw-weapon',
@@ -816,7 +816,7 @@ class Ruleset(object):
         attr_type = action['attr-type']
         attr = action['attribute']
         new_value = action['new-value']
-        fighter.details[attr_type][attr] = new_value
+        fighter.rawdata[attr_type][attr] = new_value
         return Ruleset.HANDLED_OK
 
     def _adjust_hp(self,
@@ -839,7 +839,7 @@ class Ruleset(object):
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
 
-        fighter.details['current']['hp'] += action['adj']
+        fighter.rawdata['current']['hp'] += action['adj']
         return Ruleset.HANDLED_OK
 
     def __close_container(self,
@@ -856,7 +856,7 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
-        fighter.details['open-container'].pop()
+        fighter.rawdata['open-container'].pop()
         return Ruleset.HANDLED_OK
 
     def __configure_armor_weapons(self,
@@ -925,7 +925,7 @@ class Ruleset(object):
 
         # Dump non-armor/weapon that is preferred armor/weapon
         preferred_item_list = []
-        preferred_index_list = fighter.details[preferred_index]
+        preferred_index_list = fighter.rawdata[preferred_index]
 
         for item_index in preferred_index_list:
             item = fighter.equipment.get_item_by_index(item_index)
@@ -938,7 +938,7 @@ class Ruleset(object):
                     'Creature "%s"' % fighter.name,
                     '  is preferring a weird %s "<None>". Fixing.' %
                     item_string])
-                fighter.details[preferred_index].remove(index)
+                fighter.rawdata[preferred_index].remove(index)
                 result = False
             elif ((is_armor and 'armor' not in item['type']) or
                     (not is_armor and
@@ -948,29 +948,29 @@ class Ruleset(object):
                     ('  is preferring a weird %s "%s". Fixing.' %
                         (item_string, item['name']))
                     ])
-                fighter.details[preferred_index].remove(index)
+                fighter.rawdata[preferred_index].remove(index)
                 result = False
 
 
         # Check to see if they have preferred armor/weapon at all - if not and
         # we only have 1 armor, make that our preferred armor
-        if len(fighter.details[preferred_index]) == 0:
+        if len(fighter.rawdata[preferred_index]) == 0:
             owned_item_count = 0
             item_index = None
             if is_armor:
-                for index, item in enumerate(fighter.details['stuff']):
+                for index, item in enumerate(fighter.rawdata['stuff']):
                     if ca_equipment.Equipment.is_armor(item):
                         owned_item_count += 1
                         item_index = index # only useful w/just 1 owned armor
             else:
-                for index, item in enumerate(fighter.details['stuff']):
+                for index, item in enumerate(fighter.rawdata['stuff']):
                     if ca_equipment.Weapon.is_weapon(item):
                         owned_item_count += 1
                         item_index = index # only useful w/just 1 owned armor
             if owned_item_count == 0:
                 pass
             elif owned_item_count == 1:
-                fighter.details[preferred_index] = [item_index]
+                fighter.rawdata[preferred_index] = [item_index]
             else: # owns more than one piece of armor
                 self._window_manager.error([
                     'Creature "%s" has no preferred %s' %
@@ -994,7 +994,7 @@ class Ruleset(object):
                 else:
                     if ca_equipment.Equipment.is_natural_weapon(item):
                         continue # don't remove natural weapons
-                if item_index in fighter.details[preferred_index]:
+                if item_index in fighter.rawdata[preferred_index]:
                     continue # don't remove preferred weapons/armor
 
                 item_list_menu.append(('stop using %s' % item['name'],
@@ -1002,7 +1002,7 @@ class Ruleset(object):
                 # If the preferred list is not full, ask user if s/he wants
                 # to add _this_ item to the preferred list.
                 if (not is_armor or
-                        len(fighter.details[preferred_index])
+                        len(fighter.rawdata[preferred_index])
                         < ca_fighter.Fighter.MAX_WEAPONS):
                     item_list_menu.append(('prefer %s' % item['name'],
                                             ('prefer', item_index)))
@@ -1031,14 +1031,14 @@ class Ruleset(object):
                                     'notimer': True},
                                    None)
                 elif item_index[0] == 'prefer':
-                    fighter.details[preferred_index].append(item_index[1])
+                    fighter.rawdata[preferred_index].append(item_index[1])
                 elif item_index[0] == 'quit':
                     result = item_index[1]
                     keep_asking = False
 
         # Add natural weapon/armor
 
-        for index, item in enumerate(fighter.details['stuff']):
+        for index, item in enumerate(fighter.rawdata['stuff']):
             addit = False
             if is_armor:
                 if ca_equipment.Equipment.is_natural_armor(item):
@@ -1065,7 +1065,7 @@ class Ruleset(object):
 
             # Build list of preferred items not being used / items being used
             # that aren't in the preferred list.
-            for preferred_item_index in fighter.details[preferred_index]:
+            for preferred_item_index in fighter.rawdata[preferred_index]:
                 if preferred_item_index not in index_list:
                     item = fighter.equipment.get_item_by_index(
                             preferred_item_index)
@@ -1102,7 +1102,7 @@ class Ruleset(object):
                                     'notimer': True},
                                    None)
                 elif preferred_item_index[0] == 'unprefer':
-                    fighter.details[preferred_index].remove(preferred_item_index[1])
+                    fighter.rawdata[preferred_index].remove(preferred_item_index[1])
 
                 elif preferred_item_index[0] == 'quit':
                     result = preferred_item_index[1]
@@ -1112,7 +1112,7 @@ class Ruleset(object):
 
         # Just weapons (just ranged weapons, actually)
         if result == Ruleset.KEEP_CHECKING_CONSISTENCY and not is_armor:
-            for weapon in fighter.details['stuff']:
+            for weapon in fighter.rawdata['stuff']:
                 missing_ammo = self._get_missing_ammo_names(fighter, weapon)
                 if len(missing_ammo) > 1:
                     self._window_manager.error([
@@ -1140,7 +1140,7 @@ class Ruleset(object):
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
 
-        if (fighter.details['opponent'] is None and
+        if (fighter.rawdata['opponent'] is None and
                 fight_handler is not None and
                 not fight_handler.world.playing_back):
             fight_handler.pick_opponent()
@@ -1153,12 +1153,12 @@ class Ruleset(object):
 
         # 'current-weapon' indexes into 'weapon-index' and points to the weapon
         # in the hand that's attacking right now.
-        if fighter.details['current-weapon'] >= len(weapons):
+        if fighter.rawdata['current-weapon'] >= len(weapons):
             return Ruleset.HANDLED_OK
-        weapon = weapons[fighter.details['current-weapon']]
+        weapon = weapons[fighter.rawdata['current-weapon']]
         if weapon is None:
             return Ruleset.HANDLED_OK
-        action['weapon-index'] = fighter.details['current-weapon']
+        action['weapon-index'] = fighter.rawdata['current-weapon']
 
         # Used for a fighter with two weapons.  Advance the index of the weapon
         # being used for the next attack in the same round.  We're advancing it
@@ -1167,8 +1167,8 @@ class Ruleset(object):
 
         # Wrap around so that you can attack more than once in a round (in
         # order to fix mistakes during battle).
-        fighter.details['current-weapon'] = (
-                (fighter.details['current-weapon'] + 1) % len(weapons))
+        fighter.rawdata['current-weapon'] = (
+                (fighter.rawdata['current-weapon'] + 1) % len(weapons))
 
         if not weapon.uses_ammo():
             return Ruleset.HANDLED_OK
@@ -1302,8 +1302,8 @@ class Ruleset(object):
 
             # Reload rounds individually (rather than as a whole clip)?
             reload_by_1 = False
-            if ('reload_type' in weapon.details and
-                    weapon.details['reload_type'] ==
+            if ('reload_type' in weapon.rawdata and
+                    weapon.rawdata['reload_type'] ==
                     ca_equipment.Equipment.RELOAD_ONE):
                 reload_by_1 = True
 
@@ -1320,8 +1320,8 @@ class Ruleset(object):
                         ignore_item = fighter.add_equipment(old_clip)
 
             load_type = (ca_equipment.Equipment.RELOAD_CLIP
-                         if 'reload_type' not in weapon.details else
-                         weapon.details['reload_type'])
+                         if 'reload_type' not in weapon.rawdata else
+                         weapon.rawdata['reload_type'])
 
             # all_items is used for auto-reload at the end of a fight.
             all_items = (False if 'all_items' not in action else
@@ -1364,15 +1364,15 @@ class Ruleset(object):
             if not weapon.uses_ammo():
                 return Ruleset.HANDLED_ERROR
 
-            #clip_name = weapon.details['ammo']['name']
+            #clip_name = weapon.rawdata['ammo']['name']
 
             # Get a list of clips that fit this weapon, ask the user which one
 
             clip_menu = []
-            clip_name = weapon.details['ammo']['name']
+            clip_name = weapon.rawdata['ammo']['name']
             if clip_name is None:
                 clip_name = ca_equipment.Equipment.UNKNOWN_STRING
-            for index, item in enumerate(fighter.details['stuff']):
+            for index, item in enumerate(fighter.rawdata['stuff']):
                 if item['name'] == clip_name:
                     if 'notes' in item and len(item['notes']) > 0:
                         text = '%s -- %s' % (item['name'], item['notes'])
@@ -1425,7 +1425,7 @@ class Ruleset(object):
                      fighter,         # Fighter object
                      action,          # {'action-name': 'doff-armor',
                                       #  'armor-index': <int> # index in
-                                      #         fighter.details['stuff',
+                                      #         fighter.rawdata['stuff',
                                       #         None doffs armor
                                       #  'comment': <string> # optional
                     fight_handler,    # FightHandler object (ignored)
@@ -1447,7 +1447,7 @@ class Ruleset(object):
                     fighter,          # Fighter object
                     action,           # {'action-name': 'don-armor',
                                       #  'armor-index': <int> # index in
-                                      #         fighter.details['stuff',
+                                      #         fighter.rawdata['stuff',
                                       #         None doffs armor
                                       #  'comment': <string> # optional
                     fight_handler,    # FightHandler object (ignored)
@@ -1469,7 +1469,7 @@ class Ruleset(object):
                       fighter,          # Fighter object
                       action,           # {'action-name': 'draw-weapon',
                                         #  'weapon-index': <int> # index in
-                                        #       fighter.details['stuff'],
+                                        #       fighter.rawdata['stuff'],
                                         #       None drops weapon
                                         #  'comment': <string> # optional
                       fight_handler,    # FightHandler object (ignored)
@@ -1563,7 +1563,7 @@ class Ruleset(object):
             return missing_ammo
 
         found_clip = False
-        for clip in fighter.details['stuff']:
+        for clip in fighter.rawdata['stuff']:
             if clip['name'] == clip_name:
                 found_clip = True
                 break
@@ -1625,7 +1625,7 @@ class Ruleset(object):
                     fighter,          # Fighter object
                     action,           # {'action-name': 'hold-init',
                                       #  'item-index': <int> # index in
-                                      #       fighter.details['stuff']
+                                      #       fighter.rawdata['stuff']
                                       #  'comment': <string>, # optional
                     fight_handler,    # FightHandler object
                     ):
@@ -1645,7 +1645,7 @@ class Ruleset(object):
                              action,        # {'action-name':
                                             #       'hold-init-complete',
                                             #  'item-index': <int> # ndx in
-                                            #       fighter.details['stuff']
+                                            #       fighter.rawdata['stuff']
                                             #  'comment': <string>, # opt'l
                              fight_handler, # FightHandler object
                              ):
@@ -1671,7 +1671,7 @@ class Ruleset(object):
                          fighter,          # Fighter object
                          action,           # {'action-name': 'holster-weapon',
                                            #  'weapon-index': <int> # index in
-                                           #       fighter.details['stuff'],
+                                           #       fighter.rawdata['stuff'],
                                            #       None drops weapon
                                            #  'comment': <string> # optional
                          fight_handler,    # FightHandler object (ignored)
@@ -1709,7 +1709,7 @@ class Ruleset(object):
         '''
         # Put item in container (first, so it doesn't mess-up indexes)
         item = fighter.equipment.get_item_by_index(
-                action['item-index'], fighter.details['open-container'])
+                action['item-index'], fighter.rawdata['open-container'])
         ignore = fighter.add_equipment(
                 item,
                 source=None,
@@ -1720,7 +1720,7 @@ class Ruleset(object):
         count = 1 if 'count' not in item else item['count']
         ignore_item = fighter.remove_equipment(action['item-index'],
                                                count,
-                                               fighter.details['open-container'])
+                                               fighter.rawdata['open-container'])
 
         return Ruleset.HANDLED_OK
 
@@ -1740,7 +1740,7 @@ class Ruleset(object):
         Returns: Whether the action was successfully handled or not (i.e.,
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
-        fighter.details['open-container'].append(action['container-index'])
+        fighter.rawdata['open-container'].append(action['container-index'])
         return Ruleset.HANDLED_OK
 
     def _perform_action(self,
@@ -1835,7 +1835,7 @@ class Ruleset(object):
         UNHANDLED, HANDLED_OK, or HANDLED_ERROR)
         '''
 
-        fighter.details['opponent'] = {'group': action['opponent']['group'],
+        fighter.rawdata['opponent'] = {'group': action['opponent']['group'],
                                        'name': action['opponent']['name']}
         return Ruleset.HANDLED_OK
 
@@ -1965,13 +1965,13 @@ class Ruleset(object):
             print('  %d: %s' % (index, name))
 
         print('--- in use %s ---' % items_string)
-        for index in fighter.details[action_index]:
+        for index in fighter.rawdata[action_index]:
             item = fighter.equipment.get_item_by_index(index)
             name = '<None>' if item is None else item['name']
             print('  %d: %s' % (index, name))
 
         print('--- preferred %s ---' % items_string)
-        for index in fighter.details[preferred_index]:
+        for index in fighter.rawdata[preferred_index]:
             item = fighter.equipment.get_item_by_index(index)
             name = '<None>' if item is None else item['name']
             print('  %d: %s' % (index, name))
@@ -1993,13 +1993,13 @@ class Ruleset(object):
         '''
         # The 1st weapon the fighter messes with should be the 1st one in the
         # weapon-index list (i.e., the weapon in the fighter's dominant hand.
-        fighter.details['current-weapon'] = 0
+        fighter.rawdata['current-weapon'] = 0
 
         # TODO (eventually): if _char_being_timed is None, do whatever we do
         self._char_being_timed = {'name': fighter.name,
                                   'group': fighter.group,
                                   'start': datetime.datetime.now(),
-                                  'state': fighter.details['state'],
+                                  'state': fighter.rawdata['state'],
                                   'round': fight_handler.get_round()}
 
         fighter.start_turn(fight_handler)
@@ -2010,7 +2010,7 @@ class Ruleset(object):
                    fighter,          # Fighter object
                    action,           # {'action-name': 'use-item',
                                      #  'item-index': <int> # index in
-                                     #       fighter.details['stuff']
+                                     #       fighter.rawdata['stuff']
                                      #  'comment': <string>, # optional
                    fight_handler,    # FightHandler object (ignored)
                    ):

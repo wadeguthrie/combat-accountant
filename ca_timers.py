@@ -24,13 +24,13 @@ class Timer(object):
      FIRE_ROUND_END) = list(range(2))
 
     def __init__(self,
-                 details    # dict from the Game File, contains timer's info
+                 rawdata    # dict from the Game File, contains timer's info
                  ):
-        self.details = details  # This needs to actually be from the Game File
+        self.rawdata = rawdata  # This needs to actually be from the Game File
         self.__complete_me()
 
     def decrement(self):
-        self.details['rounds'] -= 1
+        self.rawdata['rounds'] -= 1
 
     def fire(self,
              owner,          # ThingsInFight object to receive timer action
@@ -42,23 +42,23 @@ class Timer(object):
         # used to return it
         result = None
 
-        if 'state' in self.details['actions']:
-            owner.details['state'] = self.details['actions']['state']
+        if 'state' in self.rawdata['actions']:
+            owner.rawdata['state'] = self.rawdata['actions']['state']
 
-        if 'announcement' in self.details['actions']:
+        if 'announcement' in self.rawdata['actions']:
             window_manager.display_window(
-                    ('Timer Fired for %s' % self.details['parent-name']),
-                    [[{'text': self.details['actions']['announcement'],
+                    ('Timer Fired for %s' % self.rawdata['parent-name']),
+                    [[{'text': self.rawdata['actions']['announcement'],
                         'mode': curses.A_NORMAL}]])
 
-        if 'timer' in self.details['actions']:
-            result = self.details['actions']['timer']
+        if 'timer' in self.rawdata['actions']:
+            result = self.rawdata['actions']['timer']
 
         # TODO (eventually): implement this (haven't yet figured out where
         #   |ruleset| is coming from)
-        #if 'action' in self.details['actions']:
+        #if 'action' in self.rawdata['actions']:
         #    ruleset.do_action(owner,
-        #                      self.details['actions']['action'],
+        #                      self.rawdata['actions']['action'],
         #                      None #fight_handler
         #                      )
 
@@ -95,7 +95,7 @@ class Timer(object):
         Creates a new timer from scratch (rather than from data that's already
         in the Game File).
         '''
-        self.details = copy.deepcopy(pieces)
+        self.rawdata = copy.deepcopy(pieces)
         self.__complete_me()
 
     def get_description(self):
@@ -105,29 +105,29 @@ class Timer(object):
         result = []  # List of strings, one per line of output
         this_line = []
 
-        rounds = self.details['rounds']
+        rounds = self.rawdata['rounds']
         round_count_string = Timer.round_count_string % rounds
         this_line.append(round_count_string)
-        if 'announcement' in self.details['actions']:
-            this_line.append('[%s]' % self.details['actions']['announcement'])
+        if 'announcement' in self.rawdata['actions']:
+            this_line.append('[%s]' % self.rawdata['actions']['announcement'])
             result.append(''.join(this_line))
             this_line = []
 
-        if ('state' in self.details['actions'] and
-                self.details['actions']['state'] is not None):
-            this_line.append('<%s>' % self.details['actions']['state'])
+        if ('state' in self.rawdata['actions'] and
+                self.rawdata['actions']['state'] is not None):
+            this_line.append('<%s>' % self.rawdata['actions']['state'])
             result.append(''.join(this_line))
             this_line = []
 
-        if ('string' in self.details and self.details['string'] is not None
-                and len(self.details['string']) > 0):
-            if isinstance(self.details['string'], list):
-                for substring in self.details['string']:
+        if ('string' in self.rawdata and self.rawdata['string'] is not None
+                and len(self.rawdata['string']) > 0):
+            if isinstance(self.rawdata['string'], list):
+                for substring in self.rawdata['string']:
                     this_line.append('%s' % (substring))
                     result.append(''.join(this_line))
                     this_line = []
             else:
-                this_line.append('%s' % (self.details['string']))
+                this_line.append('%s' % (self.rawdata['string']))
                 result.append(''.join(this_line))
                 this_line = []
 
@@ -143,23 +143,23 @@ class Timer(object):
         '''
         this_line = []
 
-        rounds = self.details['rounds']
+        rounds = self.rawdata['rounds']
 
         round_count_string = Timer.round_count_string % rounds
         this_line.append(round_count_string)
 
         needs_headline = True
-        if 'announcement' in self.details['actions']:
+        if 'announcement' in self.rawdata['actions']:
             this_line.append('[%s]' %
-                             self.details['actions']['announcement'][0])
+                             self.rawdata['actions']['announcement'][0])
             needs_headline = False
 
-        if ('string' in self.details and self.details['string'] is not None
-                and len(self.details['string']) > 0):
-            if isinstance(self.details['string'], list):
-                this_line.append('%s' % (self.details['string'][0]))
+        if ('string' in self.rawdata and self.rawdata['string'] is not None
+                and len(self.rawdata['string']) > 0):
+            if isinstance(self.rawdata['string'], list):
+                this_line.append('%s' % (self.rawdata['string'][0]))
             else:
-                this_line.append('%s' % (self.details['string']))
+                this_line.append('%s' % (self.rawdata['string']))
             needs_headline = False
 
         if needs_headline:
@@ -169,26 +169,26 @@ class Timer(object):
 
     def mark_owner_as_busy(self,
                            is_busy=True):
-        self.details['busy'] = is_busy
+        self.rawdata['busy'] = is_busy
 
     def __complete_me(self):
         '''
         Fills-in any missing parts of the timer.
         '''
-        if self.details is None:
-            self.details = {}
-        if 'parent-name' not in self.details:
-            self.details['parent-name'] = '<< Unknown Parent >>'
-        if 'busy' not in self.details:
+        if self.rawdata is None:
+            self.rawdata = {}
+        if 'parent-name' not in self.rawdata:
+            self.rawdata['parent-name'] = '<< Unknown Parent >>'
+        if 'busy' not in self.rawdata:
             self.mark_owner_as_busy(is_busy=False)
-        if 'rounds' not in self.details:
-            self.details['rounds'] = 1
-        if 'actions' not in self.details:
-            self.details['actions'] = {}
-        if 'fire_when' not in self.details:
-            self.details['fire_when'] = Timer.FIRE_ROUND_END
-        if 'data' not in self.details:
-            self.details['data'] = {}
+        if 'rounds' not in self.rawdata:
+            self.rawdata['rounds'] = 1
+        if 'actions' not in self.rawdata:
+            self.rawdata['actions'] = {}
+        if 'fire_when' not in self.rawdata:
+            self.rawdata['fire_when'] = Timer.FIRE_ROUND_END
+        if 'data' not in self.rawdata:
+            self.rawdata['data'] = {}
 
 
 class TimersWidget(object):
@@ -419,7 +419,7 @@ class Timers(object):
 
         Returns the timer right back, again.
         '''
-        self.__timers['data'].append(timer.details)
+        self.__timers['data'].append(timer.rawdata)
         self.__timers['obj'].append(timer)
         return timer
 
@@ -446,8 +446,8 @@ class Timers(object):
                            ):
         '''Returns 'True' if a current timer has string matching parameter.'''
         for timer_obj in self.__timers['obj']:
-            if ('string' in timer_obj.details and
-                    timer_obj.details['string' ] == string):
+            if ('string' in timer_obj.rawdata and
+                    timer_obj.rawdata['string' ] == string):
                 return True
         return False
 
@@ -462,7 +462,7 @@ class Timers(object):
     def is_busy(self):
         '''Returns 'True' if a current timer has the owner marked as busy.'''
         for timer_obj in self.__timers['obj']:
-            if timer_obj.details['busy']:
+            if timer_obj.rawdata['busy']:
                 return True
         return False
 
@@ -479,8 +479,8 @@ class Timers(object):
         self.show_all() # TODO (now): remove
         fire_and_remove_these = []
         for index, timer in enumerate(self.__timers['obj']):
-            if timer.details['rounds'] <= 0:
-                if timer.details['fire_when'] == when:
+            if timer.rawdata['rounds'] <= 0:
+                if timer.rawdata['fire_when'] == when:
                     fire_and_remove_these.insert(0, index)  # largest indexes last
 
         for index in fire_and_remove_these:
@@ -519,7 +519,7 @@ class Timers(object):
         debug.print('\n<< Timer list')
         printed_something = False
         for timer in self.__timers['obj']:
-            debug.pprint(timer.details)
+            debug.pprint(timer.rawdata)
             printed_something = True
         if not printed_something:
             debug.print('  (Empty)')

@@ -1049,7 +1049,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
                                  mock_fight_handler)
         weapon, actual_weapon_index = self._get_current_weapon(vodou_priest)
         assert actual_weapon_index == requested_weapon_index
-        assert weapon.details['name'] == "pistol, Colt 170D"
+        assert weapon.rawdata['name'] == "pistol, Colt 170D"
 
         requested_armor_index = 2
         self._ruleset.do_action(vodou_priest,
@@ -1081,14 +1081,14 @@ class GmTestCaseGurps(GmTestCaseCommon):
 
         damage_1st = -3
         self._window_manager.set_menu_response('Use Armor\'s DR?', False)
-        original_hp = vodou_priest.details['current']['hp']
+        original_hp = vodou_priest.rawdata['current']['hp']
 
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'adjust-hp',
                                   'adj': damage_1st},
                                  mock_fight_handler)
 
-        modified_hp = vodou_priest.details['current']['hp']
+        modified_hp = vodou_priest.rawdata['current']['hp']
         assert modified_hp == original_hp + damage_1st
 
         # Shock (B419)
@@ -1112,14 +1112,14 @@ class GmTestCaseGurps(GmTestCaseCommon):
 
         damage_2nd = -1
         self._window_manager.set_menu_response('Use Armor\'s DR?', True)
-        original_hp = vodou_priest.details['current']['hp']
+        original_hp = vodou_priest.rawdata['current']['hp']
 
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'adjust-hp',
                                   'adj': damage_2nd},
                                  mock_fight_handler)
 
-        modified_hp = vodou_priest.details['current']['hp']
+        modified_hp = vodou_priest.rawdata['current']['hp']
         assert modified_hp == original_hp  # No damage because of DR
 
         # Shock (B419) is only from the 1st attack since this did no damage
@@ -1145,14 +1145,14 @@ class GmTestCaseGurps(GmTestCaseCommon):
         expected_damage = -2
         pre_armor_damage = expected_damage - self._vodou_priest_armor_dr
         self._window_manager.set_menu_response('Use Armor\'s DR?', True)
-        original_hp = vodou_priest.details['current']['hp']
+        original_hp = vodou_priest.rawdata['current']['hp']
 
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'adjust-hp',
                                   'adj': pre_armor_damage},
                                  mock_fight_handler)
 
-        modified_hp = vodou_priest.details['current']['hp']
+        modified_hp = vodou_priest.rawdata['current']['hp']
         assert modified_hp == original_hp + expected_damage
 
         # Shock is capped at -4
@@ -1185,13 +1185,13 @@ class GmTestCaseGurps(GmTestCaseCommon):
                                  {'action-name': 'start-turn'},
                                  mock_fight_handler)
 
-        vodou_priest.details['current']['hp'] = (
-                vodou_priest.details['permanent']['hp'])
+        vodou_priest.rawdata['current']['hp'] = (
+                vodou_priest.rawdata['permanent']['hp'])
 
         # Major wound (B420) - Make HT roll (no knockdown or stun)
 
         # +1 to make sure that the damage is more than half
-        major_damage = - ((vodou_priest.details['permanent']['hp'] / 2) + 1)
+        major_damage = - ((vodou_priest.rawdata['permanent']['hp'] / 2) + 1)
 
         self._window_manager.set_menu_response('Use Armor\'s DR?', False)
         # TODO: clear the 'pass-out-immediately' flag for this.  make a
@@ -1216,7 +1216,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         dodge_skill, ignore = self._ruleset.get_dodge_skill(vodou_priest)
 
         assert dodge_skill == original_dodge_skill  # shock
-        assert vodou_priest.details['posture'] == 'standing'
+        assert vodou_priest.rawdata['posture'] == 'standing'
 
         # Major wound (B420) - miss HT roll (knockdown and stunned)
 
@@ -1227,8 +1227,8 @@ class GmTestCaseGurps(GmTestCaseCommon):
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'start-turn'},
                                  mock_fight_handler)
-        vodou_priest.details['current']['hp'] = (
-                vodou_priest.details['permanent']['hp'])
+        vodou_priest.rawdata['current']['hp'] = (
+                vodou_priest.rawdata['permanent']['hp'])
 
         self._window_manager.set_menu_response('Use Armor\'s DR?', False)
         self._window_manager.set_menu_response(
@@ -1254,7 +1254,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         dodge_skill, ignore = self._ruleset.get_dodge_skill(vodou_priest)
 
         assert dodge_skill == original_dodge_skill + total_penalty
-        assert vodou_priest.details['posture'] == 'lying'
+        assert vodou_priest.rawdata['posture'] == 'lying'
 
         # End of the turn -- check for stun (B420) to be over
 
@@ -1281,7 +1281,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         dodge_skill, ignore = self._ruleset.get_dodge_skill(vodou_priest)
 
         assert dodge_skill == original_dodge_skill + total_penalty
-        assert vodou_priest.details['posture'] == 'lying'
+        assert vodou_priest.rawdata['posture'] == 'lying'
 
         # Check for death, check for unconscious
         self._ruleset.do_action(vodou_priest,
@@ -1290,8 +1290,8 @@ class GmTestCaseGurps(GmTestCaseCommon):
 
         # Major wound (B420) - bad fail (unconscious)
 
-        vodou_priest.details['current']['hp'] = (
-                vodou_priest.details['permanent']['hp'])
+        vodou_priest.rawdata['current']['hp'] = (
+                vodou_priest.rawdata['permanent']['hp'])
 
         self._window_manager.set_menu_response('Use Armor\'s DR?', False)
         self._window_manager.set_menu_response(
@@ -1321,8 +1321,8 @@ class GmTestCaseGurps(GmTestCaseCommon):
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'start-turn'},
                                  mock_fight_handler)
-        vodou_priest.details['current']['hp'] = (
-                vodou_priest.details['permanent']['hp'])
+        vodou_priest.rawdata['current']['hp'] = (
+                vodou_priest.rawdata['permanent']['hp'])
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'change-posture',
                                   'posture': 'standing'},
@@ -1379,8 +1379,8 @@ class GmTestCaseGurps(GmTestCaseCommon):
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'start-turn'},
                                  mock_fight_handler)
-        vodou_priest.details['current']['hp'] = (
-                vodou_priest.details['permanent']['hp'])
+        vodou_priest.rawdata['current']['hp'] = (
+                vodou_priest.rawdata['permanent']['hp'])
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'change-posture',
                                   'posture': 'standing'},
@@ -1427,8 +1427,8 @@ class GmTestCaseGurps(GmTestCaseCommon):
         assert to_hit == expected_to_hit + damage  # aiming for 1 round + shock
 
         # B327
-        # TODO: if adjusted_hp <= -(5 * fighter.details['permanent']['hp']):
-        #        fighter.details['state'] = 'dead'
+        # TODO: if adjusted_hp <= -(5 * fighter.rawdata['permanent']['hp']):
+        #        fighter.rawdata['state'] = 'dead'
 
         # Start by healing him up
         self._ruleset.do_action(vodou_priest,
@@ -1439,8 +1439,8 @@ class GmTestCaseGurps(GmTestCaseCommon):
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'start-turn'},
                                  mock_fight_handler)
-        vodou_priest.details['current']['hp'] = (
-                vodou_priest.details['permanent']['hp'])
+        vodou_priest.rawdata['current']['hp'] = (
+                vodou_priest.rawdata['permanent']['hp'])
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'change-posture',
                                   'posture': 'standing'},
@@ -1468,7 +1468,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
                 self._ruleset,
                 self._window_manager)
 
-        del vodou_priest.details['advantages']['Combat Reflexes']
+        del vodou_priest.rawdata['advantages']['Combat Reflexes']
 
         original_hand_to_hand_info = self._ruleset.get_unarmed_info(
                 vodou_priest,
@@ -1494,7 +1494,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
 
         # Test High Pain Threshold
 
-        vodou_priest.details['advantages']['High Pain Threshold'] = 10
+        vodou_priest.rawdata['advantages']['High Pain Threshold'] = 10
 
         self._window_manager.set_menu_response('Use Armor\'s DR?', False)
         high_pain_thrshold_margin = 3
@@ -1507,7 +1507,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         # failed the high stun roll so knockdown & stun is still in effect
 
         # +1 to make sure that the damage is more than half
-        major_damage = - ((vodou_priest.details['permanent']['hp'] / 2) + 1)
+        major_damage = - ((vodou_priest.rawdata['permanent']['hp'] / 2) + 1)
         self._ruleset.do_action(vodou_priest,
                                  {'action-name': 'adjust-hp',
                                   'adj': major_damage},
@@ -1538,14 +1538,14 @@ class GmTestCaseGurps(GmTestCaseCommon):
         dodge_skill, ignore = self._ruleset.get_dodge_skill(vodou_priest)
 
         assert dodge_skill == original_dodge_skill + total_penalty
-        assert vodou_priest.details['posture'] == 'lying'
+        assert vodou_priest.rawdata['posture'] == 'lying'
 
         # # low pain threshold (B142)
         # # - 2x shock / -4 to HT roll for knockdown and stunning
         # # - according to KROMM, the max is -8 for LPT
 
-        # del vodou_priest.details['advantages']['High Pain Threshold']
-        # vodou_priest.details['advantages']['Low Pain Threshold'] = -10
+        # del vodou_priest.rawdata['advantages']['High Pain Threshold']
+        # vodou_priest.rawdata['advantages']['Low Pain Threshold'] = -10
 
         # '''
         # There's:
@@ -1561,7 +1561,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
 
         # Test High Pain Threshold
 
-        # vodou_priest.details['advantages']['High Pain Threshold'] = 10
+        # vodou_priest.rawdata['advantages']['High Pain Threshold'] = 10
 
         # self._window_manager.set_menu_response('Use Armor\'s DR?', False)
         # high_pain_thrshold_margin = 3
@@ -1574,7 +1574,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         # # failed the high stun roll so knockdown & stun is still in effect
 
         # # +1 to make sure that the damage is more than half
-        # major_damage = - ((vodou_priest.details['permanent']['hp'] / 2) + 1)
+        # major_damage = - ((vodou_priest.rawdata['permanent']['hp'] / 2) + 1)
         # self._ruleset.do_action(vodou_priest,
         #                         {'action-name': 'adjust-hp',
         #                          'adj': major_damage},
@@ -1604,7 +1604,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         # dodge_skill, ignore = self._ruleset.get_dodge_skill(vodou_priest)
 
         # assert dodge_skill == original_dodge_skill + total_penalty
-        # assert vodou_priest.details['posture'] == 'lying'
+        # assert vodou_priest.rawdata['posture'] == 'lying'
 
     def test_spell_casting(self):
         '''
@@ -1702,9 +1702,9 @@ class GmTestCaseGurps(GmTestCaseCommon):
           # duration
         ]
 
-        original_fp = vodou_priest.details['current']['fp']
+        original_fp = vodou_priest.rawdata['current']['fp']
 
-        assert original_fp == vodou_priest.details['permanent']['fp']
+        assert original_fp == vodou_priest.rawdata['permanent']['fp']
 
         # Just to load the spells from the file
         with (ca_gurps_ruleset.GurpsRuleset(self._window_manager)
@@ -1715,7 +1715,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
             opponent.timers.clear_all()
 
             vodou_priest.timers.clear_all()
-            vodou_priest.details['current']['fp'] = original_fp
+            vodou_priest.rawdata['current']['fp'] = original_fp
 
             if (ca_gurps_ruleset.GurpsRuleset.spells[
                     trial['name']]['range'] == 'area'):
@@ -1770,7 +1770,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
             # Cost
 
             expected_cost = trial['cost'] + trial['skill-bonus']
-            assert (vodou_priest.details['current']['fp'] ==
+            assert (vodou_priest.rawdata['current']['fp'] ==
                     original_fp - expected_cost)
 
             # Watch the casting time and the spell duration
@@ -1789,10 +1789,10 @@ class GmTestCaseGurps(GmTestCaseCommon):
                 # start-turn because the action takes place in the middle of a
                 # turn.
 
-                assert len(vodou_priest.details['timers']) == 1
-                assert (vodou_priest.details['timers'][0]['string'] ==
+                assert len(vodou_priest.rawdata['timers']) == 1
+                assert (vodou_priest.rawdata['timers'][0]['string'] ==
                         casting_text)
-                assert vodou_priest.details['timers'][0]['busy']
+                assert vodou_priest.rawdata['timers'][0]['busy']
                 self._ruleset.do_action(vodou_priest,
                                          {'action-name': 'end-turn'},
                                          mock_fight_handler)
@@ -1808,8 +1808,8 @@ class GmTestCaseGurps(GmTestCaseCommon):
                                          {'action-name': 'start-turn'},
                                          mock_fight_handler)
 
-                assert len(opponent.details['timers']) == 1
-                assert (opponent.details['timers'][0]['string'] ==
+                assert len(opponent.rawdata['timers']) == 1
+                assert (opponent.rawdata['timers'][0]['string'] ==
                         opponent_casting_text)
 
                 self._ruleset.do_action(opponent,
@@ -1830,11 +1830,11 @@ class GmTestCaseGurps(GmTestCaseCommon):
             opponent_active_text = 'SPELL "%s" AGAINST ME' % trial['name']
 
             for turn in range(trial['duration']):
-                assert len(vodou_priest.details['timers']) == 1
-                assert (vodou_priest.details['timers'][0]['string'] ==
+                assert len(vodou_priest.rawdata['timers']) == 1
+                assert (vodou_priest.rawdata['timers'][0]['string'] ==
                         active_text)
-                if 'busy' in vodou_priest.details['timers'][0]:
-                    assert not vodou_priest.details['timers'][0]['busy']
+                if 'busy' in vodou_priest.rawdata['timers'][0]:
+                    assert not vodou_priest.rawdata['timers'][0]['busy']
                 # else, it's OK
                 self._ruleset.do_action(vodou_priest,
                                          {'action-name': 'end-turn'},
@@ -1845,8 +1845,8 @@ class GmTestCaseGurps(GmTestCaseCommon):
 
                 # Opponent
 
-                assert len(opponent.details['timers']) == 1
-                assert (opponent.details['timers'][0]['string'] ==
+                assert len(opponent.rawdata['timers']) == 1
+                assert (opponent.rawdata['timers'][0]['string'] ==
                         opponent_active_text)
 
                 self._ruleset.do_action(opponent,
@@ -1858,8 +1858,8 @@ class GmTestCaseGurps(GmTestCaseCommon):
 
             # Make sure that all of the timers are dead
 
-            assert len(vodou_priest.details['timers']) == 0
-            assert len(opponent.details['timers']) == 0
+            assert len(vodou_priest.rawdata['timers']) == 0
+            assert len(opponent.rawdata['timers']) == 0
 
     def test_defend(self):
         '''
@@ -2028,7 +2028,7 @@ class GmTestCaseGurps(GmTestCaseCommon):
         # test that an unconscious fighter is not skipped but a dead one is
 
         injured_hp = 3  # arbitrary amount
-        injured_fighter.details['current']['hp'] -= injured_hp
+        injured_fighter.rawdata['current']['hp'] -= injured_hp
         unconscious_fighter.set_consciousness(ca_fighter.Fighter.UNCONSCIOUS,
                                               None)
         dead_fighter.set_consciousness(ca_fighter.Fighter.DEAD, None)
@@ -2108,11 +2108,11 @@ class GmTestCaseGurps(GmTestCaseCommon):
         fighters = fight_handler.get_fighters()
         assert len(expected_fighters) == len(fighters)
 
-        assert self._are_equal(expected_fighters[0], fighters[0]['details'])
-        assert self._are_equal(expected_fighters[1], fighters[1]['details'])
-        assert self._are_equal(expected_fighters[2], fighters[2]['details'])
-        assert self._are_equal(expected_fighters[3], fighters[3]['details'])
-        assert self._are_equal(expected_fighters[4], fighters[4]['details'])
+        assert self._are_equal(expected_fighters[0], fighters[0]['rawdata'])
+        assert self._are_equal(expected_fighters[1], fighters[1]['rawdata'])
+        assert self._are_equal(expected_fighters[2], fighters[2]['rawdata'])
+        assert self._are_equal(expected_fighters[3], fighters[3]['rawdata'])
+        assert self._are_equal(expected_fighters[4], fighters[4]['rawdata'])
 
     def test_initiative_order_again(self):
         '''
