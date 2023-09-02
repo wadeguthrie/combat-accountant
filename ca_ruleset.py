@@ -162,45 +162,16 @@ class Ruleset(object):
         '''
         # Figure out who we are and what we're holding.
 
-        weapons = fighter.get_current_weapons()
-        holding_ranged = False
-        holding_loaded_ranged = False
-        holding_melee = False
-        holding_natural_weapon = False
-        holding_non_natural_weapon = False
-
-        for weapon in weapons:
-            if weapon is None:
-                continue
-            if weapon.is_ranged_weapon():
-                holding_ranged = True
-                # TODO (now): not?
-                if not weapon.uses_ammo() or weapon.shots_left() > 0:
-                    holding_loaded_ranged = True
-            else:
-                holding_melee = True
-            if ca_equipment.Equipment.is_natural_weapon(weapon.details):
-                holding_natural_weapon = True
-            else:
-                holding_non_natural_weapon = True
-
+        holding = fighter.what_are_we_holding()
         weapon_indexes = fighter.get_current_weapon_indexes()
-
-        # If you're not holding anything, you've at least got your fists
-        if (not holding_ranged and not holding_melee and
-                not holding_natural_weapon and not holding_non_natural_weapon):
-            holding_natural_weapon = True
 
         # ATTACK #
 
-        if (holding_melee or holding_loaded_ranged or
-                holding_natural_weapon or holding_non_natural_weapon):
-            # Can only attack if there's someone to attack
+        if (holding['melee'] or holding['loaded_ranged'] or
+                holding['natural_weapon'] or holding['non_natural_weapon']):
             action_menu.extend([
                 ('attack',          {'action':
-                                     {'action-name': 'attack'}}),
-                ('attack, all out', {'action':
-                                     {'action-name': 'all-out-attack'}})
+                                     {'action-name': 'attack'}})
             ])
 
         # USER-DEFINED #
@@ -388,7 +359,8 @@ class Ruleset(object):
 
         # DRAW OR HOLSTER WEAPON #
 
-        if holding_non_natural_weapon:
+        weapons = fighter.get_current_weapons()
+        if holding['non_natural_weapon']:
             for index, weapon in enumerate(weapons):
                 weapon_index = weapon_indexes[index]
                 if not ca_equipment.Equipment.is_natural_weapon(weapon.details):
@@ -440,7 +412,7 @@ class Ruleset(object):
 
         # RELOAD #
 
-        if holding_ranged and len(weapons) == 1:
+        if holding['ranged'] and len(weapons) == 1:
             action_menu.append(('reload (ready)',
                                {'action': {'action-name': 'reload'}}))
 
