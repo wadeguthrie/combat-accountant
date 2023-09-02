@@ -651,6 +651,8 @@ class Weapon(object):
         #
         # returns (damage dict, notes (scalar string) for this shot)
 
+        debug = ca_debug.Debug()
+        debug.header2('get_damage_next_shot')
         damage = self.get_param('damage', mode)
         notes = self.get_param('notes', mode)
         return damage, notes
@@ -668,12 +670,12 @@ class Weapon(object):
         '''
         # weapon[type][mode]: swung weapon, thrust weapon, thrown weapon,
         #                      missile weapon
-        debug = ca_debug.Debug(quiet=True)
-        debug.header2('get_param: %s, %s' % (param, mode))
+        #debug = ca_debug.Debug()
+        #debug.header2('get_param: %s, %s' % (param, mode))
 
         # start with the weapon's inherent value
-        debug.print('details:')
-        debug.pprint(self.details)
+        #debug.print('details:')
+        #debug.pprint(self.details)
         result = None
         if param in self.details:
             result = self.details[param]
@@ -682,13 +684,13 @@ class Weapon(object):
         if mode in self.details['type'] and param in self.details['type'][mode]:
             result = self.details['type'][mode][param]
 
-        debug.print('type[%r] = "%r"' % (mode, self.details['type'][mode]))
+        #debug.print('type[%r] = "%r"' % (mode, self.details['type'][mode]))
 
         # check the clip (and bullets therein)
         if mode == 'ranged weapon':
             clip = self.get_clip()
-            debug.print('  it is a ranged weapon, clip:')
-            debug.pprint(clip)
+            #debug.print('  it is a ranged weapon, clip:')
+            #debug.pprint(clip)
             if clip is None:
                 return result
 
@@ -696,7 +698,7 @@ class Weapon(object):
                 result = clip[param]
 
             if 'stuff' in clip: # bullets contained in clip
-                debug.print('stuff is in clip')
+                #debug.print('stuff is in clip')
                 bullet = clip['stuff'][0] # next bullet to be fired
                 if param in bullet:
                     result = bullet[param]
@@ -705,6 +707,20 @@ class Weapon(object):
 
     def is_melee_weapon(self):
         return Weapon.is_item_melee_weapon(self.details)
+
+    def is_melee_strength_based_weapon(self):
+        if not self.is_melee_weapon():
+            return False
+        for mode in self.details['type']:
+            full_mode = self.details['type'][mode]
+            if ('damage' in full_mode and 'st' in full_mode['damage'] and
+                    (full_mode['damage']['st'] == 'sw' or
+                     full_mode['damage']['st'] == 'thr')):
+                return True
+        return False
+
+    def is_natural_weapon(self):
+        return Weapon.is_item_natural_weapon(self.details)
 
     def is_ranged_weapon(self):
         return Weapon.is_item_ranged_weapon(self.details)

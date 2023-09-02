@@ -25,9 +25,8 @@ import ca_timers
 
 # in priority order:
 
-# TODO: ISSUE 17 - allow markdown in notes and fight notes
+# TODO: replace 'details' with 'rawdata' throughout
 
-# TODO: flesh-out attack, all-out
 # TODO: grenade support (missile-like but not with clips)
 
 # TODO: Make unarmed stuff more closely mirror the armed stuff.
@@ -66,6 +65,7 @@ import ca_timers
 # TODO: ISSUE 19 - optimize curses commands
 # TODO: ? ISSUE 12 - timeslots (for other games)
 # TODO: ISSUE 6 - monsters should be able to get pocket lint
+# TODO: ? ISSUE 17 - allow markdown in notes and fight notes
 
 # The JSON file that defines a campaign is expected to look like:
 # {

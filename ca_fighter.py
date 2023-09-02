@@ -4,6 +4,7 @@ import copy
 import curses
 import pprint
 
+import ca_debug
 import ca_equipment
 import ca_timers
 
@@ -872,6 +873,36 @@ class Fighter(ThingsInFight):
 
         return item
 
+    def what_are_we_holding(self):
+        weapons = self.get_current_weapons()
+        holding = {'ranged': 0,
+                   'loaded_ranged': 0,
+                   'melee': 0,
+                   'natural_weapon': 0,
+                   'non_natural_weapon': 0}
+
+        for weapon in weapons:
+            if weapon is None:
+                continue
+            if weapon.is_ranged_weapon():
+                holding['ranged'] += 1
+                # TODO (now): not?
+                if not weapon.uses_ammo() or weapon.shots_left() > 0:
+                    holding['loaded_ranged'] += 1
+            else:
+                holding['melee'] += 1
+            if ca_equipment.Equipment.is_natural_weapon(weapon.details):
+                holding['natural_weapon'] += 1
+            else:
+                holding['non_natural_weapon'] += 1
+
+        # If you're not holding anything, you've at least got your fists
+        if (not holding['ranged'] and not holding['melee'] and
+                not holding['natural_weapon'] and not holding['non_natural_weapon']):
+            holding['natural_weapon'] += 1
+
+        return holding
+
     #
     # Notes related methods
     #
@@ -997,11 +1028,11 @@ class Fighter(ThingsInFight):
             each line segment has its own mode so, for example, only SOME of
                the line is shown in bold
         '''
-
         weapons = self.get_current_weapons()
         why_opponent = fight_handler.get_opponent_for(self)
         all_lines = []
         looking_for_weapon = True
+        disallowed_modes = self._ruleset.get_disallowed_modes(self)
         for weapon in weapons:
             if weapon is None:
                 continue
@@ -1009,10 +1040,11 @@ class Fighter(ThingsInFight):
 
             modes = weapon.get_attack_modes()
             for mode in modes:
-                lines = self.__explain_one_weapon_numbers(weapon,
-                                                          mode,
-                                                          why_opponent)
-                all_lines.extend(lines)
+                if mode not in disallowed_modes:
+                    lines = self.__explain_one_weapon_numbers(weapon,
+                                                              mode,
+                                                              why_opponent)
+                    all_lines.extend(lines)
 
         #if looking_for_weapon:
         #    XXXX - do unarmed stuff
@@ -1181,6 +1213,9 @@ class Fighter(ThingsInFight):
             each line segment has its own mode so, for example, only SOME of
                the line is shown in bold
         '''
+        debug = ca_debug.Debug()
+        debug.header2('__explain_one_weapon_numbers')
+
         lines = []
 
         if self._ruleset.does_weapon_use_unarmed_skills(weapon):

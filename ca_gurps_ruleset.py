@@ -288,6 +288,21 @@ class GurpsRuleset(ca_ruleset.Ruleset):
      MAJOR_WOUND_SIMPLE_FAIL,
      MAJOR_WOUND_BAD_FAIL) = list(range(3))
 
+    (ALL_OUT_DOUBLE_ATTACK,
+     ALL_OUT_STRONG_ATTACK,
+     ALL_OUT_SUPPRESSION_FIRE,
+     ALL_OUT_FEINT,
+     ALL_OUT_RANGED_DETERMINED_ATTACK,
+     ALL_OUT_MELEE_DETERMINED_ATTACK) = list(range(6))
+
+    all_out_attack_option_strings = {
+        ALL_OUT_DOUBLE_ATTACK:              'Double Attack',
+        ALL_OUT_STRONG_ATTACK:              'Strong Attack',
+        ALL_OUT_SUPPRESSION_FIRE:           'Suppression Fire',
+        ALL_OUT_FEINT:                      'Feint',
+        ALL_OUT_RANGED_DETERMINED_ATTACK:   'Determined Attack (ranged)',
+        ALL_OUT_MELEE_DETERMINED_ATTACK:    'Determined Attack (melee)'}
+
     def __init__(self,
                  window_manager  # GmWindowManager object for menus and errors
                  ):
@@ -616,20 +631,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         # Figure out who we are and what we're holding.
 
-        weapons = fighter.get_current_weapons()
-        holding_ranged = False
-        holding_loaded_ranged = False
-        holding_melee = False
-        for weapon in weapons:
-            if weapon is None:
-                continue
-            if weapon.is_ranged_weapon():
-                holding_ranged = True
-                # TODO (now): not?
-                if not weapon.uses_ammo() or weapon.shots_left() > 0:
-                    holding_loaded_ranged = True
-            else:
-                holding_melee = True
+        holding = fighter.what_are_we_holding()
 
         # Posture SUB-menu
 
@@ -644,7 +646,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         # Build the action_menu.  Alphabetical order.  Only allow the things
         # the fighter can do based on zis current situation.
 
-        if holding_loaded_ranged:
+        # ATTACK #
+
+        if (holding['melee'] or holding['loaded_ranged'] or
+                holding['natural_weapon'] or holding['non_natural_weapon']):
+            action_menu.extend([
+                ('attack, all out', {'action':
+                                     {'action-name': 'all-out-attack'}})
+            ])
+
+        if holding['loaded_ranged']:
             # Aim
             #
             # Ask if we're bracing if this is the first round of aiming
@@ -738,7 +749,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                             {'action': {'action-name': 'evaluate'}}))
 
         # Can only feint with a melee weapon
-        if holding_melee:
+        if holding['melee']:
             action_menu.append(('feint (B365)', {'action':
                                                 {'action-name': 'feint'}}))
 
@@ -752,7 +763,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         else:
             move_string = 'full=%d' % move
 
-        if holding_melee or holding_loaded_ranged:
+        if holding['melee'] or holding['loaded_ranged']:
             action_menu.extend([
                 ('Move and attack (B365)',
                     {'action': {'action-name': 'move-and-attack'}}),
@@ -854,13 +865,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             2) a string describing the calculations that went into the pieces
                of the dict
         '''
-        st = fighter.details['current']['st']
         results = []
         why = []
 
-        this_results, this_why = self.__get_damage_one_case(mode,
+        this_results, this_why = self.__get_damage_one_case(fighter,
                                                             weapon,
-                                                            st)
+                                                            mode)
         results.extend(this_results)
         why.extend(this_why)
 
@@ -868,6 +878,29 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             return '(None)', why
 
         return results, why
+
+    def get_disallowed_modes(self,
+                             fighter, # Fighter object
+                             all_out_option = None
+                             ):
+        if all_out_option is None:
+            all_out_option = self.__get_current_all_out_attack_option(fighter)
+
+        if all_out_option is None:
+            return []
+
+        if (all_out_option == GurpsRuleset.ALL_OUT_RANGED_DETERMINED_ATTACK or
+                all_out_option == GurpsRuleset.ALL_OUT_SUPPRESSION_FIRE):
+            return ['natural weapon', 'swung weapon', 'thrust weapon',
+                    'melee weapon']
+
+        if (all_out_option == GurpsRuleset.ALL_OUT_DOUBLE_ATTACK or
+                all_out_option == GurpsRuleset.ALL_OUT_STRONG_ATTACK or
+                all_out_option == GurpsRuleset.ALL_OUT_FEINT or
+                all_out_option == GurpsRuleset.ALL_OUT_MELEE_DETERMINED_ATTACK):
+            return ['ranged weapon']
+
+        return []
 
     def get_dodge_skill(self,                       # Public to aid in testing
                         fighter,        # Fighter object
@@ -1028,41 +1061,52 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         notes = []
         why = []
 
-        weapons = fighter.get_current_weapons()
+        all_out_option = self.__get_current_all_out_attack_option(fighter)
+        if all_out_option is not None:
+            notes.append('Dodge/Parry/Block: *NONE*')
+            why.extend([
+                'Dodge/Parry/Block: None',
+                '  fighter has chosen an all-out attack',
+                '  (%s) and that precludes an active' %
+                    GurpsRuleset.all_out_attack_option_strings[all_out_option],
+                '  defense (B324)'])
+        else:
+            # TODO (now): figure out how to pull the unarmed stuff out of the loop
+            # TODO (now): this doesn't work if there're no weapons -- unarmed
 
-        dodge_skill, dodge_why = self.get_dodge_skill(fighter, opponent)
-        if dodge_skill is not None:
-            dodge_string = 'Dodge (B326): %d' % dodge_skill
-            why.extend(dodge_why)
-            notes.append(dodge_string)
+            dodge_skill, dodge_why = self.get_dodge_skill(fighter, opponent)
+            if dodge_skill is not None:
+                dodge_string = 'Dodge (B326): %d' % dodge_skill
+                why.extend(dodge_why)
+                notes.append(dodge_string)
 
-        # TODO (now): figure out how to pull the unarmed stuff out of the loop
-        # TODO (now): this doesn't work if there're no weapons -- unarmed
-        for weapon in weapons:
-            if weapon is None:
-                continue
+            weapons = fighter.get_current_weapons()
+            for weapon in weapons:
+                if weapon is None:
+                    continue
 
-            if self.does_weapon_use_unarmed_skills(weapon):
-                unarmed_info = self.get_unarmed_info(fighter,
-                                                     opponent,
-                                                     weapon)
-                # Unarmed Parry
-                notes.append('%s: %d' % (unarmed_info['parry_string'],
-                                         unarmed_info['parry_skill']))
+                if self.does_weapon_use_unarmed_skills(weapon):
+                    unarmed_info = self.get_unarmed_info(fighter,
+                                                         opponent,
+                                                         weapon)
+                    # Unarmed Parry
+                    notes.append('%s: %d' % (unarmed_info['parry_string'],
+                                             unarmed_info['parry_skill']))
 
-            elif weapon.is_shield():  # NOTE: cloaks also have this 'type'
-                block_skill, block_why = self.get_block_skill(fighter, weapon)
-                if block_skill is not None:
-                    why.extend(block_why)
-                    notes.append('Block (B327, B375): %d' % block_skill)
+                elif weapon.is_shield():  # NOTE: cloaks also have this 'type'
+                    block_skill, block_why = self.get_block_skill(fighter,
+                                                                  weapon)
+                    if block_skill is not None:
+                        why.extend(block_why)
+                        notes.append('Block (B327, B375): %d' % block_skill)
 
-            elif weapon.is_melee_weapon():
-                parry_skill, parry_why = self.get_parry_skill(fighter,
-                                                              weapon,
-                                                              opponent)
-                if parry_skill is not None:
-                    why.extend(parry_why)
-                    notes.append('Parry (B327, B376): %d' % parry_skill)
+                elif weapon.is_melee_weapon():
+                    parry_skill, parry_why = self.get_parry_skill(fighter,
+                                                                  weapon,
+                                                                  opponent)
+                    if parry_skill is not None:
+                        why.extend(parry_why)
+                        notes.append('Parry (B327, B376): %d' % parry_skill)
 
         # Armor
 
@@ -1472,6 +1516,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         weapon, in the current posture, etc.) fighting capability (to-hit and
         damage) of the fighter.
         '''
+        debug = ca_debug.Debug()
+        debug.header2('get_fighter_to_hit_damage_notes')
+
         notes = []
         weapons = fighter.get_current_weapons()
         if len(weapons) == 0:
@@ -1482,6 +1529,8 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                                      )
             return notes
 
+        disallowed_modes = self.get_disallowed_modes(fighter)
+
         for weapon in weapons:
             if weapon is None:
                 continue
@@ -1489,16 +1538,19 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             notes.append('%s' % weapon.details['name'])
 
             if self.does_weapon_use_unarmed_skills(weapon):
-                # i.e., if this weapon uses unarmed skills (brass knuckles are
-                # an example)
-                self.__show_unarmed_info(notes,
-                                         fighter,
-                                         opponent,
-                                         weapon)
+                if 'natural weapon' not in disallowed_modes:
+                    # i.e., if this weapon uses unarmed skills (brass knuckles
+                    # are an example)
+                    self.__show_unarmed_info(notes,
+                                             fighter,
+                                             opponent,
+                                             weapon)
             else:
                 modes = weapon.get_attack_modes()
                 found_weapon_skill = False
                 for mode in modes:
+                    if mode in disallowed_modes:
+                        continue
                     notes.append('  %s' % mode)
                     weapon_skill = fighter.get_best_skill_for_weapon(
                             weapon.details, mode)
@@ -1776,15 +1828,17 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         }
         return None
 
-    def get_to_hit(self,
-                   fighter,     # Fighter object
-                   opponent,    # Fighter object
-                   weapon,      # Weapon object
-                   mode,        # string: 'swung weapon', or ...
-                   shots_fired, # int: how many shots taken (1 unless RoF > 1).
-                                #       None means 'use max'
-                   moving=False # bool: ignore timers/we attack during move
-                   ):
+    def get_to_hit(
+            self,
+            fighter,             # Fighter object
+            opponent,            # Fighter object
+            weapon,              # Weapon object
+            mode,                # string: 'swung weapon', or ...
+            shots_fired,         # int: how many shots taken (1 unless RoF>1).
+                                 #       None means 'use max'
+            moving=False,        # bool: ignore timers/we attack during move
+            all_out_option=None  # int: GurpsRuleset.ALL_OUT_xxx values
+            ):
         '''
         Figures out the total to-hit for this fighter on this opponent with
         this weapon.  Includes situational stuff (posture, aiming, two-weapon
@@ -1796,6 +1850,10 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             'why'   is an array of strings describing why the to-hit numbers
                     are what they are.
         '''
+        debug = ca_debug.Debug()
+        weapon_name = '<Unarmed>' if weapon is None else weapon.name
+        debug.header2('get_to_hit: %s' % weapon_name)
+
         skill_full = None
         if weapon is not None:
             skill_full = fighter.get_best_skill_for_weapon(weapon.details,
@@ -1968,6 +2026,25 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         if fighter.details['shock'] != 0:
             why.append('  %+d due to shock' % fighter.details['shock'])
             skill += fighter.details['shock']
+
+        # All-out attack
+
+        debug.print('checking all_out_attack')
+
+        if all_out_option is None:
+            all_out_option = self.__get_current_all_out_attack_option(fighter)
+
+        if all_out_option is None:
+            debug.print('<No All Out Attack Option>')
+        else:
+            debug.print(GurpsRuleset.all_out_attack_option_strings[all_out_option])
+
+        if all_out_option == GurpsRuleset.ALL_OUT_RANGED_DETERMINED_ATTACK:
+            skill += 1
+            why.append('  +1 due to all-out attack, determined (ranged)')
+        elif all_out_option == GurpsRuleset.ALL_OUT_MELEE_DETERMINED_ATTACK:
+            skill += 4
+            why.append('  +4 due to all-out attack, determined (melee)')
 
         # Posture
 
@@ -4164,6 +4241,13 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         Returns: Timer (if any) to add to Fighter.  Used for keeping track
             of what the Fighter is doing.
         '''
+        debug = ca_debug.Debug()
+        debug.header1('__do_attack')
+        debug.pprint(action)
+
+        weapons = fighter.get_current_weapons()
+        weapon = (None if fighter.details['current-weapon'] >= len(weapons) else
+                  weapons[fighter.details['current-weapon']])
 
         if 'part' in action and action['part'] == 2:
             # This is the 2nd part of a 2-part action.  This part
@@ -4172,84 +4256,101 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
             self.reset_aim(fighter)
 
+            # Get some details
+
+            if weapon is None:
+                return None  # No timer
+
+            # Move
+
+            move = fighter.details['current']['basic-move']
+            move_strings = []
+            move_string = None
+            move_and_attack = False
+
+            # Fatigue points: B426
+            no_fatigue_penalty = self.get_option('no-fatigue-penalty')
+            if ((no_fatigue_penalty is None or not no_fatigue_penalty) and
+                    (fighter.details['current']['fp'] <
+                        (fighter.details['permanent']['fp'] / 3))):
+                move_strings.append('half (FP:B426)')
+                move /= 2
+
+            # Getting down to brass tacks...
+
+            if action['action-name'] == 'attack':
+                title = 'Attack'
+                defense = 'any'
+                move_string = 'step'
+                move = 0
+            elif action['action-name'] == 'all-out-attack':
+                title = 'All out attack'
+                defense = 'NONE'
+                move_strings.append('half, BEFORE attack and only FORWARD (all-out-attack)')
+                move /= 2
+            elif action['action-name'] == 'move-and-attack':
+                title = 'Move & Attack'
+                defense = 'Dodge,block'
+                move_strings.append('half (move-and-attack)')
+                move /= 2
+                move_and_attack = True
+            else:
+                title = '<UNKNOWN ACTION %s>' % action['action-name']
+                defense = '<UNKNOWN>'
+                move_string = '<UNKNOWN>'
+
+            if move_string is None:
+                move_string = ' + '.join(move_strings)
+                move_string = ' %s = %d' % (move_string, move)
+
+            text = ['%s' % title,
+                    ' Defense: %s' % defense,
+                    ' Move: %s' % move_string]
+
+            # To-Hit, etc.
+
+            opponent = (None if fight_handler is None else
+                    fight_handler.get_opponent_for(fighter))
+
+            disallowed_modes = self.get_disallowed_modes(
+                    fighter, action['all-out-option'])
+            for weapon in weapons:
+                modes = weapon.get_attack_modes()
+                for mode in modes:
+                    if mode in disallowed_modes:
+                        continue
+                    text.append(' %s' % mode)
+                    shots_fired = (None if 'shots_fired' not in action else
+                                   action['shots_fired'])
+
+                    to_hit, ignore_why = self.get_to_hit(
+                            fighter,
+                            opponent,
+                            weapon,
+                            mode,
+                            shots_fired,
+                            moving=move_and_attack,
+                            all_out_option=action['all-out-option'])
+
+                    crit, fumble = self.__get_crit_fumble(to_hit)
+                    text.append('  %s to-hit: %d, crit <= %d, fumble >= %d' % (
+                        weapon.details['name'], to_hit, crit, fumble))
+
+            # Damage mods
+
+            if action['all-out-option'] == GurpsRuleset.ALL_OUT_SUPPRESSION_FIRE:
+                text.append('NOTE: See B410 for details of suppression fire')
+            elif action['all-out-option'] == GurpsRuleset.ALL_OUT_FEINT:
+                text.extend = ['FEINT:',
+                               ' Contest of melee skill vs melee/unarmed/',
+                               '   cloak/shield skilli.  Subtract margin',
+                               '   of victory from opponent\'s defense']
+
             # Timer
 
             timer = ca_timers.Timer(None)
             # TODO (now): Mods are actual total values.  They _should_ be delta
             #   values but one of the mods caps the to-hit to 9.
-            mods = None
-
-            # Get some details
-
-            weapons = fighter.get_current_weapons()
-            if (action['weapon-index'] is None or
-                    action['weapon-index'] >= len(weapons)):
-                return None  # No timer
-            weapon = weapons[action['weapon-index']]
-            if weapon is None:
-                return None  # No timer
-
-            holding_ranged = False if len(weapons) == 0 else weapon.is_ranged_weapon()
-            move = fighter.details['current']['basic-move']
-
-            if action['action-name'] == 'all-out-attack':
-                if holding_ranged:
-                    text = ['All out attack',
-                            ' Choice of:',
-                            '   +1 to hit',
-                            '   suppression fire (if ROF > 4)',
-                            ' Defense: NONE',
-                            ' Move: 1/2 = %d' % (move/2)]
-                else:
-                    text = ['All out attack',
-                            ' Choice of:',
-                            '   +4 to hit',
-                            '   double attack (simple melee weapon)',
-                            '   feint',
-                            '   +2 damage',
-                            ' Defense: NONE',
-                            ' Move: 1/2 = %d' % (move/2)]
-
-            elif action['action-name'] == 'attack':
-                text = ['Attack', ' Defense: any', ' Move: step']
-
-            elif action['action-name'] == 'move-and-attack':
-                # FP: B426
-                no_fatigue_penalty = self.get_option('no-fatigue-penalty')
-                if ((no_fatigue_penalty is None or not no_fatigue_penalty) and
-                        (fighter.details['current']['fp'] <
-                            (fighter.details['permanent']['fp'] / 3))):
-                    move_string = 'half=%d (FP:B426)' % (move/2)
-                else:
-                    move_string = 'full=%d' % move
-
-                # Move and attack info
-                text = ['Move & Attack',
-                        ' Defense: Dodge,block',
-                        ' Move: %s' % move_string]
-                opponent = (None if fight_handler is None else
-                        fight_handler.get_opponent_for(fighter))
-
-                for weapon in weapons:
-                    modes = weapon.get_attack_modes()
-                    for mode in modes:
-                        text.append(' %s' % mode)
-                        shots_fired = (None if 'shots_fired' not in action else
-                                       action['shots_fired'])
-
-                        to_hit, ignore_why = self.get_to_hit(fighter,
-                                                             opponent,
-                                                             weapon,
-                                                             mode,
-                                                             shots_fired,
-                                                             moving=True)
-
-                        crit, fumble = self.__get_crit_fumble(to_hit)
-                        text.append('  %s to-hit: %d, crit <= %d, fumble >= %d' % (
-                            weapon.details['name'], to_hit, crit, fumble))
-
-            else:
-                text = ['<<UNHANDLED ACTION: %s' % action['action-name']]
 
             timer.from_pieces({'parent-name': fighter.name,
                                'rounds': 1,
@@ -4260,6 +4361,12 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                 timer.details['info'] = {'shots_fired': action['shots_fired']}
             if action['action-name'] == 'move-and-attack':
                 timer.details['move-and-attack'] = True
+            # TODO: should put this isn details['data']['all-out-option']
+            if 'all-out-option' in action:
+                timer.details['all-out-option'] = action['all-out-option']
+
+            debug.print('Sending this timer')
+            debug.pprint(timer.details)
 
             return timer
 
@@ -4268,72 +4375,74 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # the action asks questions of the user and sends the
             # second part.  The 1st part isn't executed when playing
             # back.
-            debug = ca_debug.Debug(quiet=True)
-
-            # Multiple shots per round describes machine guns or shotguns
-            weapon_needs_multiple_shot_handling = True
-
             # Don't do the first part when playing back.
             if (fight_handler is not None and
                     fight_handler.world.playing_back):
                 return None  # No timers
 
-            # Get the current weapon
-            weapons = fighter.get_current_weapons()
-            if (weapons is None or
-                    fighter.details['current-weapon'] >= len(weapons)):
-                weapon_needs_multiple_shot_handling = False
+            if fight_handler is not None:
+                if fighter.details['opponent'] is None:
+                    fight_handler.pick_opponent()
 
-            if weapon_needs_multiple_shot_handling:
-                weapon = weapons[fighter.details['current-weapon']]
-                if weapon is None:
-                    weapon_needs_multiple_shot_handling = False
+            shots_fired = self.__get_shots_fired(fighter)
+            debug.print('shots fired: %d' % shots_fired)
 
-            # Does the weapon shoot multiple rounds?
-            if weapon_needs_multiple_shot_handling:
-                debug.header1('do_attack: %s' % weapon.name)
-                if ('shots_per_round' not in weapon.details or
-                        weapon.details['shots_per_round'] <= 1):
-                    #debug.print('shots_per_round: %d' % weapon.details['shots_per_round'])
-                    weapon_needs_multiple_shot_handling = False
+            # All-out attack (B324)
 
-            max_shots_this_round = 1    # Just a default value
-            if weapon_needs_multiple_shot_handling:
-                max_shots_this_round = weapon.details['shots_per_round']
-                debug.print('max_shots_this_round: %d' % max_shots_this_round)
-                if max_shots_this_round <= 1:
-                    weapon_needs_multiple_shot_handling = False
+            all_out_option = None
+            debug.print('weapon: %s' % ('NONE' if weapon is None else weapon.name))
+            if weapon is not None and action['action-name'] == 'all-out-attack':
+                holding = fighter.what_are_we_holding()
+                debug.print('Holding:')
+                debug.pprint(holding)
 
-            # Do we have more than 1 round in the clip?
-            if weapon_needs_multiple_shot_handling:
-                clip = weapon.get_clip()
-                debug.print('clip:')
-                debug.pprint(clip)
-                if clip is None:
-                    weapon_needs_multiple_shot_handling = False
+                all_out_menu = [ ]
 
-            if weapon_needs_multiple_shot_handling:
-                shots_left = weapon.shots_left()
-                debug.print('shots left: %d' % shots_left)
-                if shots_left < max_shots_this_round:
-                    max_shots_this_round = shots_left
-                    if max_shots_this_round <= 0:
-                        weapon_needs_multiple_shot_handling = False
+                # TODO (now): I haven't modeled 2 weapon attacks well.  For
+                #   missile weapons, you need extra attack or dual weapon
+                #   attack.  For melee attacks, you need all-out attack or
+                #   rapid strike.  Extra Attack allows 2 attacks.  Add dual
+                #   weapon attack, you can exchange one normal attack for a DWA
+                #   (or a Rapid Strike in the case of a melee attack). You
+                #   could fire with both revolvers with a DWA by spending one
+                #   of your attacks and then kick a target with your other
+                #   attack.
 
-            # Ask how many rounds we want to expend
-            if weapon_needs_multiple_shot_handling:
-                shots_fired = 1 if shots_left == 1 else None
-                while shots_fired is None:
-                    shots_fired = self._window_manager.input_box_number(
-                            1, 20,
-                            'Fire how many rounds (%d max)?' %
-                                max_shots_this_round)
-                    if shots_fired > max_shots_this_round or shots_fired < 0:
-                        self._window_manager.error(
-                            ['Gotta shoot between 0 and %d shots' %
-                                max_shots_this_round]
-                        )
-                        shots_fired = None
+                number_of_hands = 2
+                if (holding['melee'] + holding['natural_weapon']) >= number_of_hands:
+                    # NOTE: both weapons have to be ready but I don't model that.
+                    debug.print('adding double')
+                    all_out_menu.append(
+                            ('double',
+                             GurpsRuleset.ALL_OUT_DOUBLE_ATTACK))
+                if weapon.is_melee_strength_based_weapon():
+                    debug.print('adding strong')
+                    all_out_menu.append(
+                            ('strong',
+                             GurpsRuleset.ALL_OUT_STRONG_ATTACK))
+                if shots_fired >= 5:
+                    debug.print('adding suppression fire')
+                    all_out_menu.append(
+                            ('suppression fire',
+                             GurpsRuleset.ALL_OUT_SUPPRESSION_FIRE))
+                if weapon.is_melee_weapon():
+                    debug.print('adding feint')
+                    all_out_menu.append(('feint',GurpsRuleset.ALL_OUT_FEINT))
+                if weapon.is_ranged_weapon():
+                    debug.print('adding determined range')
+                    all_out_menu.append(
+                            ('determined (ranged: %s)' % weapon.name,
+                             GurpsRuleset.ALL_OUT_RANGED_DETERMINED_ATTACK))
+                if weapon.is_melee_weapon():
+                    debug.print('adding determined melee')
+                    all_out_menu.append(
+                            ('determined (melee: %s)' % weapon.name,
+                             GurpsRuleset.ALL_OUT_MELEE_DETERMINED_ATTACK))
+
+                all_out_menu = sorted(all_out_menu, key=lambda x: x[0].upper())
+                title = 'What All-Out Attack Mode Are You Using?'
+                all_out_option, ignore = self._window_manager.menu(title,
+                                                                   all_out_menu)
 
             # TODO (eventually): In other event, maybe, show the tables and such
 
@@ -4343,8 +4452,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
             # that's what gets displayed for the history command.
 
             new_action = copy.deepcopy(action)
-            if weapon_needs_multiple_shot_handling and shots_fired is not None:
+            if shots_fired > 1:
                 new_action['shots_fired'] = shots_fired
+            if all_out_option is not None:
+                new_action['bonus'] = all_out_option
+            new_action['all-out-option'] = all_out_option
             new_action['part'] = 2
             self.do_action(fighter, new_action, fight_handler)
 
@@ -4603,6 +4715,24 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                            })
         return timer
 
+    def __get_current_all_out_attack_option(self,
+                                            fighter # Fighter objet
+                                            ):
+
+        debug = ca_debug.Debug()
+        debug.header3('__get_current_all_out_attack_option for %s' %
+                fighter.name)
+
+        all_out_option = None
+        timers = fighter.timers.get_all()
+        # NOTE: if there's more than one timer with this option, it'll pick
+        #   up the last one.  That makes sense -- it's the most recent option
+        for timer in timers:
+            debug.pprint(timer.details)
+            if 'all-out-option' in timer.details:
+                all_out_option = timer.details['all-out-option']
+        return all_out_option
+
     def __get_crit_fumble(self,
                           skill_level   # int
                           ):
@@ -4630,11 +4760,11 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
     def __get_damage_one_case(
             self,
-            mode,  # string: 'thrust weapon', 'swung weapon', ...
-            weapon, # Weapon object
-            st,     # number: fighter's current strength
+            fighter,    # Fighter object
+            weapon,     # Weapon object
+            mode,       # string: 'thrust weapon', 'swung weapon', ...
             ):
-        debug = ca_debug.Debug(quiet=True)
+        debug = ca_debug.Debug()
         debug.header1('__get_damage_one_case: %s' % weapon.name)
         '''
         Damage is described in the following ways:
@@ -4658,10 +4788,16 @@ class GurpsRuleset(ca_ruleset.Ruleset):
         results = []
         why = []
 
+        # Get the method of calculating the damage
         damage, notes = weapon.get_damage_next_shot(mode)
+        debug.print('Damage formula')
         debug.pprint(damage)
+
         if 'st' in damage:
             debug.print('found ST')
+
+            st = fighter.details['current']['st']
+
             attack_type = damage['st']  # 'sw' or 'thr'
             # This is 'cut', 'imp', 'pi' or ...
             damage_type_str = self.__get_damage_type_str(damage['type'])
@@ -4682,11 +4818,30 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                         GurpsRuleset.melee_damage[st][attack_type]['plus']))
             if damage['plus'] != 0:
                 # TODO (eventually): attack_type = 'sw' and there's none of that in |damage|
-                why.append('  ...%+d for the weapon' % damage['plus'])
+                why.append('  %+d for the weapon' % damage['plus'])
+
+            # All-Out Attack can affect damage
+            # a "strong" attack does the better of +2 damage or +1 per die
+
+            all_out_option = self.__get_current_all_out_attack_option(fighter)
+            debug.print('all_out_option: %r' % all_out_option)
+            all_out_attack_plus = 0
+            if (all_out_option is not None and
+                    all_out_option == GurpsRuleset.ALL_OUT_STRONG_ATTACK):
+                num_dice_damage = (
+                        GurpsRuleset.melee_damage[st][attack_type]['num_dice'])
+                all_out_attack_plus = (
+                        num_dice_damage if num_dice_damage > 2 else 2)
+                why.append('  %+d for all-out attack, strong' %
+                        all_out_attack_plus)
+
+            # Final tally
+
             why.append('  ...damage: %dd%+d' %
                        (GurpsRuleset.melee_damage[st][attack_type]['num_dice'],
                         GurpsRuleset.melee_damage[st][attack_type]['plus'] +
-                        damage['plus']))
+                        damage['plus'] +
+                        all_out_attack_plus))
         elif 'dice' in damage:
             # if we're here, the damage is based on the weapon and not the
             # capabilities of the wielder.  Therefore, the damage may be a
@@ -4718,6 +4873,7 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     pellets_per_shot = 1
                 debug.print('pellets_per_shot: %d' % pellets_per_shot)
                 if pellets_per_shot > 1:
+                    # shotgun
                     mult_factor = int(pellets_per_shot / 2)
 
                     why.append('    Shotgun range is 50/125 (so 5 yards for CLOSE range)')
@@ -4731,14 +4887,14 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                     why.append('      of success (closer than 5 yards, it\'s the shot,')
                     why.append('      not the pellet that\'s dodged)')
                     why.append('    See B409, B373 (rapid fire), and B375 (dodge)')
-                else:
+                elif ('shots_per_round' in weapon.details and
+                        weapon.details['shots_per_round'] > 1):
+                    # automatic weapon
                     why.append('    Number of bullets that hit is 1 (on hit success)')
                     why.append('      + margin of HIT success')
                     why.append('    Dodge success removes 1 pellet + 1 pellet per margin ')
                     why.append('      of success')
                     why.append('    See B373 (rapid fire) and B375 (dodge)')
-
-
 
         return results, why
 
@@ -4823,6 +4979,66 @@ class GurpsRuleset(ca_ruleset.Ruleset):
 
         return missing_skills
 
+    def __get_shots_fired(self,
+                          fighter   # Fighter object
+                          ):
+        debug = ca_debug.Debug()
+
+        # Get the current weapon
+        weapons = fighter.get_current_weapons()
+        weapon = None # current weapon
+
+        # Multiple shots per round describes machine guns or shotguns
+        weapon_needs_multiple_shot_handling = True
+
+        if (weapons is None or
+                fighter.details['current-weapon'] >= len(weapons)):
+            return 1    # only one shot possible
+
+        weapon = weapons[fighter.details['current-weapon']]
+        if weapon is None:
+            return 1    # only one shot possible
+
+        # Does the weapon shoot multiple rounds?
+        debug.header1('do_attack: %s' % weapon.name)
+        if 'shots_per_round' not in weapon.details:
+            #debug.print('shots_per_round: %d' % weapon.details['shots_per_round'])
+            return 1    # weapon can only shoot 1 round
+
+        max_shots_this_round = weapon.details['shots_per_round']
+        debug.print('max_shots_this_round: %d' % max_shots_this_round)
+        if max_shots_this_round <= 1:
+            return 1    # weapon can only shoot 1 round
+
+        # Do we have more than 1 round in the clip?
+        clip = weapon.get_clip()
+        debug.print('clip:')
+        debug.pprint(clip)
+        if clip is None:
+            return 1    # no clip, only 1 round possible
+
+        shots_left = weapon.shots_left()
+        debug.print('shots left: %d' % shots_left)
+        if shots_left < max_shots_this_round:
+            max_shots_this_round = shots_left
+            if max_shots_this_round <= 0:
+                return 1    # no shots left in clip
+
+        # Ask how many rounds we want to expend
+        shots_fired = 1 if shots_left == 1 else None
+        while shots_fired is None:
+            shots_fired = self._window_manager.input_box_number(
+                    1, 20,
+                    'Fire how many rounds (%d max)?' %
+                        max_shots_this_round)
+            if shots_fired > max_shots_this_round or shots_fired < 0:
+                self._window_manager.error(
+                    ['Gotta shoot between 0 and %d shots' %
+                        max_shots_this_round]
+                )
+                shots_fired = None
+
+        return shots_fired
 
     def __get_technique(self,
                         techniques,     # list from Fighter.details
@@ -5037,7 +5253,9 @@ class GurpsRuleset(ca_ruleset.Ruleset):
                        'adjust-fp': True,
                        'aim': True,
                        'attack': True,
+                       'all-out-attack': True,
                        'cast-spell': True,
+                       'move-and-attack': True,
                        'reload': True}
 
         # Call base class' perform_action FIRST because GurpsRuleset depends on
