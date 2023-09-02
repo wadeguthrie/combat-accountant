@@ -89,7 +89,7 @@ class GmTestCase(GmTestCaseCommon):
         assert world_data.read_data['current-fight']['index'] == expected_index
         current_fighter = fight_handler.get_current_fighter()
         # Wound fighter 2
-        fighters[injured_index]['details']['current']['hp'] -= injured_hp
+        fighters[injured_index]['rawdata']['current']['hp'] -= injured_hp
 
         # Cycle around to fighter 0
 
@@ -174,11 +174,11 @@ class GmTestCase(GmTestCaseCommon):
         # Check that everything is as it should be
 
         assert len(expected_fighters) == len(fighters)
-        assert self._are_equal(expected_fighters[0], fighters[0]['details'])
-        assert self._are_equal(expected_fighters[1], fighters[1]['details'])
-        assert self._are_equal(expected_fighters[2], fighters[2]['details'])
-        assert self._are_equal(expected_fighters[3], fighters[3]['details'])
-        assert self._are_equal(expected_fighters[4], fighters[4]['details'])
+        assert self._are_equal(expected_fighters[0], fighters[0]['rawdata'])
+        assert self._are_equal(expected_fighters[1], fighters[1]['rawdata'])
+        assert self._are_equal(expected_fighters[2], fighters[2]['rawdata'])
+        assert self._are_equal(expected_fighters[3], fighters[3]['rawdata'])
+        assert self._are_equal(expected_fighters[4], fighters[4]['rawdata'])
 
     def test_don_doff_armor(self):
         '''
@@ -259,7 +259,7 @@ class GmTestCase(GmTestCaseCommon):
                                  mock_fight_handler)
         weapon, actual_weapon_index = self._get_current_weapon(vodou_priest)
         assert actual_weapon_index == requested_weapon_index
-        assert weapon.details['name'] == "pistol, Colt 170D"
+        assert weapon.rawdata['name'] == "pistol, Colt 170D"
 
         # Sheathe Weapon
 
@@ -306,7 +306,7 @@ class GmTestCase(GmTestCaseCommon):
                                  mock_fight_handler)
         weapon, actual_weapon_index = self._get_current_weapon(vodou_priest)
         assert actual_weapon_index == requested_weapon_index
-        assert weapon.details['name'] == "pistol, Colt 170D"
+        assert weapon.rawdata['name'] == "pistol, Colt 170D"
         assert weapon.shots_left() == self._vodou_priest_initial_shots
 
         clip = vodou_priest.equipment.get_item_by_index(
@@ -324,7 +324,7 @@ class GmTestCase(GmTestCaseCommon):
                                      {'action-name': 'attack'},
                                      mock_fight_handler)
             # To simulate the start of the round
-            vodou_priest.details['current-weapon'] = 0
+            vodou_priest.rawdata['current-weapon'] = 0
 
         assert (weapon.shots_left() ==
                 (self._vodou_priest_initial_shots - shots_taken))
@@ -337,7 +337,7 @@ class GmTestCase(GmTestCaseCommon):
                                      {'action-name': 'attack'},
                                      mock_fight_handler)
             # To simulate the start of the round
-            vodou_priest.details['current-weapon'] = 0
+            vodou_priest.rawdata['current-weapon'] = 0
 
         # Now, reload
 
@@ -370,7 +370,7 @@ class GmTestCase(GmTestCaseCommon):
                                          {'action-name': 'attack'},
                                          mock_fight_handler)
                 # To simulate the start of the round
-                vodou_priest.details['current-weapon'] = 0
+                vodou_priest.rawdata['current-weapon'] = 0
             self._window_manager.set_menu_response('(Priest) Reload With What', 1)
             self._ruleset.do_action(vodou_priest,
                                      {'action-name': 'reload'},
@@ -385,7 +385,7 @@ class GmTestCase(GmTestCaseCommon):
                                      {'action-name': 'attack'},
                                      mock_fight_handler)
             # To simulate the start of the round
-            vodou_priest.details['current-weapon'] = 0
+            vodou_priest.rawdata['current-weapon'] = 0
 
         assert (weapon.shots_left() ==
                 (self._vodou_priest_initial_shots - shots_taken))
@@ -438,7 +438,7 @@ class GmTestCase(GmTestCaseCommon):
                                  mock_fight_handler)
         weapon, actual_weapon_index = self._get_current_weapon(vodou_priest)
         assert actual_weapon_index == requested_weapon_index
-        assert weapon.details['name'] == "pistol, Colt 170D"
+        assert weapon.rawdata['name'] == "pistol, Colt 170D"
         assert weapon.shots_left() == self._vodou_priest_initial_shots
 
         clip = vodou_priest.equipment.get_item_by_index(
@@ -456,7 +456,7 @@ class GmTestCase(GmTestCaseCommon):
                                      {'action-name': 'attack'},
                                      mock_fight_handler)
             # To simulate the start of the round
-            vodou_priest.details['current-weapon'] = 0
+            vodou_priest.rawdata['current-weapon'] = 0
 
         assert (weapon.shots_left() ==
                 (self._vodou_priest_initial_shots - shots_taken))
@@ -489,7 +489,7 @@ class GmTestCase(GmTestCaseCommon):
                                  {'action-name': 'attack'},
                                  mock_fight_handler)
         # To simulate the start of the round
-        vodou_priest.details['current-weapon'] = 0
+        vodou_priest.rawdata['current-weapon'] = 0
 
         # Reload with the partial (the previously ejected one)
         self._window_manager.set_menu_response('(Priest) Reload With What',
@@ -544,7 +544,7 @@ class GmTestCase(GmTestCaseCommon):
         # check consciousness level
 
         state_number = ca_fighter.Fighter.get_fighter_state(
-                current_fighter.details)
+                current_fighter.rawdata)
         assert state_number == ca_fighter.Fighter.ALIVE
 
         self._ruleset.do_action(current_fighter,
@@ -560,7 +560,7 @@ class GmTestCase(GmTestCaseCommon):
                                   'level': new_state},
                                  fight_handler)
         state_number = ca_fighter.Fighter.get_fighter_state(
-                current_fighter.details)
+                current_fighter.rawdata)
         assert state_number == new_state
         opponent = fight_handler.get_opponent_for(current_fighter)
         assert opponent.name == 'Moe'
@@ -572,7 +572,7 @@ class GmTestCase(GmTestCaseCommon):
                                   'level': new_state},
                                  fight_handler)
         state_number = ca_fighter.Fighter.get_fighter_state(
-                current_fighter.details)
+                current_fighter.rawdata)
         assert state_number == new_state
         opponent = fight_handler.get_opponent_for(current_fighter)
         assert opponent is None
@@ -634,15 +634,15 @@ class GmTestCase(GmTestCaseCommon):
         fighter.timers.add(timer_obj)
 
         for i in range(round_count):
-            assert len(fighter.details['timers']) == 1
-            assert fighter.details['timers'][0]['string'] == timer_text
+            assert len(fighter.rawdata['timers']) == 1
+            assert fighter.rawdata['timers'][0]['string'] == timer_text
             # At the _end_ of a fighter's turn, we remove all his expired
             # timers.  That causes the timer expiring this round to be shown.
             fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
             fighter.timers.decrement_all()
 
         fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
-        assert len(fighter.details['timers']) == 0
+        assert len(fighter.rawdata['timers']) == 0
 
         # Test 3 timers simultaneously
 
@@ -662,32 +662,32 @@ class GmTestCase(GmTestCaseCommon):
         # round 0
         fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
         fighter.timers.decrement_all()
-        assert len(fighter.details['timers']) == 3
+        assert len(fighter.rawdata['timers']) == 3
         expected = ['0', '1', '2']
-        for timer in fighter.details['timers']:
+        for timer in fighter.rawdata['timers']:
             assert timer['string'] in expected
             expected.remove(timer['string'])
 
         # round 1
         fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
         fighter.timers.decrement_all()
-        assert len(fighter.details['timers']) == 2
+        assert len(fighter.rawdata['timers']) == 2
         expected = ['1', '2']
-        for timer in fighter.details['timers']:
+        for timer in fighter.rawdata['timers']:
             assert timer['string'] in expected
             expected.remove(timer['string'])
 
         # round 2
         fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
         fighter.timers.decrement_all()
-        assert len(fighter.details['timers']) == 1
+        assert len(fighter.rawdata['timers']) == 1
         expected = ['2']
-        for timer in fighter.details['timers']:
+        for timer in fighter.rawdata['timers']:
             assert timer['string'] in expected
             expected.remove(timer['string'])
 
         fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
-        assert len(fighter.details['timers']) == 0
+        assert len(fighter.rawdata['timers']) == 0
 
         # Test a FIRE_ROUND_START timer.  The FIRE_ROUND_START timer is
         # supposed to show during the current round but not the beginning of
@@ -715,8 +715,8 @@ class GmTestCase(GmTestCaseCommon):
         fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_START)
 
         # assert 1 timer -- didn't kill the 1-turn timer
-        assert len(fighter.details['timers']) == 1
-        assert fighter.details['timers'][0]['string'] == timer0_text
+        assert len(fighter.rawdata['timers']) == 1
+        assert fighter.rawdata['timers'][0]['string'] == timer0_text
 
         # add FIRE_ROUND_START timer -- shown through this turn, killed before next turn
         timer_id = 1
@@ -730,9 +730,9 @@ class GmTestCase(GmTestCaseCommon):
         fighter.timers.add(timer_obj)
 
         # assert 2 timers -- right: both timers are there
-        assert len(fighter.details['timers']) == 2
+        assert len(fighter.rawdata['timers']) == 2
         expected = ['0', '1']
-        for timer in fighter.details['timers']:
+        for timer in fighter.rawdata['timers']:
             assert timer['string'] in expected
             expected.remove(timer['string'])
 
@@ -740,15 +740,15 @@ class GmTestCase(GmTestCaseCommon):
         fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_END)
 
         # assert 1 timer -- show that the 1-turn timer was killed
-        assert len(fighter.details['timers']) == 1
-        assert fighter.details['timers'][0]['string'] == timer1_text
+        assert len(fighter.rawdata['timers']) == 1
+        assert fighter.rawdata['timers'][0]['string'] == timer1_text
 
         # start turn - kills 0.9 timer before the next turn's stuff is shown
         fighter.timers.decrement_all()
         fighter.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_START)
 
         # assert 0 timers -- yup, 0.9 timer is now gone
-        assert len(fighter.details['timers']) == 0
+        assert len(fighter.rawdata['timers']) == 0
 
     def test_save(self):
         '''
@@ -897,10 +897,10 @@ class GmTestCase(GmTestCaseCommon):
                 self._window_manager)
         mock_fight_handler = MockFightHandler()
 
-        original_item = fighter.details['stuff'][
+        original_item = fighter.rawdata['stuff'][
                                         self._tank_fighter_pistol_index]
-        current_count = len(fighter.details['stuff'])
-        original_stuff = copy.deepcopy(fighter.details['stuff'])
+        current_count = len(fighter.rawdata['stuff'])
+        original_stuff = copy.deepcopy(fighter.rawdata['stuff'])
 
         # Same item - verify that the count goes up
 
@@ -921,7 +921,7 @@ class GmTestCase(GmTestCaseCommon):
         similar_item['count'] = 1
         similar_item['acc'] = original_item['acc'] + 1
 
-        assert len(fighter.details['stuff']) == current_count
+        assert len(fighter.rawdata['stuff']) == current_count
         self._window_manager.set_menu_response(
                 'Make pistol, Sig D65 the preferred weapon?',
                 False)
@@ -929,7 +929,7 @@ class GmTestCase(GmTestCaseCommon):
 
         current_count += 1
 
-        assert len(fighter.details['stuff']) == current_count
+        assert len(fighter.rawdata['stuff']) == current_count
 
         # Different item
 
@@ -956,13 +956,13 @@ class GmTestCase(GmTestCaseCommon):
                           "owners": None,
                           "notes": ""}
 
-        assert len(fighter.details['stuff']) == current_count
+        assert len(fighter.rawdata['stuff']) == current_count
         self._window_manager.set_menu_response(
                 'Make pistol, Baretta DX 192 the preferred weapon?',
                 False)
         new_pistol_index = fighter.add_equipment(different_item, 'test')
         current_count += 1
-        assert len(fighter.details['stuff']) == current_count
+        assert len(fighter.rawdata['stuff']) == current_count
 
         # Make sure we only add to the end
 
@@ -970,7 +970,7 @@ class GmTestCase(GmTestCaseCommon):
             # We've changed the count on the fighter's pistol
             if i != self._tank_fighter_pistol_index:
                 assert self._are_equal(original_item,
-                                        fighter.details['stuff'][i])
+                                        fighter.rawdata['stuff'][i])
 
         # Remove counted item
         self._window_manager.set_input_box_response(
@@ -1156,15 +1156,15 @@ class GmTestCase(GmTestCaseCommon):
         '''
         mock_fight_handler = MockFightHandler()
 
-        original_item = fighter.details['stuff'][
+        original_item = fighter.rawdata['stuff'][
                                         self._tank_fighter_pistol_index]
-        current_count = len(fighter.details['stuff'])
-        original_stuff = copy.deepcopy(fighter.details['stuff'])
+        current_count = len(fighter.rawdata['stuff'])
+        original_stuff = copy.deepcopy(fighter.rawdata['stuff'])
 
         # Adds an identical weapon to an existing one.  Since there isn't a
         # preferred weapon, it should up the count and make it preferred.
 
-        assert len(fighter.details['preferred-weapon-index']) == 0
+        assert len(fighter.rawdata['preferred-weapon-index']) == 0
         assert original_item['count'] == 1
 
         same_item = copy.deepcopy(original_item)
@@ -1176,8 +1176,8 @@ class GmTestCase(GmTestCaseCommon):
         assert original_item['count'] == 3 # we've added 2 new items
         assert before_item_count == after_item_count
 
-        assert len(fighter.details['preferred-weapon-index']) == 1
-        new_preferred_weapon_index = fighter.details['preferred-weapon-index'][0]
+        assert len(fighter.rawdata['preferred-weapon-index']) == 1
+        new_preferred_weapon_index = fighter.rawdata['preferred-weapon-index'][0]
         assert new_preferred_weapon_index == self._tank_fighter_pistol_index
 
         # Add the same weapon again and show that we don't get asked to make
@@ -1189,8 +1189,8 @@ class GmTestCase(GmTestCaseCommon):
 
         assert original_item['count'] == 5 # we've added 2 MORE new items
         assert before_item_count == after_item_count
-        assert len(fighter.details['preferred-weapon-index']) == 1
-        new_preferred_weapon_index = fighter.details['preferred-weapon-index'][0]
+        assert len(fighter.rawdata['preferred-weapon-index']) == 1
+        new_preferred_weapon_index = fighter.rawdata['preferred-weapon-index'][0]
         assert new_preferred_weapon_index == self._tank_fighter_pistol_index
 
         # Add weapon to list w/preferred weapon: should ask whether to make
@@ -1199,14 +1199,14 @@ class GmTestCase(GmTestCaseCommon):
         similar_item = copy.deepcopy(original_item)
         similar_item['count'] = 1
         similar_item['acc'] = original_item['acc'] + 1 # just so it's different
-        previous_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        previous_preferred_weapon = fighter.rawdata['preferred-weapon-index'][0]
 
         self._window_manager.set_menu_response(
                 'Make pistol, Sig D65 the preferred weapon?', False)
         ignore = fighter.add_equipment(similar_item, 'sixth')
-        new_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        new_preferred_weapon = fighter.rawdata['preferred-weapon-index'][0]
 
-        assert len(fighter.details['preferred-weapon-index']) == 1
+        assert len(fighter.rawdata['preferred-weapon-index']) == 1
         assert new_preferred_weapon == previous_preferred_weapon
 
         # Add weapon to list w/preferred weapon: should ask whether to make
@@ -1222,10 +1222,10 @@ class GmTestCase(GmTestCaseCommon):
         new_index = fighter.add_equipment(similar_item, 'eighth')
 
         # The current preferred weapon should be the most recently added item
-        current_count = len(fighter.details['stuff'])
-        new_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        current_count = len(fighter.rawdata['stuff'])
+        new_preferred_weapon = fighter.rawdata['preferred-weapon-index'][0]
 
-        assert len(fighter.details['preferred-weapon-index']) == 1
+        assert len(fighter.rawdata['preferred-weapon-index']) == 1
         assert new_preferred_weapon == current_count - 1
         assert new_index == new_preferred_weapon
 
@@ -1237,11 +1237,11 @@ class GmTestCase(GmTestCaseCommon):
 
         # Remove preferred weapon, preferred weapon should be none
 
-        old_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        old_preferred_weapon = fighter.rawdata['preferred-weapon-index'][0]
         self._window_manager.set_input_box_response(
                 'How Many Items (5 Available)?', 5)
         fighter.remove_equipment(old_preferred_weapon)
-        assert len(fighter.details['preferred-weapon-index']) == 0
+        assert len(fighter.rawdata['preferred-weapon-index']) == 0
 
         # Remove weapon before preferred weapon: preferred index should move
         # to continue pointing to preferred weapon
@@ -1251,13 +1251,13 @@ class GmTestCase(GmTestCaseCommon):
         #    index 2: { 'name': 'C Cell' },
         #    index 3: { 'name': 'pistol, Sig D65', 'acc': 5, 'count': 1}]
 
-        fighter.details['preferred-weapon-index'] = [self._tank_fighter_sickstick_index]
-        old_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        fighter.rawdata['preferred-weapon-index'] = [self._tank_fighter_sickstick_index]
+        old_preferred_weapon = fighter.rawdata['preferred-weapon-index'][0]
         index_to_remove = old_preferred_weapon - 1 # index 0
         self._window_manager.set_input_box_response(
                 'How Many Items (5 Available)?', 5)
         fighter.remove_equipment(index_to_remove)
-        new_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        new_preferred_weapon = fighter.rawdata['preferred-weapon-index'][0]
         assert new_preferred_weapon == old_preferred_weapon - 1
 
         # Remove weapon after preferred weapon: preferred index should
@@ -1267,29 +1267,29 @@ class GmTestCase(GmTestCaseCommon):
         #    index 1: { 'name': 'C Cell', 'count': 5 },
         #    index 2: { 'name': 'pistol, Sig D65', 'acc': 5, 'count': 1}]
 
-        old_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        old_preferred_weapon = fighter.rawdata['preferred-weapon-index'][0]
         index_to_remove = old_preferred_weapon + 1 # index 1
         self._window_manager.set_input_box_response(
                 'How Many Items (5 Available)?', 5)
         fighter.remove_equipment(index_to_remove)
-        new_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        new_preferred_weapon = fighter.rawdata['preferred-weapon-index'][0]
         assert new_preferred_weapon == old_preferred_weapon
 
         # Add weapon to empty list: should make weapon preferred
 
-        while len(fighter.details['stuff']) > 0:
+        while len(fighter.rawdata['stuff']) > 0:
             fighter.remove_equipment(0)
 
-        assert len(fighter.details['stuff']) == 0
-        assert len(fighter.details['preferred-weapon-index']) == 0
+        assert len(fighter.rawdata['stuff']) == 0
+        assert len(fighter.rawdata['preferred-weapon-index']) == 0
 
         original_item = self._tank_fighter['stuff'][
                                         self._tank_fighter_pistol_index]
         same_item = copy.deepcopy(original_item)
 
         new_index = fighter.add_equipment(same_item, 'test')
-        assert len(fighter.details['preferred-weapon-index']) == 1
-        new_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        assert len(fighter.rawdata['preferred-weapon-index']) == 1
+        new_preferred_weapon = fighter.rawdata['preferred-weapon-index'][0]
         assert new_preferred_weapon == new_index
 
         # [  index 0: { 'name': 'pistol, Sig D65', 'acc': 5, 'count': 1} <- PREFERRED ]
@@ -1304,11 +1304,11 @@ class GmTestCase(GmTestCaseCommon):
                 'Make Ray Gun the preferred weapon?',
                 ca_fighter.Fighter.NOT_PREFERRED)
 
-        old_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        old_preferred_weapon = fighter.rawdata['preferred-weapon-index'][0]
         new_index = fighter.add_equipment(similar_item, 'eighth')
-        new_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        new_preferred_weapon = fighter.rawdata['preferred-weapon-index'][0]
 
-        assert len(fighter.details['preferred-weapon-index']) == 1
+        assert len(fighter.rawdata['preferred-weapon-index']) == 1
         assert new_preferred_weapon == old_preferred_weapon
 
         # Add weapon to list w/preferred weapon: should ask whether to make
@@ -1321,12 +1321,12 @@ class GmTestCase(GmTestCaseCommon):
                 'Make Ray Gun 2 the preferred weapon?',
                 ca_fighter.Fighter.ADD_PREFERRED)
 
-        old_preferred_weapon = fighter.details['preferred-weapon-index'][0]
+        old_preferred_weapon = fighter.rawdata['preferred-weapon-index'][0]
         new_index = fighter.add_equipment(similar_item, 'eighth')
 
-        assert len(fighter.details['preferred-weapon-index']) == 2
-        assert fighter.details['preferred-weapon-index'][0] == old_preferred_weapon
-        assert fighter.details['preferred-weapon-index'][1] == new_index
+        assert len(fighter.rawdata['preferred-weapon-index']) == 2
+        assert fighter.rawdata['preferred-weapon-index'][0] == old_preferred_weapon
+        assert fighter.rawdata['preferred-weapon-index'][1] == new_index
 
 
     def test_give_equipment(self):
@@ -1429,8 +1429,8 @@ class GmTestCase(GmTestCaseCommon):
                  },
                 mock_fight_handler)
 
-        assert self._are_equal(tank_after_gift, tank.details['stuff'])
-        assert self._are_equal(priest_after_gift, priest.details['stuff'])
+        assert self._are_equal(tank_after_gift, tank.rawdata['stuff'])
+        assert self._are_equal(priest_after_gift, priest.rawdata['stuff'])
 
     def test_redirects(self):
         '''
@@ -1519,7 +1519,7 @@ class GmTestCase(GmTestCaseCommon):
 
         # TODO: FightHandler.promote_to_NPC - check source already an NPC #
 
-        # if npc_name not in self.__world.details['NPCs']:
+        # if npc_name not in self.__world.rawdata['NPCs']:
         # self._window_manager.error(['%s is already an NPC' %
         #                             new_NPC.name])
 

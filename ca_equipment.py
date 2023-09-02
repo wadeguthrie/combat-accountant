@@ -23,12 +23,12 @@ import ca_debug
 #   o misc            - miscellaneous item, value is '1' (arbitrary)
 #   o container       - container, value is '1' (arbitrary)
 #                       dict contains "stuff": [array of items]
-#   o ranged weapon   - see the ruleset file for details
-#   o swung weapon    - see the ruleset file for details
-#   o thrust weapon   - see the ruleset file for details
-#   o natural weapon  - see the ruleset file for details
-#   o armor           - see the ruleset file for details
-#   o natural armor   - see the ruleset file for details
+#   o ranged weapon   - see the ruleset file for rawdata
+#   o swung weapon    - see the ruleset file for rawdata
+#   o thrust weapon   - see the ruleset file for rawdata
+#   o natural weapon  - see the ruleset file for rawdata
+#   o armor           - see the ruleset file for rawdata
+#   o natural armor   - see the ruleset file for rawdata
 
 class Equipment(object):
     (RELOAD_NONE,   # for a thrown dagger or suriken
@@ -41,7 +41,7 @@ class Equipment(object):
     '''
     def __init__(self,
                  owner_name,    # string, name of owner, for debugging
-                 equipment      # self.details['stuff'], list of items
+                 equipment      # self.rawdata['stuff'], list of items
                  ):
         self.owner_name = owner_name
         self.__equipment = equipment
@@ -499,7 +499,7 @@ class EquipmentManager(object):
         # Rebuild this every time in case there are unique items in the
         # equipment list
         item_menu = [(item['name'], item)
-                     for item in self.__world.details['stuff']]
+                     for item in self.__world.rawdata['stuff']]
         item_menu = sorted(item_menu, key=lambda x: x[0].upper())
         item, starting_index = self.__window_manager.menu(
                 'Item to Add', item_menu, starting_index)
@@ -559,7 +559,7 @@ class EquipmentManager(object):
             return None
 
         item_menu = []
-        for index, item in enumerate(fighter.details['stuff']):
+        for index, item in enumerate(fighter.rawdata['stuff']):
             if limit_to_removable:
                 if Equipment.is_natural_weapon(item):
                     continue  # Can't remove natural weapons
@@ -631,16 +631,16 @@ class Weapon(object):
     def __init__(self,
                  weapon_details    # dict from world file
                  ):
-        self.details = weapon_details
-        self.name = self.details['name']
+        self.rawdata = weapon_details
+        self.name = self.rawdata['name']
 
     def get_attack_modes(self):
-        modes = [mode for mode in self.details['type'].keys()
+        modes = [mode for mode in self.rawdata['type'].keys()
                  if mode != 'container']
         return modes
 
     def get_clip(self):
-        clip = None if 'clip' not in self.details else self.details['clip']
+        clip = None if 'clip' not in self.rawdata else self.rawdata['clip']
         return clip
 
     def get_damage_next_shot(self,
@@ -674,17 +674,17 @@ class Weapon(object):
         #debug.header2('get_param: %s, %s' % (param, mode))
 
         # start with the weapon's inherent value
-        #debug.print('details:')
-        #debug.pprint(self.details)
+        #debug.print('rawdata:')
+        #debug.pprint(self.rawdata)
         result = None
-        if param in self.details:
-            result = self.details[param]
+        if param in self.rawdata:
+            result = self.rawdata[param]
 
         # check mode-specific information
-        if mode in self.details['type'] and param in self.details['type'][mode]:
-            result = self.details['type'][mode][param]
+        if mode in self.rawdata['type'] and param in self.rawdata['type'][mode]:
+            result = self.rawdata['type'][mode][param]
 
-        #debug.print('type[%r] = "%r"' % (mode, self.details['type'][mode]))
+        #debug.print('type[%r] = "%r"' % (mode, self.rawdata['type'][mode]))
 
         # check the clip (and bullets therein)
         if mode == 'ranged weapon':
@@ -706,13 +706,13 @@ class Weapon(object):
         return result
 
     def is_melee_weapon(self):
-        return Weapon.is_item_melee_weapon(self.details)
+        return Weapon.is_item_melee_weapon(self.rawdata)
 
     def is_melee_strength_based_weapon(self):
         if not self.is_melee_weapon():
             return False
-        for mode in self.details['type']:
-            full_mode = self.details['type'][mode]
+        for mode in self.rawdata['type']:
+            full_mode = self.rawdata['type'][mode]
             if ('damage' in full_mode and 'st' in full_mode['damage'] and
                     (full_mode['damage']['st'] == 'sw' or
                      full_mode['damage']['st'] == 'thr')):
@@ -720,14 +720,14 @@ class Weapon(object):
         return False
 
     def is_natural_weapon(self):
-        return Weapon.is_item_natural_weapon(self.details)
+        return Weapon.is_item_natural_weapon(self.rawdata)
 
     def is_ranged_weapon(self):
-        return Weapon.is_item_ranged_weapon(self.details)
+        return Weapon.is_item_ranged_weapon(self.rawdata)
 
     def is_shield(self):
         # NOTE: cloaks also have this 'type'
-        return True if 'shield' in self.details['type'] else False
+        return True if 'shield' in self.rawdata['type'] else False
 
     def load(self,
              clip,      # dict: from character file
@@ -741,30 +741,30 @@ class Weapon(object):
             return
 
         elif load_type == Equipment.RELOAD_ONE:
-            if self.details['clip'] is None:
-                self.details['clip'] = clip
+            if self.rawdata['clip'] is None:
+                self.rawdata['clip'] = clip
                 # storing the total number of shots in clip as a convenience
-                self.details['clip']['shots'] = self.details['ammo']['shots']
-                self.details['clip']['shots_left'] = 1
-            elif (self.details['clip']['shots_left'] <
-                    self.details['clip']['shots']):
-                self.details['clip']['shots_left'] += 1
+                self.rawdata['clip']['shots'] = self.rawdata['ammo']['shots']
+                self.rawdata['clip']['shots_left'] = 1
+            elif (self.rawdata['clip']['shots_left'] <
+                    self.rawdata['clip']['shots']):
+                self.rawdata['clip']['shots_left'] += 1
         else: # load_type == Equipment.or RELOAD_CLIP
-            self.details['clip'] = clip
+            self.rawdata['clip'] = clip
 
-            if 'ammo' not in self.details:
+            if 'ammo' not in self.rawdata:
                 return
 
         # Shotgun or battery needs this stored in ammo:
-        if 'shots' in self.details['ammo']:
-            clip['shots'] = self.details['ammo']['shots']
+        if 'shots' in self.rawdata['ammo']:
+            clip['shots'] = self.rawdata['ammo']['shots']
 
         if 'shots_left' not in clip:
             clip['shots_left'] = clip['shots']
 
     def notes(self):
-        weapon_notes = (None if 'notes' not in self.details
-                        or len(self.details) == 0 else self.details['notes'])
+        weapon_notes = (None if 'notes' not in self.rawdata
+                        or len(self.rawdata) == 0 else self.rawdata['notes'])
 
         clip = self.get_clip()
 
@@ -790,9 +790,9 @@ class Weapon(object):
             return None
 
         old_clip = None
-        if 'clip' in self.details:
-            old_clip = self.details['clip']
-        self.details['clip'] = None
+        if 'clip' in self.rawdata:
+            old_clip = self.rawdata['clip']
+        self.rawdata['clip'] = None
         self.shots_left(0)
         return old_clip
 
@@ -843,4 +843,4 @@ class Weapon(object):
         return True
 
     def uses_ammo(self):
-        return Weapon.uses_ammo_static(self.details)
+        return Weapon.uses_ammo_static(self.rawdata)

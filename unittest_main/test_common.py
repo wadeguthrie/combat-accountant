@@ -245,7 +245,7 @@ class MockMainGmWindow(object):
     def show_creatures(self,
                        char_list,  # [ {'name': xxx,
                                    #    'group': xxx,
-                                   #    'details':xxx}, ...
+                                   #    'rawdata':xxx}, ...
                        current_index,
                        standout=False
                        ):
@@ -279,7 +279,7 @@ class MockPersonnelGmWindow(MockGmWindow):
         pass
 
     def show_creatures(self,
-                       new_creatures,   # {name: {details}, ...} like in JSON
+                       new_creatures,   # {name: {rawdata}, ...} like in JSON
                        new_char_name,   # name of character to highlight
                        viewing_index    # index into creature list:
                                         #   dict: {'new'=True, index=0}

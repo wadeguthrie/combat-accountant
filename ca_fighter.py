@@ -31,7 +31,7 @@ class ThingsInFight(object):
     def __init__(self,
                  name,           # string, name of the thing
                  group,          # string to index into world['fights']
-                 details,        # world.details['fights'][name] (world is
+                 rawdata,        # world.rawdata['fights'][name] (world is
                                  #   a World object)
                  ruleset,        # Ruleset object
                  window_manager  # GmWindowManager object for reporting errors
@@ -39,23 +39,23 @@ class ThingsInFight(object):
         self.name = name
         self.detailed_name = self.name
         self.group = group
-        self.details = details
+        self.rawdata = rawdata
         self._ruleset = ruleset
         self._window_manager = window_manager
 
         # Equipment
 
-        if 'stuff' not in self.details:     # Public to facilitate testing
-            self.details['stuff'] = []
+        if 'stuff' not in self.rawdata:     # Public to facilitate testing
+            self.rawdata['stuff'] = []
 
         self.equipment = ca_equipment.Equipment(self.name,
-                                                self.details['stuff'])
+                                                self.rawdata['stuff'])
 
         # Timers
 
-        if 'timers' not in details:
-            details['timers'] = []
-        self.timers = ca_timers.Timers(self.details['timers'],
+        if 'timers' not in rawdata:
+            rawdata['timers'] = []
+        self.timers = ca_timers.Timers(self.rawdata['timers'],
                                        self,
                                        self._window_manager)
 
@@ -242,14 +242,14 @@ class Venue(ThingsInFight):
 
     def __init__(self,
                  group,          # string to index into world['fights']
-                 details,        # world.details['fights'][name] (world is
+                 rawdata,        # world.rawdata['fights'][name] (world is
                                  #   a World object)
                  ruleset,        # Ruleset object
                  window_manager  # GmWindowManager object for error reporting
                  ):
         super(Venue, self).__init__(Venue.name,
                                     group,
-                                    details,
+                                    rawdata,
                                     ruleset,
                                     window_manager)
         self.detailed_name = Venue.detailed_name % group
@@ -273,8 +273,8 @@ class Venue(ThingsInFight):
                              'mode': mode | curses.A_BOLD}])
 
         found_one = False
-        if 'stuff' in self.details:
-            for item in sorted(self.details['stuff'], key=lambda x: x['name']):
+        if 'stuff' in self.rawdata:
+            for item in sorted(self.rawdata['stuff'], key=lambda x: x['name']):
                 found_one = True
                 ca_equipment.EquipmentManager.get_description(
                         item, '', [], False, output)
@@ -307,8 +307,8 @@ class Venue(ThingsInFight):
         output.append([{'text': 'Notes', 'mode': mode | curses.A_BOLD}])
 
         found_one = False
-        if 'notes' in self.details:
-            for note in self.details['notes']:
+        if 'notes' in self.rawdata:
+            for note in self.rawdata['notes']:
                 found_one = True
                 output.append([{'text': '  %s' % note, 'mode': mode}])
 
@@ -323,13 +323,13 @@ class Venue(ThingsInFight):
         '''
         fighter_string = '%s' % self.name
 
-        if 'stuff' in self.details and len(self.details['stuff']) > 0:
+        if 'stuff' in self.rawdata and len(self.rawdata['stuff']) > 0:
             fighter_string += ' - EQUIP'
 
-        if 'timers' in self.details and len(self.details['timers']) > 0:
+        if 'timers' in self.rawdata and len(self.rawdata['timers']) > 0:
             fighter_string += ' - TIMERS'
 
-        if 'notes' in self.details and len(self.details['notes']) > 0:
+        if 'notes' in self.rawdata and len(self.rawdata['notes']) > 0:
             fighter_string += ' - NOTES'
 
         return fighter_string
@@ -383,15 +383,15 @@ class Fighter(ThingsInFight):
             Fighter.strawman = ruleset.make_empty_creature()
 
     @staticmethod
-    def get_fighter_state(details):
+    def get_fighter_state(rawdata):
         '''
         Returns the fighter state number.  Note that Fighter.INJURED needs to
         be calculated -- we don't store that in the Fighter as a separate
         state.
         '''
-        conscious_number = Fighter.conscious_map[details['state']]
+        conscious_number = Fighter.conscious_map[rawdata['state']]
         if (conscious_number == Fighter.ALIVE and
-                details['current']['hp'] < details['permanent']['hp']):
+                rawdata['current']['hp'] < rawdata['permanent']['hp']):
             return Fighter.INJURED
         return conscious_number
 
@@ -448,7 +448,7 @@ class Fighter(ThingsInFight):
         if new_item_index is not None:
             after_item_count = self.equipment.get_item_count()
             if is_weapon:
-                if len(self.details['preferred-weapon-index']) > 0:
+                if len(self.rawdata['preferred-weapon-index']) > 0:
                     if before_item_count != after_item_count:
                         # Only ask if we've added a new weapon and not just
                         # bumped-up the count on a previous weapon
@@ -456,7 +456,7 @@ class Fighter(ThingsInFight):
                                 ('no', Fighter.NOT_PREFERRED),
                                 ('replace existing',
                                     Fighter.REPLACE_PREFERRED)]
-                        if (len(self.details['preferred-weapon-index']) <
+                        if (len(self.rawdata['preferred-weapon-index']) <
                                 Fighter.MAX_WEAPONS):
                             replace_preferred_menu.append(
                                     ('add to existing list',
@@ -469,7 +469,7 @@ class Fighter(ThingsInFight):
                         # If we're replacing an item, which one do we replace?
                         if replace_preferred == Fighter.REPLACE_PREFERRED:
                             remove_which_menu = []
-                            for index in self.details['preferred-weapon-index']:
+                            for index in self.rawdata['preferred-weapon-index']:
                                 weapon = self.equipment.get_item_by_index(index)
                                 remove_which_menu.append((weapon['name'], index))
 
@@ -480,16 +480,16 @@ class Fighter(ThingsInFight):
                                 # I guess we're not replacing anything
                                 replace_preferred = Fighter.NOT_PREFERRED
                             else:
-                                self.details['preferred-weapon-index'].remove(
+                                self.rawdata['preferred-weapon-index'].remove(
                                     remove_index)
 
                         if replace_preferred != Fighter.NOT_PREFERRED:
-                            self.details['preferred-weapon-index'].append(
+                            self.rawdata['preferred-weapon-index'].append(
                                     new_item_index)
                 else:
-                    self.details['preferred-weapon-index'].append(new_item_index)
+                    self.rawdata['preferred-weapon-index'].append(new_item_index)
             if is_armor:
-                if len(self.details['preferred-armor-index']) > 0:
+                if len(self.rawdata['preferred-armor-index']) > 0:
                     if before_item_count != after_item_count:
                         # Only ask if we've added a new item and not just
                         # bumped-up the count on a previous item
@@ -508,7 +508,7 @@ class Fighter(ThingsInFight):
                         # If we're replacing an item, which one do we replace?
                         if replace_preferred == Fighter.REPLACE_PREFERRED:
                             remove_which_menu = []
-                            for index in self.details['preferred-armor-index']:
+                            for index in self.rawdata['preferred-armor-index']:
                                 item = self.equipment.get_item_by_index(index)
                                 remove_which_menu.append((item['name'], index))
 
@@ -519,14 +519,14 @@ class Fighter(ThingsInFight):
                                 # I guess we're not replacing anything
                                 replace_preferred = Fighter.NOT_PREFERRED
                             else:
-                                self.details['preferred-armor-index'].remove(
+                                self.rawdata['preferred-armor-index'].remove(
                                     remove_index)
 
                         if replace_preferred != Fighter.NOT_PREFERRED:
-                            self.details['preferred-armor-index'].append(
+                            self.rawdata['preferred-armor-index'].append(
                                     new_item_index)
                 else:
-                    self.details['preferred-armor-index'].append(new_item_index)
+                    self.rawdata['preferred-armor-index'].append(new_item_index)
         return new_item_index
 
     def add_one_ability(
@@ -576,7 +576,7 @@ class Fighter(ThingsInFight):
                      (predicate, ability_name)])
 
         if result is not None:
-            self.details[param][ability_name] = result
+            self.rawdata[param][ability_name] = result
 
         return result
 
@@ -586,17 +586,17 @@ class Fighter(ThingsInFight):
                            ):
         '''Removes armor.'''
 
-        if index not in self.details['armor-index']:
+        if index not in self.rawdata['armor-index']:
             return  # Not wearing the armor we want to taking off
 
-        self.details['armor-index'].remove(index)
+        self.rawdata['armor-index'].remove(index)
 
         # if we're doffing armor and there's natural armor, pick that
         # one up.
-        for item_index, item in enumerate(self.details['stuff']):
-            if (item_index not in self.details['armor-index'] and
+        for item_index, item in enumerate(self.rawdata['stuff']):
+            if (item_index not in self.rawdata['armor-index'] and
                     'natural-armor' in item and item['natural-armor']):
-                self.details['armor-index'].append(item_index)
+                self.rawdata['armor-index'].append(item_index)
 
 
     def don_armor_by_index(self,
@@ -605,8 +605,8 @@ class Fighter(ThingsInFight):
                            ):
         '''Puts on armor.'''
 
-        if index not in self.details['armor-index']:
-            self.details['armor-index'].append(index)
+        if index not in self.rawdata['armor-index']:
+            self.rawdata['armor-index'].append(index)
 
     def draw_weapon_by_index(self,
                              weapon_index  # Index of weapon in fighter's 'stuff'
@@ -622,7 +622,7 @@ class Fighter(ThingsInFight):
 
         weapon_indexes = self.get_current_weapon_indexes()
         if len(weapon_indexes) < Fighter.MAX_WEAPONS: # [], [x]
-            self.details['weapon-index'].append(weapon_index)
+            self.rawdata['weapon-index'].append(weapon_index)
         elif weapon_indexes[0] is None:     # [0, x]
             weapon_indexes[0] = weapon_index
         #else:
@@ -641,7 +641,7 @@ class Fighter(ThingsInFight):
         '''
         index, item = self.equipment.get_item_by_name(name)
         if index is not None:
-            self.details['weapon-index'].append(index)
+            self.rawdata['weapon-index'].append(index)
         return index, ca_equipment.Weapon(item)
 
     def end_fight(self,
@@ -719,18 +719,18 @@ class Fighter(ThingsInFight):
         Gets the armor the Fighter is wearing.
         Returns: list of indexes
         '''
-        if 'armor-index' not in self.details:
+        if 'armor-index' not in self.rawdata:
             return []
-        return self.details['armor-index']
+        return self.rawdata['armor-index']
 
     def get_current_weapon_indexes(self):
         '''
         Gets the weapons the Fighter is wielding.
         Returns: list of indexes
         '''
-        if 'weapon-index' not in self.details:
+        if 'weapon-index' not in self.rawdata:
             return []
-        return self.details['weapon-index']
+        return self.rawdata['weapon-index']
 
     def get_current_weapons(self):
         weapon_indexes = self.get_current_weapon_indexes()
@@ -746,7 +746,7 @@ class Fighter(ThingsInFight):
         return weapon_list
 
     def get_items_from_indexes(self,
-                               indexes  # list of indexes in self.details.stuff
+                               indexes  # list of indexes in self.rawdata.stuff
                                ):
         '''
         Gets the items corresponding to indexes into the Fighter's stuff
@@ -765,10 +765,10 @@ class Fighter(ThingsInFight):
         '''
         result = []
 
-        if len(self.details['preferred-armor-index']) > 0:
-            result.extend(self.details['preferred-armor-index'])
-        if len(self.details['preferred-weapon-index']) > 0:
-            for item in self.details['preferred-weapon-index']:
+        if len(self.rawdata['preferred-armor-index']) > 0:
+            result.extend(self.rawdata['preferred-armor-index'])
+        if len(self.rawdata['preferred-weapon-index']) > 0:
+            for item in self.rawdata['preferred-weapon-index']:
                 if item not in result:
                     result.append(item)
 
@@ -783,7 +783,7 @@ class Fighter(ThingsInFight):
 
         # Make sure we have the weapon in question
         try:
-            index = self.details['weapon-index'].index(weapon_index)
+            index = self.rawdata['weapon-index'].index(weapon_index)
         except ValueError:
             item = self.equipment.get_item_by_index(weapon_index)
             self._window_manager.error(
@@ -796,22 +796,22 @@ class Fighter(ThingsInFight):
         # primary hand is injured.  This is a weird enough situation and hard
         # enough to handle that I'm not supporting it just now.  If I did, it
         # would look something like this:
-        # if index == len(self.details['weapon-index']) - 1:
-        #     self.details['weapon-index'].pop()
+        # if index == len(self.rawdata['weapon-index']) - 1:
+        #     self.rawdata['weapon-index'].pop()
         # else:
-        #     self.details['weapon-index'][index] = None
+        #     self.rawdata['weapon-index'][index] = None
 
-        self.details['weapon-index'].pop(index)
+        self.rawdata['weapon-index'].pop(index)
 
         # If there're no weapons left, add natural weapons (if applicable)
-        if len(self.details['weapon-index']) == 0:
-            for item_index, item in enumerate(self.details['stuff']):
+        if len(self.rawdata['weapon-index']) == 0:
+            for item_index, item in enumerate(self.rawdata['stuff']):
                 if 'natural-weapon' in item and item['natural-weapon']:
-                    self.details['weapon-index'].append(item_index)
+                    self.rawdata['weapon-index'].append(item_index)
 
     #def print_me(self):
     #    print '-- Fighter (%s, %s) --' % (self.name, self.group)
-    #    PP.pprint(self.details)
+    #    PP.pprint(self.rawdata)
 
     def remove_equipment(self,
                          index_to_remove,   # <int> index into Equipment list
@@ -841,35 +841,35 @@ class Fighter(ThingsInFight):
         if len(container_stack) == 0 and before_item_count != after_item_count:
             # Remove weapon from current weapon list
             for index_in_weapons, index_in_stuff in enumerate(
-                    self.details['weapon-index']):
+                    self.rawdata['weapon-index']):
                 if index_to_remove == index_in_stuff:
-                    self.details['weapon-index'].remove(index_in_stuff)
+                    self.rawdata['weapon-index'].remove(index_in_stuff)
                 elif index_to_remove < index_in_stuff:
-                    self.details['weapon-index'][index_in_weapons] -= 1
+                    self.rawdata['weapon-index'][index_in_weapons] -= 1
 
             # Remove weapon from preferred weapons list
             for index_in_weapons, index_in_stuff in enumerate(
-                    self.details['preferred-weapon-index']):
+                    self.rawdata['preferred-weapon-index']):
                 if index_to_remove == index_in_stuff:
-                    self.details['preferred-weapon-index'].remove(index_in_stuff)
+                    self.rawdata['preferred-weapon-index'].remove(index_in_stuff)
                 elif index_to_remove < index_in_stuff:
-                    self.details['preferred-weapon-index'][index_in_weapons] -= 1
+                    self.rawdata['preferred-weapon-index'][index_in_weapons] -= 1
 
             # Remove armor from current armor list
             for index_in_armor, index_in_stuff in enumerate(
-                    self.details['armor-index']):
+                    self.rawdata['armor-index']):
                 if index_to_remove == index_in_stuff:
-                    self.details['armor-index'].remove(index_in_stuff)
+                    self.rawdata['armor-index'].remove(index_in_stuff)
                 elif index_to_remove < index_in_stuff:
-                    self.details['armor-index'][index_in_armor] -= 1
+                    self.rawdata['armor-index'][index_in_armor] -= 1
 
             # Remove armor from preferred armor list
             for index_in_armor, index_in_stuff in enumerate(
-                    self.details['preferred-armor-index']):
+                    self.rawdata['preferred-armor-index']):
                 if index_to_remove == index_in_stuff:
-                    self.details['preferred-armor-index'].remove(index_in_stuff)
+                    self.rawdata['preferred-armor-index'].remove(index_in_stuff)
                 elif index_to_remove < index_in_stuff:
-                    self.details['preferred-armor-index'][index_in_armor] -= 1
+                    self.rawdata['preferred-armor-index'][index_in_armor] -= 1
 
         return item
 
@@ -891,7 +891,7 @@ class Fighter(ThingsInFight):
                     holding['loaded_ranged'] += 1
             else:
                 holding['melee'] += 1
-            if ca_equipment.Equipment.is_natural_weapon(weapon.details):
+            if ca_equipment.Equipment.is_natural_weapon(weapon.rawdata):
                 holding['natural_weapon'] += 1
             else:
                 holding['non_natural_weapon'] += 1
@@ -1063,9 +1063,9 @@ class Fighter(ThingsInFight):
             mode_name=None   # str: 'swung weapon' or ...; None for all modes
             ):
         # skills = [{'name': name, 'modifier': number}, ...]
-        #if weapon['skill'] in self.details['skills']:
+        #if weapon['skill'] in self.rawdata['skills']:
         #    best_skill = weapon['skill']
-        #    best_value = self.details['skills'][best_skill]
+        #    best_value = self.rawdata['skills'][best_skill]
         #else:
         #    return None
 
@@ -1092,17 +1092,17 @@ class Fighter(ThingsInFight):
         return best_result
 
     def get_state(self):
-        return Fighter.get_fighter_state(self.details)
+        return Fighter.get_fighter_state(self.rawdata)
 
     def is_absent(self):
-        return True if self.details['state'] == 'Absent' else False
+        return True if self.rawdata['state'] == 'Absent' else False
 
     def is_conscious(self):
-        # NOTE: 'injured' is not stored in self.details['state']
-        return True if self.details['state'] == 'alive' else False
+        # NOTE: 'injured' is not stored in self.rawdata['state']
+        return True if self.rawdata['state'] == 'alive' else False
 
     def is_dead(self):
-        return True if self.details['state'] == 'dead' else False
+        return True if self.rawdata['state'] == 'dead' else False
 
     def set_consciousness(self,
                           conscious_number,  # <int> See Fighter.conscious_map
@@ -1118,11 +1118,11 @@ class Fighter(ThingsInFight):
 
         for state_name, state_num in Fighter.conscious_map.items():
             if state_num == conscious_number:
-                self.details['state'] = state_name
+                self.rawdata['state'] = state_name
                 break
 
         if not self.is_conscious():
-            self.details['opponent'] = None  # unconscious men fight nobody
+            self.rawdata['opponent'] = None  # unconscious men fight nobody
             weapon_indexes = self.get_current_weapon_indexes()
             for index in weapon_indexes:
                 # unconscious men don't hold stuff
@@ -1142,14 +1142,14 @@ class Fighter(ThingsInFight):
         '''
         # NOTE: we're allowing health to still be messed-up, here
         # NOTE: person may go around wearing armor -- no need to reset
-        self.details['opponent'] = None
+        self.rawdata['opponent'] = None
         if self.group == 'PCs':
-            if ('fight-notes' in self.details and
-                    self.details['fight-notes'] is not None):
-                self.details['fight-notes'] = []
+            if ('fight-notes' in self.rawdata and
+                    self.rawdata['fight-notes'] is not None):
+                self.rawdata['fight-notes'] = []
 
-            if ('label' in self.details and self.details['label'] is not None):
-                self.details['label'] = None
+            if ('label' in self.rawdata and self.rawdata['label'] is not None):
+                self.rawdata['label'] = None
 
         self._ruleset.start_fight(self)
 
@@ -1166,7 +1166,7 @@ class Fighter(ThingsInFight):
         self.timers.decrement_all()
         self.timers.fire_expired_timers(ca_timers.Timer.FIRE_ROUND_START)
         for timer in self.timers.get_all():
-            if 'busy' in timer.details and timer.details['busy']:
+            if 'busy' in timer.rawdata and timer.rawdata['busy']:
                 window_text = []
                 lines = timer.get_description()
                 for line in lines:
@@ -1178,7 +1178,7 @@ class Fighter(ThingsInFight):
 
                 # Allow the fighter to continue without doing anything since
                 # s/he's already busy
-                self.details['actions_this_turn'].append('busy')
+                self.rawdata['actions_this_turn'].append('busy')
                 fight_handler.add_to_history(
                         {'comment': '(%s) is busy this round' % self.name})
 
@@ -1189,10 +1189,10 @@ class Fighter(ThingsInFight):
         Returns nothing.
         '''
 
-        if self.details['state'] == 'Absent':
-            self.details['state'] = 'alive'
+        if self.rawdata['state'] == 'Absent':
+            self.rawdata['state'] = 'alive'
         else:
-            self.details['state'] = 'Absent'
+            self.rawdata['state'] = 'Absent'
 
     #
     # Protected and Private Methods
@@ -1227,7 +1227,7 @@ class Fighter(ThingsInFight):
         else:
             #lines.extend([[{'text': 'Weapon: "%s"' % weapon.name,
             #                'mode': curses.A_NORMAL}]])
-            if self.get_best_skill_for_weapon(weapon.details,
+            if self.get_best_skill_for_weapon(weapon.rawdata,
                                               mode) is not None:
                 # To-Hit
                 skill, to_hit_why = self._ruleset.get_to_hit(self,
@@ -1255,9 +1255,9 @@ class Fighter(ThingsInFight):
             mode        # str: 'swung weapon' or ...; None for all modes
             ):
         # skills = [{'name': name, 'modifier': number}, ...]
-        #if weapon['skill'] in self.details['skills']:
+        #if weapon['skill'] in self.rawdata['skills']:
         #    best_skill = weapon['skill']
-        #    best_value = self.details['skills'][best_skill]
+        #    best_value = self.rawdata['skills'][best_skill]
         #else:
         #    return None
 
@@ -1272,11 +1272,11 @@ class Fighter(ThingsInFight):
         for skill_camel, value in weapon['type'][mode]['skill'].items():
             skill_lower = skill_camel.lower()
             found_skill = False
-            if skill_camel in self.details['skills']:
-                value += self.details['skills'][skill_camel]
+            if skill_camel in self.rawdata['skills']:
+                value += self.rawdata['skills'][skill_camel]
                 found_skill = True
-            elif skill_lower in self.details['current']:
-                value += self.details['current'][skill_lower]
+            elif skill_lower in self.rawdata['current']:
+                value += self.rawdata['current'][skill_lower]
                 found_skill = True
             if found_skill and (best_value is None or value > best_value):
                 best_value = value

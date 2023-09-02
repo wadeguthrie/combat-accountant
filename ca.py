@@ -25,8 +25,6 @@ import ca_timers
 
 # in priority order:
 
-# TODO: replace 'details' with 'rawdata' throughout
-
 # TODO: grenade support (missile-like but not with clips)
 
 # TODO: Make unarmed stuff more closely mirror the armed stuff.
@@ -284,7 +282,7 @@ class MainGmWindow(ca_gui.GmWindow):
                 mode |= self._window_manager.color_of_venue()
             else:
                 mode |= self._window_manager.get_mode_from_fighter_state(
-                        ca_fighter.Fighter.get_fighter_state(char.details))
+                        ca_fighter.Fighter.get_fighter_state(char.rawdata))
 
             mode |= (curses.A_NORMAL if current_index is None or
                      current_index != line else curses.A_STANDOUT)
@@ -428,7 +426,7 @@ class PersonnelGmWindow(ca_gui.GmWindow):
                        ):
         '''
         Builds a color-annotated character list from the passed-in list.
-        Displays the color-annotated list.  Shows details in the right-hand
+        Displays the color-annotated list.  Shows rawdata in the right-hand
         pane for the 'current' creature,
 
         Returns nothing.
@@ -792,7 +790,7 @@ class World(object):
         # program.
         self.__gm_json = world_details
 
-        self.details = world_details.read_data  # entire dict from Game File
+        self.rawdata = world_details.read_data  # entire dict from Game File
         self.ruleset = ruleset
         self.__window_manager = window_manager
         self.__delete_old_debug_files()
@@ -843,11 +841,11 @@ class World(object):
                                 #   see Ruleset::do_action()
                        ):
         ''' Adds an action to the saved history list.  '''
-        self.details['current-fight']['history'].append(action)
+        self.rawdata['current-fight']['history'].append(action)
 
     def clear_history(self):
         ''' Removes all the saved history data.  '''
-        self.details['current-fight']['history'] = []
+        self.rawdata['current-fight']['history'] = []
 
     def do_debug_snapshot(self,
                           tag,  # String with which to tag the debug filename
@@ -875,7 +873,7 @@ class World(object):
                 keep_going = False
 
         with open(debug_filename, 'w') as f:
-            json.dump(self.details, f, indent=2)
+            json.dump(self.rawdata, f, indent=2)
 
         self.program.add_snapshot(tag, debug_filename)
 
@@ -953,7 +951,7 @@ class World(object):
         find the correct creature.
 
         This routine also handles redirection of creatures.  If a creature's
-        whole details section is "'redirect': <group>", it says that this is
+        whole rawdata section is "'redirect': <group>", it says that this is
         only a copy and the original is in <group>.
         '''
         if name is None or group_name is None:
@@ -962,9 +960,9 @@ class World(object):
             return None
 
         if group_name == 'PCs':
-            details = self.details['PCs'][name]
+            rawdata = self.rawdata['PCs'][name]
         elif group_name == 'NPCs':
-            details = self.details['NPCs'][name]
+            rawdata = self.rawdata['NPCs'][name]
         else:
             group = self.get_creature_details_list(group_name)
             if group is None:
@@ -978,25 +976,25 @@ class World(object):
                         (name, group_name)])
                 return None
 
-            details = group[name]
+            rawdata = group[name]
 
-        if 'redirect' in details:
+        if 'redirect' in rawdata:
             # NOTE: this only allows redirects to PCs and NPCs since monsters
-            # are buried deeper in the details.  That's by design since
+            # are buried deeper in the rawdata.  That's by design since
             # monsters are transitory.
-            if details['redirect'] not in self.details:
+            if rawdata['redirect'] not in self.rawdata:
                 self.__window_manager.error(
                     ['No "%s" group in world (redirect)' %
-                     details['redirect']])
+                     rawdata['redirect']])
                 return None
-            if name not in self.details[details['redirect']]:
+            if name not in self.rawdata[rawdata['redirect']]:
                 self.__window_manager.error(
                     ['No name "%s" in "%s" group (redirect)' %
-                     (name, details['redirect'])])
+                     (name, rawdata['redirect'])])
                 return None
-            details = self.details[details['redirect']][name]
+            rawdata = self.rawdata[rawdata['redirect']][name]
 
-        return details
+        return rawdata
 
     def get_creature_details_list(self,
                                   group_name  # string: 'PCs', 'NPCs', or a
@@ -1007,23 +1005,23 @@ class World(object):
         order they are from the Game File (meaning that they are in random
         order).
 
-        Returns dict of details: {name: {<details>}, name: ... }
+        Returns dict of rawdata: {name: {<rawdata>}, name: ... }
         '''
 
-        if group_name in self.details:
-            return self.details[group_name]
+        if group_name in self.rawdata:
+            return self.rawdata[group_name]
 
         fights = self.get_fights()
         if group_name in fights:
-            return self.details['fights'][group_name]['monsters']
+            return self.rawdata['fights'][group_name]['monsters']
 
         return None
 
     def get_fights(self):
         '''
-        Returns {fight_name: {details}, fight_name: {details}, ...}
+        Returns {fight_name: {rawdata}, fight_name: {rawdata}, ...}
         '''
-        return self.details['fights']
+        return self.rawdata['fights']
 
     def get_random_name(self):
         '''
@@ -1049,22 +1047,22 @@ class World(object):
         # naming categories is permitted.
         randomly_generate = False
 
-        if 'names' not in self.details or self.details['names'] is None:
+        if 'names' not in self.rawdata or self.rawdata['names'] is None:
             return None, None, None
 
         # Country
 
-        country_menu = [(x, x) for x in self.details['names']]
+        country_menu = [(x, x) for x in self.rawdata['names']]
         country_name, ignore = self.__window_manager.menu('What kind of name',
                                                           country_menu)
         if country_name is None:
             randomly_generate = True
-            country_name = random.choice(list(self.details['names'].keys()))
+            country_name = random.choice(list(self.rawdata['names'].keys()))
 
         # Gender
 
         if not randomly_generate:
-            gender_menu = [(x, x) for x in self.details['names'][country_name]]
+            gender_menu = [(x, x) for x in self.rawdata['names'][country_name]]
 
             gender, ignore = self.__window_manager.menu('What Gender',
                                                         gender_menu)
@@ -1074,7 +1072,7 @@ class World(object):
         if randomly_generate:
             debug = ca_debug.Debug(quiet=True)
             debug.header1('Gender')
-            genders = list(self.details['names'][country_name].keys())
+            genders = list(self.rawdata['names'][country_name].keys())
             debug.pprint(genders)
             genders.remove('last')  # last names are treated diferently
             debug.pprint(genders)
@@ -1084,8 +1082,8 @@ class World(object):
 
         # Name
 
-        first_name = random.choice(self.details['names'][country_name][gender])
-        last_name = random.choice(self.details['names'][country_name]['last'])
+        first_name = random.choice(self.rawdata['names'][country_name][gender])
+        last_name = random.choice(self.rawdata['names'][country_name]['last'])
         name = '%s %s' % (first_name, last_name)
 
         return (name, country_name, gender)
@@ -1120,18 +1118,18 @@ class World(object):
         #        <monsters> is the monster list described under the JSON
         #           section ['fights'][<group name>]['monsters']
 
-        if group_name in self.details['fights']:
+        if group_name in self.rawdata['fights']:
             # Put fight in dead-monsters list
             fmt = '%Y-%m-%d-%H-%M-%S'
             date = datetime.datetime.now().strftime(fmt).format()
 
-            monsters = self.details['fights'][group_name]['monsters']
-            self.details['dead-monsters'].append({'name': group_name,
+            monsters = self.rawdata['fights'][group_name]['monsters']
+            self.rawdata['dead-monsters'].append({'name': group_name,
                                                   'date': date,
                                                   'monsters': monsters})
 
             # Remove fight from regular monster list
-            del self.details['fights'][group_name]
+            del self.rawdata['fights'][group_name]
             del self.__fighters[group_name]
 
     def restore_fight(self,
@@ -1145,14 +1143,14 @@ class World(object):
         Returns nothing.
         '''
 
-        group = self.details['dead-monsters'][group_index]
+        group = self.rawdata['dead-monsters'][group_index]
         group_name = group['name']
 
         # Put fight into regular monster list
-        self.details['fights'][group_name] = {'monsters': group['monsters']}
+        self.rawdata['fights'][group_name] = {'monsters': group['monsters']}
 
         # Remove fight from dead-monsters
-        del(self.details['dead-monsters'][group_index])
+        del(self.rawdata['dead-monsters'][group_index])
 
     def toggle_saved_on_exit(self):
         '''
@@ -1217,7 +1215,7 @@ class ScreenHandler(object):
         self._window_manager = window_manager
         self.world = world
 
-        self._saved_fight = self.world.details['current-fight']
+        self._saved_fight = self.world.rawdata['current-fight']
 
         # Install default command ribbon command(s).
         self._choices = {
@@ -1545,7 +1543,7 @@ class AttributeWidget(object):
                 change_current = True if attr_type == 'current' else False
 
             attr_menu = [(attr, attr)
-                         for attr in list(self.__fighter.details[attr_type].keys())]
+                         for attr in list(self.__fighter.rawdata[attr_type].keys())]
 
             attr, starting_attribute = self.__window_manager.menu(
                     'Attr To Modify', attr_menu, starting_attribute)
@@ -1554,11 +1552,11 @@ class AttributeWidget(object):
 
             if change_current:
                 title = ('New Value (old value: %d/%d)' %
-                         (self.__fighter.details['current'][attr],
-                          self.__fighter.details['permanent'][attr]))
+                         (self.__fighter.rawdata['current'][attr],
+                          self.__fighter.rawdata['permanent'][attr]))
             else:
                 title = ('New Value (old value: %d)' %
-                         self.__fighter.details['permanent'][attr])
+                         self.__fighter.rawdata['permanent'][attr])
             height = 1
             width = len(title) + 2
             keep_ask_attr = True
@@ -1567,20 +1565,20 @@ class AttributeWidget(object):
                     self.__window_manager.input_box_calc(
                         height,
                         width,
-                        self.__fighter.details[attr_type][attr],
+                        self.__fighter.rawdata[attr_type][attr],
                         title))
 
             force_current = False
             if change_current:
                 if (new_attr_value >
-                        self.__fighter.details['permanent'][attr]):
+                        self.__fighter.rawdata['permanent'][attr]):
                     cap_menu = [('yes', True), ('no', False)]
                     cap_current, ignore = self.__window_manager.menu(
                             'Cap the "current" Value to the "permanent" value',
                             cap_menu)
                     if cap_current:
                         new_attr_value = (
-                                self.__fighter.details['permanent'][attr])
+                                self.__fighter.rawdata['permanent'][attr])
             else:
                 both_menu = [('yes', True), ('no', False)]
                 force_current, ignore = self.__window_manager.menu(
@@ -1639,12 +1637,12 @@ class PersonnelHandler(ScreenHandler):
                                'help': 'Scroll DOWN on the current pane ' +
                                        'which may may be either the ' +
                                        'character pane (on the left) or ' +
-                                       'the details pane (on the right)'},
+                                       'the rawdata pane (on the right)'},
             curses.KEY_PPAGE: {'name': 'scroll up',
                                'func': self.__prev_page,
                                'help': 'Scroll UP on the current pane which ' +
                                        'may may be either the character ' +
-                                       'pane (on the left) or the details ' +
+                                       'pane (on the left) or the rawdata ' +
                                        'pane (on the right)'},
             curses.KEY_LEFT: {'name': 'scroll char list',
                               'func': self.__left_pane,
@@ -1652,7 +1650,7 @@ class PersonnelHandler(ScreenHandler):
                                       'left) for scrolling.'},
             curses.KEY_RIGHT: {'name': 'scroll char detail',
                                'func': self.__right_pane,
-                               'help': 'Choose the details pane (on the ' +
+                               'help': 'Choose the rawdata pane (on the ' +
                                        'right) for scrolling.'},
 
             ord('a'): {'name': 'add creature',
@@ -1907,11 +1905,11 @@ class PersonnelHandler(ScreenHandler):
             self._window_manager.error(['"%s" not an NPC' % npc.name])
             return True
 
-        if npc.name in self.world.details['PCs']:
+        if npc.name in self.world.rawdata['PCs']:
             self._window_manager.error(['"%s" already a PC' % npc.name])
             return True
 
-        self.world.details['PCs'][npc.name] = {'redirect': 'NPCs'}
+        self.world.rawdata['PCs'][npc.name] = {'redirect': 'NPCs'}
 
         self._window.show_creatures(self.__critters['obj'],
                                     self.__new_char_name,
@@ -1937,20 +1935,20 @@ class PersonnelHandler(ScreenHandler):
             self._window_manager.error(['"%s" not a Monster' % monster.name])
             return True
 
-        if monster.name in self.world.details['NPCs']:
+        if monster.name in self.world.rawdata['NPCs']:
             self._window_manager.error(['"%s" already a NPC' % monster.name])
             return True
 
-        if self.world.details['current-fight']['saved']:
+        if self.world.rawdata['current-fight']['saved']:
             self._window_manager.error(['Can\'t promote a monster mid-fight'])
             return True
 
         # Move actual creature
-        self.world.details['NPCs'][monster.name] = monster.details
-        self.world.details['fights'][monster.group][monster.name] = {'redirect': 'NPCs'}
+        self.world.rawdata['NPCs'][monster.name] = monster.rawdata
+        self.world.rawdata['fights'][monster.group][monster.name] = {'redirect': 'NPCs'}
 
         # Move pointers
-        self.__critters['data'][monster.name] = monster.details
+        self.__critters['data'][monster.name] = monster.rawdata
         self.__critters['obj'][self.__viewing_index] = self.world.get_creature(
                                                                 monster.name,
                                                                 monster.group)
@@ -2073,11 +2071,11 @@ class PersonnelHandler(ScreenHandler):
 
         # actually import the equipment
         self.world.ruleset.import_equipment_from_file(
-                filename, self.world.details['stuff'])
+                filename, self.world.rawdata['stuff'])
 
         # Then, fix any issues with the equipment
         equipment = ca_equipment.Equipment('Equipment Store',
-                                           self.world.details['stuff'])
+                                           self.world.rawdata['stuff'])
         equipment.fix_ammo(self._window_manager)
         return True
 
@@ -2167,7 +2165,7 @@ class PersonnelHandler(ScreenHandler):
             result = self.world.ruleset.search_one_creature(
                     name,
                     creature.group,
-                    creature.details,
+                    creature.rawdata,
                     look_for_re)
             if result is not None and len(result) > 0:
                 all_results.extend(result)
@@ -2226,12 +2224,12 @@ class PersonnelHandler(ScreenHandler):
 
         need_file_message = None
         filename = None # Import from the character's internal filename
-        if 'gcs-file' not in fighter.details:
+        if 'gcs-file' not in fighter.rawdata:
             need_file_message = 'No file is associated with %s' % fighter.name
         elif not os.path.isfile(os.path.join(os.getcwd(),
-                                fighter.details['gcs-file'])):
+                                fighter.rawdata['gcs-file'])):
             need_file_message = 'File "%s" does not exist, pick a new one' % (
-                    fighter.details['gcs-file'])
+                    fighter.rawdata['gcs-file'])
 
         if need_file_message is not None:
             self._window_manager.error(['%s' % need_file_message])
@@ -2244,7 +2242,7 @@ class PersonnelHandler(ScreenHandler):
 
         # actually import the new creature
 
-        changes = self.world.ruleset.update_creature_from_file(fighter.details,
+        changes = self.world.ruleset.update_creature_from_file(fighter.rawdata,
                                                                filename)
         changes_with_modes = [
                 [{'text': x, 'mode': curses.A_NORMAL}] for x in changes ]
@@ -2375,7 +2373,7 @@ class PersonnelHandler(ScreenHandler):
             return None
 
         # Is the fighter a caster?
-        if 'spells' not in fighter.details:
+        if 'spells' not in fighter.rawdata:
             self._window_manager.error(
                 ['Doesn\'t look like %s casts spells' % fighter.name])
             return None
@@ -2394,7 +2392,7 @@ class PersonnelHandler(ScreenHandler):
                 return None
 
             # Check if spell is already there
-            for spell in fighter.details['spells']:
+            for spell in fighter.rawdata['spells']:
                 if spell['name'] == new_spell_name:
                     self._window_manager.error(
                             ['%s already has spell "%s"' % (fighter.name,
@@ -2419,7 +2417,7 @@ class PersonnelHandler(ScreenHandler):
                         self._window_manager.error(
                                                 ['You must specify a skill'])
 
-                fighter.details['spells'].append(my_copy)
+                fighter.rawdata['spells'].append(my_copy)
                 self._draw_screen()
 
             keep_asking, ignore = self._window_manager.menu('Add More Spells',
@@ -2548,7 +2546,7 @@ class PersonnelHandler(ScreenHandler):
 
         self.__ruleset_abilities = self.world.ruleset.get_creature_abilities()
         for ability in self.__ruleset_abilities:
-            if ability in fighter.details:
+            if ability in fighter.rawdata:
                 sub_menu.extend([
                     ('%s (add)' % ability,
                         {'doit': self.__ruleset_ability,
@@ -2560,13 +2558,13 @@ class PersonnelHandler(ScreenHandler):
 
         # Add these at the end since they're less likely to be used (I'm
         # guessing) than the abilities from the ruleset
-        if 'spells' in fighter.details:
+        if 'spells' in fighter.rawdata:
             sub_menu.extend([
                 ('magic spell (add)',       {'doit': self.__add_spell}),
                 ('Magic spell (remove)',    {'doit': self.__remove_spell})
             ])
 
-        if 'timers' in fighter.details:
+        if 'timers' in fighter.rawdata:
             sub_menu.extend([
                 ('timers (add)',           {'doit': self.__add_timer})
             ])
@@ -2574,12 +2572,12 @@ class PersonnelHandler(ScreenHandler):
                 ('Timers (remove)',           {'doit': self.__timer_cancel})
             ])
 
-        if 'fight-notes' in fighter.details:
+        if 'fight-notes' in fighter.rawdata:
             sub_menu.extend([
                 ('notes (fight)',   {'doit': self.__fight_notes})
             ])
 
-        if 'notes' in fighter.details:
+        if 'notes' in fighter.rawdata:
             sub_menu.extend([
                 ('Notes',           {'doit': self.__full_notes})
             ])
@@ -2588,7 +2586,7 @@ class PersonnelHandler(ScreenHandler):
 
         # Do a consistency check once you're done equipping
         self.world.ruleset.check_creature_consistent(fighter.name,
-                                                     fighter.details)
+                                                     fighter.rawdata)
 
         self._window.touchwin()
         self._window.refresh()
@@ -2604,13 +2602,13 @@ class PersonnelHandler(ScreenHandler):
         '''
         # Get the new group info.
 
-        if len(self.world.details['templates']) <= 0:
+        if len(self.world.rawdata['templates']) <= 0:
             return True
 
         # Get the template
         lines, cols = self._window.getmaxyx()
         template_menu = [(template_group, template_group)
-                         for template_group in self.world.details['templates']]
+                         for template_group in self.world.rawdata['templates']]
         template_group, ignore = self._window_manager.menu(
                 'Which Template Group', template_menu)
         if template_group is None:
@@ -2697,7 +2695,7 @@ class PersonnelHandler(ScreenHandler):
         if fighter is None:
             return None
 
-        container_stack = fighter.details['open-container']
+        container_stack = fighter.rawdata['open-container']
         container = fighter.equipment.get_container(container_stack)
         containers = fighter.equipment.get_container_list(container)
 
@@ -2763,7 +2761,7 @@ class PersonnelHandler(ScreenHandler):
         if fighter is None:
             return None
 
-        container_stack = fighter.details['open-container']
+        container_stack = fighter.rawdata['open-container']
         if len(container_stack) == 0:
             return None
         container = fighter.equipment.get_container(container_stack)
@@ -2816,7 +2814,7 @@ class PersonnelHandler(ScreenHandler):
         if fighter is None:
             return None
 
-        container_stack = fighter.details['open-container']
+        container_stack = fighter.rawdata['open-container']
         container = fighter.equipment.get_container(container_stack)
         containers = fighter.equipment.get_container_list(container)
 
@@ -2881,7 +2879,7 @@ class PersonnelHandler(ScreenHandler):
             if template_name is None or len(template_name) == 0:
                 return True
             elif (template_name in
-                    self.world.details['templates'][self.__template_group]):
+                    self.world.rawdata['templates'][self.__template_group]):
                 self._window_manager.error(
                     ['Template name "%s" already exists' % template_name])
                 keep_asking = True
@@ -2893,7 +2891,7 @@ class PersonnelHandler(ScreenHandler):
         to_creature = {}
         allowable_section_names = self.world.ruleset.get_sections_in_template()
 
-        for section_name, section_body in from_creature.details.items():
+        for section_name, section_body in from_creature.rawdata.items():
             if section_name == 'permanent':
                 to_creature['permanent'] = {}
                 for stat_name, stat_body in section_body.items():
@@ -2906,7 +2904,7 @@ class PersonnelHandler(ScreenHandler):
             else:
                 pass  # We're ignoring these
 
-        template_list = self.world.details['templates'][self.__template_group]
+        template_list = self.world.rawdata['templates'][self.__template_group]
         template_list[template_name] = to_creature
         return True  # Keep going
 
@@ -2927,7 +2925,7 @@ class PersonnelHandler(ScreenHandler):
                     'New Template Group Name')
             if template_group is None or len(template_group) <= 0:
                 return True
-            elif template_group in self.world.details['templates']:
+            elif template_group in self.world.rawdata['templates']:
                 self._window_manager.error(
                     ['Template group name "%s" already exists' %
                         template_group])
@@ -2936,7 +2934,7 @@ class PersonnelHandler(ScreenHandler):
                 keep_asking = False
 
         if len(template_group) > 0:
-            self.world.details['templates'][template_group] = {}
+            self.world.rawdata['templates'][template_group] = {}
             self.__template_group = template_group
             self._draw_screen()
 
@@ -3076,7 +3074,7 @@ class PersonnelHandler(ScreenHandler):
         armor_index_list = fighter.get_current_armor_indexes()
         armor_list = fighter.get_items_from_indexes(armor_index_list)
         don_armor_menu = []
-        for index, item in enumerate(fighter.details['stuff']):
+        for index, item in enumerate(fighter.rawdata['stuff']):
             if 'armor' in item['type']:
                 if index not in armor_index_list:
                     don_armor_menu.append((item['name'], index))
@@ -3144,7 +3142,7 @@ class PersonnelHandler(ScreenHandler):
             return None
 
         weapon_menu = []
-        for index, item in enumerate(fighter.details['stuff']):
+        for index, item in enumerate(fighter.rawdata['stuff']):
             if ca_equipment.Weapon.is_weapon(item):
                 weapon_menu.append((item['name'], index))
         weapon_menu = sorted(weapon_menu, key=lambda x: x[0].upper())
@@ -3176,7 +3174,7 @@ class PersonnelHandler(ScreenHandler):
             return True
 
         sub_menu = []
-        if 'stuff' in fighter.details:
+        if 'stuff' in fighter.rawdata:
             sub_menu.extend([
                 ('equipment (add)',     {'doit':
                     self.__add_equipment_from_store}),
@@ -3188,13 +3186,13 @@ class PersonnelHandler(ScreenHandler):
 
         owns_weapon = False
         owns_armor = False
-        for item in fighter.details['stuff']:
+        for item in fighter.rawdata['stuff']:
             if ca_equipment.Weapon.is_weapon(item):
                 owns_weapon = True
             if 'armor' in item['type']:
                 owns_armor = True
 
-        if 'armor-index' in fighter.details:
+        if 'armor-index' in fighter.rawdata:
             if owns_armor:
                 sub_menu.extend([
                     ('Don armor',  {'doit': self.__don_armor}),
@@ -3214,7 +3212,7 @@ class PersonnelHandler(ScreenHandler):
 
         # Weapons
 
-        if 'weapon-index' in fighter.details:
+        if 'weapon-index' in fighter.rawdata:
             if owns_weapon:
                 sub_menu.extend([
                     ('draw weapon',     {'doit': self.__draw_weapon}),
@@ -3227,7 +3225,7 @@ class PersonnelHandler(ScreenHandler):
             for weapon in weapons:
                 if weapon is None:
                     continue
-                if 'ranged weapon' in weapon.details['type']:
+                if 'ranged weapon' in weapon.rawdata['type']:
                     found_ranged_weapon = True
 
             if found_ranged_weapon:
@@ -3237,7 +3235,7 @@ class PersonnelHandler(ScreenHandler):
 
         # Container Stuff
 
-        container_stack = fighter.details['open-container']
+        container_stack = fighter.rawdata['open-container']
         container = fighter.equipment.get_container(container_stack)
         containers = fighter.equipment.get_container_list(container)
 
@@ -3260,7 +3258,7 @@ class PersonnelHandler(ScreenHandler):
 
         # Do a consistency check once you're done equipping
         self.world.ruleset.check_creature_consistent(fighter.name,
-                                                     fighter.details)
+                                                     fighter.rawdata)
 
         self._window.touchwin()
         self._window.refresh()
@@ -3315,9 +3313,9 @@ class PersonnelHandler(ScreenHandler):
         # Build the Fighter object array
 
         the_fight_itself = None
-        for name, details in self.__critters['data'].items():
+        for name, rawdata in self.__critters['data'].items():
             if name == ca_fighter.Venue.name:
-                the_fight_itself = details
+                the_fight_itself = rawdata
             else:
                 fighter = self.world.get_creature(name, self.__group_name)
                 self.__critters['obj'].append(fighter)
@@ -3331,7 +3329,7 @@ class PersonnelHandler(ScreenHandler):
             if the_fight_itself is None:
                 self.__critters['data'][
                         ca_fighter.Venue.name] = ca_fighter.Venue.empty_venue
-                group = self.world.details['fights'][self.__group_name]
+                group = self.world.rawdata['fights'][self.__group_name]
                 if isinstance(group, bytes):
                     window_manager.error(['9: converting "%r"' % group])
                     group = group.decode('utf-8')
@@ -3554,7 +3552,7 @@ class PersonnelHandler(ScreenHandler):
             if item_index is None:
                 return None
             count = from_fighter.ask_how_many(item_index)
-            item = from_fighter.details['stuff'][item_index]
+            item = from_fighter.rawdata['stuff'][item_index]
 
             character_list = self.world.get_creature_details_list('PCs')
             character_menu = [(dude, dude) for dude in character_list]
@@ -3656,7 +3654,7 @@ class PersonnelHandler(ScreenHandler):
             item_index = self.__equipment_manager.select_item_index(fighter)
             if item_index is None:
                 return None
-            item = fighter.details['stuff'][item_index]
+            item = fighter.rawdata['stuff'][item_index]
             item['identified'] = True
 
             # provenance?
@@ -3695,18 +3693,18 @@ class PersonnelHandler(ScreenHandler):
         if fighter is None:
             return None
 
-        if 'ignored-equipment' not in fighter.details:
-            fighter.details['ignored-equipment'] = []
+        if 'ignored-equipment' not in fighter.rawdata:
+            fighter.rawdata['ignored-equipment'] = []
 
         keep_asking_menu = [('yes', True), ('no', False)]
         keep_asking = True
         while keep_asking:
             item = self.__equipment_manager.remove_equipment(fighter)
             self._draw_screen()
-            if item is None or len(fighter.details['stuff']) == 0:
+            if item is None or len(fighter.rawdata['stuff']) == 0:
                 return True
 
-            fighter.details['ignored-equipment'].append(item['name'].lower())
+            fighter.rawdata['ignored-equipment'].append(item['name'].lower())
 
             keep_asking, ignore = self._window_manager.menu(
                     'Ignore More Equipment', keep_asking_menu)
@@ -3744,7 +3742,7 @@ class PersonnelHandler(ScreenHandler):
 
         if self.__template_group is not None:
             for from_creature_name in (
-                        self.world.details['templates'][
+                        self.world.rawdata['templates'][
                             self.__template_group]):
                     creature_menu.append((from_creature_name,
                                          {'name': from_creature_name,
@@ -3771,7 +3769,7 @@ class PersonnelHandler(ScreenHandler):
 
         if from_creature_info['from'] == PersonnelHandler.FROM_TEMPLATE:
             to_creature = self.world.ruleset.make_empty_creature()
-            from_creature = (self.world.details['templates'][
+            from_creature = (self.world.rawdata['templates'][
                              self.__template_group][from_creature_name])
             for key, value in from_creature.items():
                 if key == 'permanent':
@@ -3954,10 +3952,10 @@ class PersonnelHandler(ScreenHandler):
         # Now, get the notes for that person
         lines, cols = self._window.getmaxyx()
 
-        if notes_type not in notes_recipient.details:
+        if notes_type not in notes_recipient.rawdata:
             notes = None
         else:
-            notes = '\n'.join(notes_recipient.details[notes_type])
+            notes = '\n'.join(notes_recipient.rawdata[notes_type])
 
         notes = self._window_manager.edit_window(
                     lines - 4,
@@ -3966,7 +3964,7 @@ class PersonnelHandler(ScreenHandler):
                     'Notes',
                     '^G to exit')
 
-        notes_recipient.details[notes_type] = [x for x in notes.split('\n')]
+        notes_recipient.rawdata[notes_type] = [x for x in notes.split('\n')]
 
         # Display our new state
 
@@ -3987,15 +3985,15 @@ class PersonnelHandler(ScreenHandler):
         if npc is None:
             return True
 
-        if npc.name not in self.world.details['NPCs']:
+        if npc.name not in self.world.rawdata['NPCs']:
             self._window_manager.error(['"%s" not an NPC' % npc.name])
             return True
 
-        if npc.name not in self.world.details['PCs']:
+        if npc.name not in self.world.rawdata['PCs']:
             self._window_manager.error(['"%s" not in PC list' % npc.name])
             return True
 
-        del(self.world.details['PCs'][npc.name])
+        del(self.world.rawdata['PCs'][npc.name])
         self._draw_screen()
         return True
 
@@ -4020,10 +4018,10 @@ class PersonnelHandler(ScreenHandler):
 
         # Select the armor to prefer
         armor_menu = []
-        for index, item in enumerate(fighter.details['stuff']):
+        for index, item in enumerate(fighter.rawdata['stuff']):
             if 'armor' in item['type']:
                 preferred_string = (' (preferred)'
-                        if index in fighter.details['preferred-armor-index']
+                        if index in fighter.rawdata['preferred-armor-index']
                         else '')
                 armor_menu.append(('%s%s' % (item['name'], preferred_string),
                                     index))
@@ -4037,10 +4035,10 @@ class PersonnelHandler(ScreenHandler):
                 return None
 
         # Prefer (or unprefer) the selected armor
-        if armor_index in fighter.details['preferred-armor-index']:
-            fighter.details['preferred-armor-index'].remove(armor_index)
+        if armor_index in fighter.rawdata['preferred-armor-index']:
+            fighter.rawdata['preferred-armor-index'].remove(armor_index)
         else:
-            fighter.details['preferred-armor-index'].append(armor_index)
+            fighter.rawdata['preferred-armor-index'].append(armor_index)
 
         self._draw_screen()
         return True  # Anything but 'None' for a menu handler
@@ -4066,10 +4064,10 @@ class PersonnelHandler(ScreenHandler):
 
         # Select the weapon to prefer
         weapon_menu = []
-        for index, item in enumerate(fighter.details['stuff']):
+        for index, item in enumerate(fighter.rawdata['stuff']):
             if ca_equipment.Weapon.is_weapon(item):
                 preferred_string = (' (preferred)'
-                        if (index in fighter.details['preferred-weapon-index'])
+                        if (index in fighter.rawdata['preferred-weapon-index'])
                         else '')
                 weapon_menu.append(('%s%s' % (item['name'], preferred_string),
                                     index))
@@ -4083,10 +4081,10 @@ class PersonnelHandler(ScreenHandler):
                 return None
 
         # Prefer (or unprefer) the selected weapon
-        if weapon_index in fighter.details['preferred-weapon-index']:
-            fighter.details['preferred-weapon-index'].remove(weapon_index)
+        if weapon_index in fighter.rawdata['preferred-weapon-index']:
+            fighter.rawdata['preferred-weapon-index'].remove(weapon_index)
         else:
-            fighter.details['preferred-weapon-index'].append(weapon_index)
+            fighter.rawdata['preferred-weapon-index'].append(weapon_index)
 
         self._draw_screen()
         return True  # Anything but 'None' for a menu handler
@@ -4165,7 +4163,7 @@ class PersonnelHandler(ScreenHandler):
         while keep_asking:
             item = self.__equipment_manager.remove_equipment(fighter)
             self._draw_screen()
-            if item is None or len(fighter.details['stuff']) == 0:
+            if item is None or len(fighter.rawdata['stuff']) == 0:
                 return True
 
             keep_asking, ignore = self._window_manager.menu(
@@ -4193,7 +4191,7 @@ class PersonnelHandler(ScreenHandler):
             return None
 
         # Is the fighter a caster?
-        if 'spells' not in fighter.details:
+        if 'spells' not in fighter.rawdata:
             self._window_manager.error(
                 ['Doesn\'t look like %s casts spells' % fighter.name])
             return None
@@ -4204,7 +4202,7 @@ class PersonnelHandler(ScreenHandler):
         while keep_asking:
             # Make the spell list again (since we've removed one)
             spell_menu = [(spell['name'], spell['name'])
-                          for spell in sorted(fighter.details['spells'],
+                          for spell in sorted(fighter.rawdata['spells'],
                           key=lambda x:x['name'])]
             bad_spell_name, current_selection = self._window_manager.menu(
                     'Spell to Remove', spell_menu, current_selection)
@@ -4212,9 +4210,9 @@ class PersonnelHandler(ScreenHandler):
             if bad_spell_name is None:
                 return None
 
-            for index, spell in enumerate(fighter.details['spells']):
+            for index, spell in enumerate(fighter.rawdata['spells']):
                 if spell['name'] == bad_spell_name:
-                    del fighter.details['spells'][index]
+                    del fighter.rawdata['spells'][index]
                     self._draw_screen()
                     break
 
@@ -4239,7 +4237,7 @@ class PersonnelHandler(ScreenHandler):
         if fighter is None:
             return None
 
-        if param not in fighter.details:
+        if param not in fighter.rawdata:
             self._window_manager.error(['%s doesn\'t support' % (fighter.name,
                                                                  param)])
             return None
@@ -4304,8 +4302,8 @@ class PersonnelHandler(ScreenHandler):
             # Make the ability list again (since we've removed one)
             ability_menu = [(ability, ability)
                             for ability in
-                            sorted(fighter.details[param].keys())]
-            if len(fighter.details[param]) == 0:
+                            sorted(fighter.rawdata[param].keys())]
+            if len(fighter.rawdata[param]) == 0:
                 bad_ability_name = None
             else:
                 bad_ability_name, current_selection = self._window_manager.menu(
@@ -4316,10 +4314,10 @@ class PersonnelHandler(ScreenHandler):
             if bad_ability_name is None:
                 return None
 
-            del fighter.details[param][bad_ability_name]
+            del fighter.rawdata[param][bad_ability_name]
             self._draw_screen()
 
-            if len(fighter.details[param]) == 0:
+            if len(fighter.rawdata[param]) == 0:
                 return True
 
             keep_asking, ignore = self._window_manager.menu(
@@ -4438,15 +4436,15 @@ class FightHandler(ScreenHandler):
         # beginning of the most recent session (since the snapshot is from
         # that spot).
         if (replay_history is not None and
-                'replay_start_index' in world.details['current-fight']):
+                'replay_start_index' in world.rawdata['current-fight']):
             self.__next_replay_action_index = (
-                    world.details['current-fight']['replay_start_index'])
+                    world.rawdata['current-fight']['replay_start_index'])
         else:
             self.__next_replay_action_index = 0  # Only for replay
 
-        if 'history' in world.details['current-fight']:
-            world.details['current-fight']['replay_start_index'] = (
-                    len(world.details['current-fight']['history']))
+        if 'history' in world.rawdata['current-fight']:
+            world.rawdata['current-fight']['replay_start_index'] = (
+                    len(world.rawdata['current-fight']['history']))
 
         self._add_to_choice_dict({
             curses.KEY_UP: {'name': 'prev character',
@@ -4650,11 +4648,11 @@ class FightHandler(ScreenHandler):
             for name in self.world.get_creature_details_list(monster_group):
                 # TODO (eventually): maybe use get_creature so that the
                 # information is cached in World.
-                details = self.world.get_creature_details(name,
+                rawdata = self.world.get_creature_details(name,
                                                           monster_group)
-                if details is not None:
+                if rawdata is not None:
                     value = self.world.ruleset.check_creature_consistent(name,
-                                                                         details)
+                                                                         rawdata)
                     if value == ca_ruleset.Ruleset.STOP_CHECKING:
                         break
 
@@ -4724,8 +4722,8 @@ class FightHandler(ScreenHandler):
         Returns the name of the fighter (from a dict) with the monster number
         added (if it exists).
         '''
-        if 'monster-number' in fighter.details:
-            return '%d - %s' % (fighter.details['monster-number'],
+        if 'monster-number' in fighter.rawdata:
+            return '%d - %s' % (fighter.rawdata['monster-number'],
                                 fighter.name)
         return fighter.name
 
@@ -4749,19 +4747,19 @@ class FightHandler(ScreenHandler):
         '''
         return [{'name': fighter.name,
                  'group': fighter.group,
-                 'details': fighter.details} for fighter in self.__fighters]
+                 'rawdata': fighter.rawdata} for fighter in self.__fighters]
 
     def get_opponent_for(self,
                          fighter  # Fighter object
                          ):
         ''' Returns Fighter object for opponent of |fighter|. '''
         if (fighter is None or fighter.name == ca_fighter.Venue.name or
-                fighter.details['opponent'] is None):
+                fighter.rawdata['opponent'] is None):
             return None  # No opponent
 
         ignore, opponent = self.get_fighter_object(
-                                        fighter.details['opponent']['name'],
-                                        fighter.details['opponent']['group'])
+                                        fighter.rawdata['opponent']['name'],
+                                        fighter.rawdata['opponent']['group'])
         return opponent
 
     def get_round(self):
@@ -4968,14 +4966,14 @@ class FightHandler(ScreenHandler):
                     fighter.name != ca_fighter.Venue.name and
                     fighter.name != current_fighter.name):
                 if fighter.is_conscious():
-                    if fighter.details['opponent'] is None:
+                    if fighter.rawdata['opponent'] is None:
                         if default_selection is None:
                             default_selection = len(opponent_menu)
                         menu_text = self.get_display_name(fighter)
                     else:
                         opponent = self.world.get_creature(
-                                fighter.details['opponent']['name'],
-                                fighter.details['opponent']['group'])
+                                fighter.rawdata['opponent']['name'],
+                                fighter.rawdata['opponent']['group'])
                         menu_text = '%s (fighting %s)' % (
                                 self.get_display_name(fighter),
                                 self.get_display_name(opponent))
@@ -5009,7 +5007,7 @@ class FightHandler(ScreenHandler):
                                                    opponent_name['group'])
 
         # Ask to have them fight each other
-        if (opponent is not None and opponent.details['opponent'] is None):
+        if (opponent is not None and opponent.rawdata['opponent'] is None):
             back_menu = [('yes', True), ('no', False)]
             answer, ignore = self._window_manager.menu(
                     'Make Opponents Go Both Ways', back_menu)
@@ -5062,13 +5060,13 @@ class FightHandler(ScreenHandler):
 
         # Make the NPC entry
 
-        if new_NPC.name in self.world.details['NPCs']:
+        if new_NPC.name in self.world.rawdata['NPCs']:
             self._window_manager.error(['There\'s already an NPC named %s' %
                                         new_NPC.name])
             return True
 
-        details_copy = copy.deepcopy(new_NPC.details)
-        self.world.details['NPCs'][new_NPC.name] = details_copy
+        details_copy = copy.deepcopy(new_NPC.rawdata)
+        self.world.rawdata['NPCs'][new_NPC.name] = details_copy
 
         # Make the redirect entry
 
@@ -5315,13 +5313,13 @@ class FightHandler(ScreenHandler):
         the_fight_itself = None
         if monster_group is not None:
             for name in self.world.get_creature_details_list(monster_group):
-                details = self.world.get_creature_details(name,
+                rawdata = self.world.get_creature_details(name,
                                                           monster_group)
-                if details is None:
+                if rawdata is None:
                     continue
 
                 if name == ca_fighter.Venue.name:
-                    the_fight_itself = details
+                    the_fight_itself = rawdata
                 else:
                     fighter = self.world.get_creature(name, monster_group)
                     self.__fighters.append(fighter)
@@ -5511,11 +5509,11 @@ class FightHandler(ScreenHandler):
 
             if attacker is None:
                 ask_to_attack = False
-            elif 'attack' in attacker.details['actions_this_turn']:
+            elif 'attack' in attacker.rawdata['actions_this_turn']:
                 ask_to_attack = False
-            elif 'all-out-attack' in attacker.details['actions_this_turn']:
+            elif 'all-out-attack' in attacker.rawdata['actions_this_turn']:
                 ask_to_attack = False
-            elif 'move-and-attack' in attacker.details['actions_this_turn']:
+            elif 'move-and-attack' in attacker.rawdata['actions_this_turn']:
                 ask_to_attack = False
             else:
                 ask_to_attack = True
@@ -5749,7 +5747,7 @@ class FightHandler(ScreenHandler):
         character_menu = pc_list
         character_menu.extend(monster_list)
 
-        item = from_fighter.details['stuff'][item_index]
+        item = from_fighter.rawdata['stuff'][item_index]
         to_fighter_name, ignore = self._window_manager.menu(
                                         'Give "%s" to whom?' % item['name'],
                                         character_menu)
@@ -5799,7 +5797,7 @@ class FightHandler(ScreenHandler):
         width = len(title)
         label = self._window_manager.input_box(height, width, title)
 
-        label_recipient.details['label'] = label
+        label_recipient.rawdata['label'] = label
 
         # Redraw the fighters
         opponent = self.get_opponent_for(current_fighter)
@@ -5849,7 +5847,7 @@ class FightHandler(ScreenHandler):
 
             # Reversed so removing items doesn't change the index of others
             for index, item in reversed(list(enumerate(
-                                                bad_guy.details['stuff']))):
+                                                bad_guy.rawdata['stuff']))):
                 # Don't 'loot' natural weapons or armor
                 if (('natural-weapon' in item and item['natural-weapon']) or
                         ('natural-armor' in item and item['natural-armor'])):
@@ -6117,10 +6115,10 @@ class FightHandler(ScreenHandler):
         # Now, get the notes for that person
         lines, cols = self._window.getmaxyx()
 
-        if notes_type not in notes_recipient.details:
+        if notes_type not in notes_recipient.rawdata:
             notes = None
         else:
-            notes = '\n'.join(notes_recipient.details[notes_type])
+            notes = '\n'.join(notes_recipient.rawdata[notes_type])
 
         notes = self._window_manager.edit_window(
                     lines - 4,
@@ -6129,7 +6127,7 @@ class FightHandler(ScreenHandler):
                     'Notes',
                     '^G to exit')
 
-        notes_recipient.details[notes_type] = [x for x in notes.split('\n')]
+        notes_recipient.rawdata[notes_type] = [x for x in notes.split('\n')]
 
         # Redraw the fighters
         opponent = self.get_opponent_for(current_fighter)
@@ -6154,12 +6152,12 @@ class FightHandler(ScreenHandler):
         # These are sorted alphabetically so that the monster numbering can
         # be predictable -- for testing.
         for name in sorted(self.world.get_creature_details_list(monster_group)):
-            details = self.world.get_creature_details(name,
+            rawdata = self.world.get_creature_details(name,
                                                       monster_group)
-            if details is None or name == ca_fighter.Venue.name:
+            if rawdata is None or name == ca_fighter.Venue.name:
                 continue
 
-            details['monster-number'] = monster_number
+            rawdata['monster-number'] = monster_number
             monster_number += 1
 
     def __replay_history(self):
@@ -6250,7 +6248,7 @@ class FightHandler(ScreenHandler):
         if not ScreenHandler.maintain_game_file:
             self.world.do_debug_snapshot('EndFight')
             bug_report_game_file = self.world.program.make_bug_report(
-                self.world.details['current-fight']['history'],
+                self.world.rawdata['current-fight']['history'],
                 'Taking a snapshot at the end of the fight',
                 None, # snapshot filename
                 'end_fight')
@@ -6395,7 +6393,7 @@ class FightHandler(ScreenHandler):
         if label_recipient is None:
             return True  # Keep fighting
 
-        label_recipient.details['label'] = None
+        label_recipient.rawdata['label'] = None
 
         # Redraw the fighters
         opponent = self.get_opponent_for(current_fighter)
@@ -6520,7 +6518,7 @@ class FightHandler(ScreenHandler):
         '''
         Command ribbon method.
 
-        Explain the details that went into a fighter's calculated numbers
+        Explain the rawdata that went into a fighter's calculated numbers
         (e.g., to-hit).
 
         Returns: False to exit the current ScreenHandler, True to stay.
@@ -6800,7 +6798,7 @@ class MainHandler(ScreenHandler):
     '''
     This is the primary screen of the program.  It displays a list of
     creatures, in the left pane.  It highlights the "current" creature and it
-    shows the details of the current creature in the right pane.
+    shows the rawdata of the current creature in the right pane.
     '''
 
     # These are intended to be bits so they can be ored together
@@ -6827,14 +6825,14 @@ class MainHandler(ScreenHandler):
                                     'help': 'Scroll DOWN on the current ' +
                                             'pane which may may be either ' +
                                             'the character pane (on the ' +
-                                            'left) or the details pane ' +
+                                            'left) or the rawdata pane ' +
                                             '(on the right)'},
                  curses.KEY_PPAGE: {'name': 'scroll up',
                                     'func': self.__prev_page,
                                     'help': 'Scroll UP on the current ' +
                                             'pane which may may be ' +
                                             'either the character pane ' +
-                                            '(on the left) or the details ' +
+                                            '(on the left) or the rawdata ' +
                                             'pane (on the right)'},
                  curses.KEY_LEFT: {'name': 'scroll chars',
                                    'func': self.__left_pane,
@@ -6842,7 +6840,7 @@ class MainHandler(ScreenHandler):
                                            'the left) for scrolling.'},
                  curses.KEY_RIGHT: {'name': 'scroll char detail',
                                     'func': self.__right_pane,
-                                    'help': 'Choose the details pane (on ' +
+                                    'help': 'Choose the rawdata pane (on ' +
                                             'the right) for scrolling.'},
 
                  ord('a'): {'name': 'about the program',
@@ -6936,9 +6934,9 @@ class MainHandler(ScreenHandler):
 
         # Check characters for consistency.
         for name in self.world.get_creature_details_list('PCs'):
-            details = self.world.get_creature_details(name, 'PCs')
-            if details is not None:
-                value = self.world.ruleset.check_creature_consistent(name, details)
+            rawdata = self.world.get_creature_details(name, 'PCs')
+            if rawdata is not None:
+                value = self.world.ruleset.check_creature_consistent(name, rawdata)
                 if value == ca_ruleset.Ruleset.STOP_CHECKING:
                     break
 
@@ -7210,10 +7208,10 @@ class MainHandler(ScreenHandler):
         # Now, get the notes for that person
         lines, cols = self._window.getmaxyx()
 
-        if notes_type not in fighter.details:
+        if notes_type not in fighter.rawdata:
             notes = None
         else:
-            notes = '\n'.join(fighter.details[notes_type])
+            notes = '\n'.join(fighter.rawdata[notes_type])
 
         notes = self._window_manager.edit_window(
                     lines - 4,
@@ -7222,7 +7220,7 @@ class MainHandler(ScreenHandler):
                     'Notes',
                     '^G to exit')
 
-        fighter.details[notes_type] = [x for x in notes.split('\n')]
+        fighter.rawdata[notes_type] = [x for x in notes.split('\n')]
         self._draw_screen()
 
         return True  # Menu handler's success returns anything but 'None'
@@ -7289,7 +7287,7 @@ class MainHandler(ScreenHandler):
         '''
         # Ask which monster group to resurrect
         fight_name_menu = []
-        for i, entry in enumerate(self.world.details['dead-monsters']):
+        for i, entry in enumerate(self.world.rawdata['dead-monsters']):
             fight_name_menu.append((entry['name'], i))
         monster_group_index, ignore = self._window_manager.menu(
                 'Resurrect Which Fight',
@@ -7297,7 +7295,7 @@ class MainHandler(ScreenHandler):
         if monster_group_index is None:
             return True
 
-        monster_group = self.world.details['dead-monsters'][
+        monster_group = self.world.rawdata['dead-monsters'][
                 monster_group_index]
 
         if (self.world.get_creature_details_list(monster_group['name'])
@@ -7472,9 +7470,9 @@ class MainHandler(ScreenHandler):
             monsters = self.world.get_creature_details_list(group)
             if monsters is not None:
                 the_fight_itself = None
-                for name, details in monsters.items():
+                for name, rawdata in monsters.items():
                     if name == ca_fighter.Venue.name:
-                        the_fight_itself = details
+                        the_fight_itself = rawdata
                     else:
                         fighter = self.world.get_creature(name, group)
                         self.__chars.append(fighter)
@@ -7929,8 +7927,8 @@ if __name__ == '__main__':
 
             program = Program(filename)
             world = World(filename, campaign, ruleset, program, window_manager)
-            campaign_options = (None if 'options' not in world.details else
-                                world.details['options'])
+            campaign_options = (None if 'options' not in world.rawdata else
+                                world.rawdata['options'])
             # NOTE: |prefs| is not guaranteed to be writeable
             options = Options(prefs, campaign_options)
             ruleset.set_options(options)
@@ -7961,7 +7959,7 @@ if __name__ == '__main__':
 
                 window_manager.display_window('Playing Back Bug Report', lines)
 
-            if world.details['current-fight']['saved']:
+            if world.rawdata['current-fight']['saved']:
                 is_new = False if os.path.exists(FightHandler.timing_file) else True
                 mode = 'w' if is_new else 'a'
                 with open(FightHandler.timing_file, mode) as f:
